@@ -1820,7 +1820,12 @@ function escJsAttr(s) {
 }
 
 // ── Auth screen — champ URL ────────────────────────────────────────────────
-// Ajoute le champ URL dynamiquement sous le champ secret
+// Ajoute le champ URL dynamiquement sous le champ secret.
+// Pré-rempli avec l'URL de prod par défaut (pas un secret, juste une adresse
+// publique — voir échange avec l'utilisateur), mais reste modifiable :
+// dès que l'utilisateur tape autre chose, ça écrase la valeur par défaut et
+// c'est cette nouvelle valeur qui est retenue pour la suite.
+const DEFAULT_WORKER_URL = 'https://relink-auth.refugeemeraudien-direction.workers.dev';
 (function() {
   const authCard = document.querySelector('.auth-card');
   const input = document.getElementById('secret-input');
@@ -1831,8 +1836,8 @@ function escJsAttr(s) {
   urlInput.autocomplete = 'off';
   urlInput.style.marginBottom = '12px';
   urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-  const savedUrl = localStorage.getItem('relink_worker_url') || '';
-  if (savedUrl) urlInput.value = savedUrl;
+  const savedUrl = localStorage.getItem('relink_worker_url') || DEFAULT_WORKER_URL;
+  urlInput.value = savedUrl;
   urlInput.addEventListener('input', () => localStorage.setItem('relink_worker_url', urlInput.value.trim()));
   authCard.insertBefore(urlInput, input.nextSibling);
 })();
