@@ -950,25 +950,18 @@ function discordRedirectUri() {
   return location.origin + location.pathname;
 }
 
+// Client ID Discord — info publique (pas un secret), codé en dur.
+const DISCORD_CLIENT_ID = '1333801116692910172';
+
 function startDiscordLogin() {
   const urlInput  = document.getElementById('auth-worker-url');
   const url = (urlInput ? urlInput.value.trim() : WORKER_URL).replace(/\/$/, '');
   if (!url) { showError('Entrez l\'URL du Worker.'); return; }
 
-  // Le Client ID Discord est une info publique (pas un secret) mais n'a pas
-  // besoin d'être visible en permanence sur l'écran de login — on ne le
-  // demande qu'ici, une seule fois, puis on le retient.
-  let clientId = localStorage.getItem('relink_discord_client_id') || '';
-  if (!clientId) {
-    clientId = (prompt('Discord Client ID (une seule fois, sera retenu) :', '') || '').trim();
-    if (!clientId) { showError('Discord Client ID requis pour la connexion Discord.'); return; }
-    localStorage.setItem('relink_discord_client_id', clientId);
-  }
-
   localStorage.setItem('relink_worker_url', url);
 
   const authorizeUrl = 'https://discord.com/api/oauth2/authorize'
-    + '?client_id=' + encodeURIComponent(clientId)
+    + '?client_id=' + encodeURIComponent(DISCORD_CLIENT_ID)
     + '&redirect_uri=' + encodeURIComponent(discordRedirectUri())
     + '&response_type=code&scope=' + encodeURIComponent('identify email');
 
