@@ -313,9 +313,9 @@
       <button class="nav-item" data-page="commandes" onclick="showPage('commandes')">
         <span class="ico">📦</span> Suivi des commandes
       </button>
-      <div class="nav-section-label" style="margin-top:8px;">Site principal</div>
-      <button class="nav-item" data-page="flags" onclick="showPage('flags')">
-        <span class="ico">🎛️</span> Visibilité sections
+      <div class="nav-section-label" style="margin-top:8px;">Sites</div>
+      <button class="nav-item" data-page="sites" onclick="showPage('sites')">
+        <span class="ico">🌐</span> Sites &amp; visibilité
       </button>
       <div class="nav-section-label" style="margin-top:8px;">Sécurité</div>
       <button class="nav-item" data-page="roles" onclick="showPage('roles')">
@@ -625,28 +625,28 @@
       </div>
     </div>
 
-    <!-- ── Page Flags ── -->
-    <div id="page-flags" class="page">
+    <!-- ── Page Sites & visibilité ── -->
+    <div id="page-sites" class="page">
       <div class="page-header">
-        <h2>Visibilit&#233; &amp; acc&#232;s</h2>
+        <h2>Sites &amp; visibilité</h2>
       </div>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-        <button class="btn-action btn-unban" style="font-size:13px;padding:8px 16px;" onclick="unlockAll()">
-          &#128275; Tout d&#233;verrouiller
-        </button>
-        <span style="font-size:12px;color:var(--muted);">D&#233;sactive la connexion obligatoire globale et affiche toutes les sections.</span>
-      </div>
+      <div class="subtabs" id="sites-tabs"></div>
 
       <div class="card">
-        <div class="card-title">Accès global</div>
-        <div class="flags-grid" id="flags-auth"></div>
+        <div class="card-title">Détecter un nouveau site</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="site-new-slug" placeholder="nom court (ex: wiki)" style="width:170px;" autocomplete="off">
+          <input type="text" id="site-new-manifest" placeholder="https://mon-site.fr/relink.manifest.json" style="flex:1;min-width:260px;" autocomplete="off">
+          <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addSite()">🔍 Détecter</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;">
+          Le Worker lit le manifeste du site (sections + permissions) puis le relit chaque jour automatiquement :
+          toute nouvelle page ou permission apparaît ici toute seule.
+        </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Sections du site</div>
-        <div class="flags-grid" id="flags-sections"></div>
-      </div>
+      <div id="site-detail"><span class="empty-state"><span class="spinner"></span>Chargement…</span></div>
     </div>
 
     <!-- ── Page Rôles ── -->
@@ -663,6 +663,24 @@
       </div>
 
       <div class="card">
+        <div class="card-title">Permissions par rôle</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
+          Les permissions des sites apparaissent ici dès qu'elles sont détectées. Une case cochée accorde la permission au rôle ;
+          elle ne vaut ensuite que dans le <strong>scope</strong> où le rôle est attribué à l'utilisateur (ex : scope « wiki »).
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="rbac-head"></thead>
+            <tbody id="rbac-body"><tr><td class="empty-state"><span class="spinner"></span>Chargement…</td></tr></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <input type="text" id="rbac-new-role" placeholder="nouveau rôle (ex: wiki-editor)" style="width:260px;" autocomplete="off">
+          <button class="btn-action btn-unlock" onclick="createRole()">+ Créer le rôle</button>
+        </div>
+      </div>
+
+      <div class="card">
         <div class="card-title">Gérer les rôles d'un utilisateur</div>
         <div class="search-bar" style="display:flex;gap:8px;">
           <input type="text" id="roles-discord-id" placeholder="Discord ID de l'utilisateur…" style="flex:1;">
@@ -674,7 +692,8 @@
           <div class="card-title" style="font-size:12px;">Ajouter un rôle</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
             <label for="roles-add-scope" style="font-size:12px;color:var(--muted);">Scope :</label>
-            <input type="text" id="roles-add-scope" value="global" placeholder="global, wiki, admin-panel…" style="width:180px;" oninput="updateRolesScopeWarning()">
+            <input type="text" id="roles-add-scope" value="global" list="scope-options" placeholder="global, wiki, admin-panel…" style="width:180px;" oninput="updateRolesScopeWarning()">
+            <datalist id="scope-options"></datalist>
             <span style="font-size:11px;color:var(--muted);">« global » = valable sur tous les sites. Un nom de service = valable uniquement là-bas.</span>
           </div>
           <div id="roles-scope-warning" style="display:none;margin-bottom:10px;font-size:11px;color:var(--red);">
@@ -1070,7 +1089,7 @@ function showPage(name) {
 function loadPage(name) {
   if (name === 'users')       loadUsers();
   if (name === 'submissions') loadSubmissions(currentSubFilter);
-  if (name === 'flags')       loadFlags();
+  if (name === 'sites')       loadSites();
   if (name === 'eclats')      { /* les sous-onglets chargent leurs propres données */ }
   if (name === 'commandes')   loadCommandes();
   if (name === 'roles')       loadRolesPage();
@@ -1304,65 +1323,308 @@ async function unlockSub(discordId, pseudo, type) {
   }
 }
 
-// ── Page Flags ────────────────────────────────────────────────────────────
-const FLAG_META = {
-  'flag:require_auth': {
-    label: 'Connexion obligatoire (globale)',
-    desc: 'Force tous les visiteurs a se connecter pour voir n\'importe quelle section',
-    container: 'flags-auth',
-  },
-  'flag:section:home':        { label: 'Informations',    desc: 'Infos generales du serveur',          container: 'flags-sections' },
-  'flag:section:modpack':     { label: 'Modpack',         desc: '[auth] Connexion requise par defaut', container: 'flags-sections' },
-  'flag:section:lore':        { label: 'Lore',            desc: 'Histoire et univers du serveur',      container: 'flags-sections' },
-  'flag:section:reglement':   { label: 'Reglement',       desc: 'Regles de la communaute',             container: 'flags-sections' },
-  'flag:section:partenaires': { label: 'Partenaires',     desc: 'Candidature partenaire',              container: 'flags-sections' },
-  'flag:section:ajouts':      { label: 'Ajouts recents',  desc: 'Nouveautes et mises a jour',          container: 'flags-sections' },
-  'flag:section:server':      { label: 'Info Serveur',    desc: '[auth] Connexion requise par defaut', container: 'flags-sections' },
-  'flag:section:clans':       { label: 'Clans',           desc: '[auth] Connexion requise par defaut', container: 'flags-sections' },
-  'flag:section:team':        { label: 'Mon Equipe',      desc: '[auth] Connexion requise par defaut', container: 'flags-sections' },
-  'flag:section:about':       { label: 'A propos',        desc: 'Presentation du projet',              container: 'flags-sections' },
-  'flag:section:staff':       { label: 'Staff',           desc: 'Equipe de moderation',                container: 'flags-sections' },
-  'flag:section:aide':        { label: 'Aide',            desc: 'FAQ et support',                      container: 'flags-sections' },
-  'flag:section:recompense':  { label: 'Récompenses',     desc: '[auth] Boutique et éclats',           container: 'flags-sections' },
+// ── Page Sites & visibilité ───────────────────────────────────────────────
+// Tout vient du Worker (GET /admin/sites) : plus aucune liste de sections codée
+// en dur ici. Un nouveau site, une nouvelle page ou une nouvelle permission
+// détectée apparaît toute seule.
+let SITES = [];
+let currentSite = 'main';
+
+const MANIFEST_EXAMPLE = `{
+  "name": "Wiki ReLink",
+  "description": "Le wiki de la communauté",
+  "url": "https://wiki.exemple.fr",
+  "sections": [
+    { "key": "home",   "label": "Accueil" },
+    { "key": "editor", "label": "Éditeur", "requires_auth": true },
+    { "key": "beta",   "label": "Pages bêta", "default_enabled": false }
+  ],
+  "permissions": [
+    { "key": "wiki.read",  "description": "Lire le wiki" },
+    { "key": "wiki.write", "description": "Éditer les pages" }
+  ]
+}`;
+
+function errMsg(d) {
+  const base = typeof d?.error === 'string' ? d.error : (d?.error?.message || 'Erreur');
+  const details = Array.isArray(d?.error?.details) ? ' — ' + d.error.details.join(' ; ') : '';
+  return base + details;
+}
+function fmtDate(s) { return s ? new Date(s).toLocaleString() : '—'; }
+function isRecent(s, days = 7) { return !!s && (Date.now() - new Date(s).getTime()) < days * 864e5; }
+
+async function loadSites() {
+  const data = await apiFetch('/admin/sites');
+  if (data.error) { toast(errMsg(data), 'error'); return; }
+  SITES = data.sites || [];
+  if (!SITES.some(s => s.slug === currentSite)) currentSite = 'main';
+  renderSiteTabs();
+  renderSite();
 }
 
-async function loadFlags() {
-  const data = await apiFetch('/admin/flags');
-  const flat = {};
-  flat['flag:require_auth'] = data.require_auth;
-  for (const [k, v] of Object.entries(data.sections || {})) {
-    flat[`flag:section:${k}`] = v;
-  }
+function selectSite(slug) { currentSite = slug; renderSiteTabs(); renderSite(); }
 
-  document.getElementById('flags-auth').innerHTML = '';
-  document.getElementById('flags-sections').innerHTML = '';
+function renderSiteTabs() {
+  document.getElementById('sites-tabs').innerHTML = SITES.map(s => {
+    const fresh = s.sections.filter(x => x.present && isRecent(x.discovered_at)).length;
+    return `<button class="subtab ${s.slug === currentSite ? 'active' : ''}" onclick="selectSite('${esc(s.slug)}')">`
+      + `${s.builtin ? '🏠' : '🌐'} ${esc(s.name)}`
+      + (fresh ? ` <span class="badge-sub">${fresh} nouveau${fresh > 1 ? 'x' : ''}</span>` : '')
+      + `</button>`;
+  }).join('');
+}
 
-  for (const [key, meta] of Object.entries(FLAG_META)) {
-    const val = flat[key] === true || flat[key] === 'true';
-    const html = `
-      <div class="flag-item">
-        <div class="flag-info">
-          <div class="flag-label">${meta.label}</div>
-          <div class="flag-desc">${meta.desc}</div>
+function flagToggle(label, desc, checked, onchange) {
+  return `<div class="flag-item">
+      <div class="flag-info"><div class="flag-label">${label}</div><div class="flag-desc">${desc}</div></div>
+      <label class="toggle"><input type="checkbox" ${checked ? 'checked' : ''} onchange="${onchange}"><span class="slider"></span></label>
+    </div>`;
+}
+
+function renderSite() {
+  const s = SITES.find(x => x.slug === currentSite);
+  const el = document.getElementById('site-detail');
+  if (!s) { el.innerHTML = ''; return; }
+  const slug = esc(s.slug);
+
+  const status = s.builtin ? '<span class="badge-sub">intégré</span>'
+    : s.last_scan_status === 'error' ? '<span class="badge-sub" style="background:var(--red-bg);color:var(--red);">détection en erreur</span>'
+    : s.last_seen_at ? '<span class="badge-sub" style="background:var(--green-bg);color:var(--green);">détecté</span>'
+    : '<span class="badge-nosub">pas encore détecté</span>';
+
+  const present = s.sections.filter(x => x.present);
+  const absent = s.sections.filter(x => !x.present);
+
+  const sectionItem = x => `<div class="flag-item">
+      <div class="flag-info">
+        <div class="flag-label">${esc(x.label)}
+          ${x.requires_auth ? '<span class="badge-sub" title="Le site demande une connexion pour cette section">🔒 connexion</span>' : ''}
+          ${isRecent(x.discovered_at) ? '<span class="badge-sub">nouveau</span>' : ''}
         </div>
-        <label class="toggle" title="${val ? 'Activé' : 'Désactivé'}">
-          <input type="checkbox" ${val ? 'checked' : ''} onchange="setFlag('${key}', this.checked)">
-          <span class="slider"></span>
-        </label>
-      </div>`;
-    document.getElementById(meta.container).insertAdjacentHTML('beforeend', html);
-  }
+        <div class="flag-desc"><code>${esc(x.key)}</code>${x.description ? ' — ' + esc(x.description) : ''}</div>
+      </div>
+      <label class="toggle" title="${x.enabled ? 'Activée' : 'Désactivée'}">
+        <input type="checkbox" ${x.enabled ? 'checked' : ''} onchange="toggleSection('${slug}','${esc(x.key)}',this.checked)">
+        <span class="slider"></span>
+      </label>
+    </div>`;
+
+  const absentItem = x => `<div class="flag-item" style="opacity:.65;">
+      <div class="flag-info">
+        <div class="flag-label">${esc(x.label)} <span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">absente du manifeste</span></div>
+        <div class="flag-desc"><code>${esc(x.key)}</code> — réglage conservé au cas où elle revienne</div>
+      </div>
+      <button class="btn-action btn-delete" onclick="forgetSection('${slug}','${esc(x.key)}')">Oublier</button>
+    </div>`;
+
+  const infoCard = `<div class="card">
+      <div class="card-title">${esc(s.name)} <span style="color:var(--muted);font-weight:400;">(${slug})</span> ${status}</div>
+      ${s.description ? `<div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${esc(s.description)}</div>` : ''}
+      <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+        ${s.url ? `Site : <a href="${esc(s.url)}" target="_blank" rel="noopener" style="color:var(--accent);">${esc(s.url)}</a><br>` : ''}
+        ${s.builtin ? 'Les sections du site principal sont intégrées au Worker.' :
+          `Manifeste : ${s.manifest_url ? `<code>${esc(s.manifest_url)}</code>` : '<em>aucune URL — renseigne-la pour activer la détection automatique</em>'}<br>
+           Dernière détection : ${fmtDate(s.last_seen_at)}`}
+        ${s.last_scan_error ? `<br><span style="color:var(--red);">⚠️ ${esc(s.last_scan_error)}</span>` : ''}
+      </div>
+      ${s.builtin ? '' : `<div class="actions" style="margin-top:12px;">
+        ${s.manifest_url ? `<button class="btn-action btn-unlock" onclick="rescanSite('${slug}')">🔍 Détecter maintenant</button>` : ''}
+        <button class="btn-action btn-link" onclick="editManifestUrl('${slug}')">✏️ ${s.manifest_url ? 'Changer' : 'Définir'} l'URL du manifeste</button>
+        <button class="btn-action btn-delete" onclick="deleteSite('${slug}')">🗑️ Supprimer le site</button>
+      </div>`}
+    </div>`;
+
+  const globalCard = `<div class="card">
+      <div class="card-title">Accès global</div>
+      <div class="flags-grid">
+        ${flagToggle('Site actif', 'Désactivé : le site peut s\'afficher en maintenance', s.site_enabled, `toggleSetting('${slug}','site_enabled',this.checked)`)}
+        ${flagToggle('Connexion obligatoire', 'Force tous les visiteurs à se connecter pour voir ce site', s.require_auth, `toggleSetting('${slug}','require_auth',this.checked)`)}
+      </div>
+    </div>`;
+
+  const sectionsCard = `<div class="card">
+      <div class="card-title">Sections détectées (${present.length})</div>
+      ${present.length ? `<div class="actions" style="margin-bottom:12px;">
+        <button class="btn-action btn-unban" onclick="setAllSections('${slug}', true)">Tout activer</button>
+        <button class="btn-action btn-suspend" onclick="setAllSections('${slug}', false)">Tout désactiver</button>
+      </div>` : ''}
+      <div class="flags-grid">${present.length ? present.map(sectionItem).join('') : '<span class="empty-state">Aucune section détectée pour le moment.</span>'}</div>
+      ${absent.length ? `<div class="card-title" style="margin-top:18px;font-size:12px;">Disparues du manifeste</div><div class="flags-grid">${absent.map(absentItem).join('')}</div>` : ''}
+    </div>`;
+
+  const permsCard = s.builtin ? '' : `<div class="card">
+      <div class="card-title">Permissions détectées (${s.permissions.filter(p => p.present).length})</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${s.permissions.length ? s.permissions.map(p => `<span class="badge" title="${esc(p.description || '')}" style="${p.present ? '' : 'opacity:.5;'}">${esc(p.key)}</span>`).join('')
+          : '<span class="empty-state">Ce site ne déclare aucune permission.</span>'}
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;">À attribuer aux rôles dans la page « Rôles » (matrice « Permissions par rôle »).</div>
+    </div>`;
+
+  const integCard = s.builtin ? '' : `<div class="card">
+      <details>
+        <summary style="cursor:pointer;font-size:13px;font-weight:600;">📘 Brancher ce site (manifeste &amp; CI)</summary>
+        <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">
+          1. Publie à la racine du site un fichier <code>relink.manifest.json</code> (le Worker le lit, aucun secret côté site) :
+        </div>
+        <pre style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:11px;overflow:auto;">${esc(MANIFEST_EXAMPLE)}</pre>
+        <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">
+          2. Au chargement, le site lit son état : <code>GET ${esc(WORKER_URL)}/flags?site=${slug}</code>
+          → <code>{ site_enabled, require_auth, sections: { home: true, … } }</code>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">
+          3. (Optionnel, déploiement automatique) crée un service nommé <code>${slug}</code> avec un scope <code>sites.register</code>
+          dans « Services &amp; clés API », puis depuis ta CI :
+        </div>
+        <pre style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:11px;overflow:auto;">curl -X POST ${esc(WORKER_URL)}/sites/register \\
+  -H "X-Service-Key: $RELINK_KEY" -H "Content-Type: application/json" \\
+  -d @relink.manifest.json</pre>
+      </details>
+    </div>`;
+
+  el.innerHTML = infoCard + globalCard + sectionsCard + permsCard + integCard;
 }
 
-async function setFlag(key, value) {
-  const data = await apiFetch('/admin/flags', 'POST', { key, value: String(value) });
-  if (data.ok) {
-    const meta = FLAG_META[key];
-    toast(`${meta?.label || key} — ${value ? 'activé' : 'désactivé'}`, 'success');
-  } else {
-    toast(data.error || 'Erreur', 'error');
-    loadFlags(); // réinitialise si erreur
+async function toggleSection(slug, key, enabled) {
+  const d = await apiFetch(`/admin/sites/${slug}/sections/${key}`, 'PUT', { enabled });
+  if (d.ok) toast(`${key} — ${enabled ? 'activée' : 'désactivée'}`, 'success');
+  else { toast(errMsg(d), 'error'); }
+  loadSites();
+}
+
+async function toggleSetting(slug, field, value) {
+  const d = await apiFetch(`/admin/sites/${slug}/settings`, 'PUT', { [field]: value });
+  if (d.ok) toast(`${field === 'site_enabled' ? 'Site actif' : 'Connexion obligatoire'} — ${value ? 'oui' : 'non'}`, 'success');
+  else toast(errMsg(d), 'error');
+  loadSites();
+}
+
+async function setAllSections(slug, enabled) {
+  const s = SITES.find(x => x.slug === slug);
+  if (!s) return;
+  const ok = await confirm(enabled ? 'Tout activer' : 'Tout désactiver',
+    `${enabled ? 'Activer' : 'Désactiver'} toutes les sections de « ${s.name} » ?`, enabled ? 'btn-confirm-ok' : 'btn-confirm-danger');
+  if (!ok) return;
+  let errors = 0;
+  for (const x of s.sections.filter(x => x.present && x.enabled !== enabled)) {
+    const d = await apiFetch(`/admin/sites/${slug}/sections/${x.key}`, 'PUT', { enabled });
+    if (!d.ok) errors++;
   }
+  toast(errors ? `${errors} erreur(s)` : (enabled ? 'Tout est activé.' : 'Tout est désactivé.'), errors ? 'error' : 'success');
+  loadSites();
+}
+
+async function addSite() {
+  const slugEl = document.getElementById('site-new-slug');
+  const urlEl = document.getElementById('site-new-manifest');
+  const slug = slugEl.value.trim().toLowerCase();
+  const manifest_url = urlEl.value.trim();
+  if (!slug) { toast('Donne un nom court au site (ex: wiki).', 'error'); return; }
+  const body = { slug };
+  if (manifest_url) body.manifest_url = manifest_url;
+  const d = await apiFetch('/admin/sites', 'POST', body);
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  slugEl.value = ''; urlEl.value = '';
+  currentSite = slug;
+  const sc = d.scan;
+  if (sc && sc.ok) toast(`« ${slug} » détecté : ${sc.created.length} section(s), ${sc.permissions_created.length} permission(s).`, 'success');
+  else if (sc) toast(`Site créé, mais la détection a échoué : ${sc.error}`, 'error');
+  else toast(`« ${slug} » créé. Ajoute l'URL de son manifeste pour lancer la détection.`, 'success');
+  loadSites();
+}
+
+async function rescanSite(slug) {
+  const d = await apiFetch(`/admin/sites/${slug}/scan`, 'POST');
+  if (d.ok) toast(`Détection OK : ${d.created.length} nouvelle(s), ${d.missing.length} disparue(s), ${d.permissions_created.length} permission(s) nouvelle(s).`, 'success');
+  else toast(errMsg(d), 'error');
+  loadSites();
+}
+
+async function editManifestUrl(slug) {
+  const s = SITES.find(x => x.slug === slug);
+  const v = prompt('URL du manifeste (https), vide pour la retirer :', s?.manifest_url || '');
+  if (v === null) return;
+  const d = await apiFetch(`/admin/sites/${slug}`, 'PUT', { manifest_url: v.trim() || null });
+  if (d.ok) { toast('URL du manifeste enregistrée.', 'success'); if (v.trim()) rescanSite(slug); else loadSites(); }
+  else toast(errMsg(d), 'error');
+}
+
+async function deleteSite(slug) {
+  const ok = await confirm('Supprimer le site',
+    `Supprimer « ${slug} » : ses sections, permissions détectées et réglages de visibilité seront effacés. (Les rôles déjà attribués sur ce scope ne sont pas touchés.)`, 'btn-confirm-danger');
+  if (!ok) return;
+  const d = await apiFetch(`/admin/sites/${slug}`, 'DELETE');
+  if (d.ok) { toast('Site supprimé.', 'success'); currentSite = 'main'; }
+  else toast(errMsg(d), 'error');
+  loadSites();
+}
+
+async function forgetSection(slug, key) {
+  const ok = await confirm('Oublier la section', `Supprimer définitivement le réglage de « ${key} » ?`, 'btn-confirm-danger');
+  if (!ok) return;
+  const d = await apiFetch(`/admin/sites/${slug}/sections/${key}`, 'DELETE');
+  if (d.ok) toast('Section oubliée.', 'success'); else toast(errMsg(d), 'error');
+  loadSites();
+}
+
+// ── Rôles × permissions (matrice) ─────────────────────────────────────────
+let RBAC = null;
+
+async function loadRbac() {
+  const d = await apiFetch('/admin/rbac');
+  if (d.error) { document.getElementById('rbac-body').innerHTML = `<tr><td class="empty-state">${esc(errMsg(d))}</td></tr>`; return; }
+  RBAC = d;
+  document.getElementById('scope-options').innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
+
+  const roles = d.roles || [];
+  document.getElementById('rbac-head').innerHTML = `<tr><th>Permission</th>${roles.map(r =>
+    `<th style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${esc(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
+
+  // Groupes : noyau (sans propriétaire) puis un groupe par site
+  const groups = new Map();
+  for (const p of d.permissions || []) {
+    const g = p.site || '';
+    if (!groups.has(g)) groups.set(g, []);
+    groups.get(g).push(p);
+  }
+  const order = ['', ...[...groups.keys()].filter(k => k !== '').sort()].filter(k => groups.has(k));
+  let html = '';
+  for (const g of order) {
+    html += `<tr><td colspan="${roles.length + 1}" style="background:var(--surface);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);">${g ? '🌐 ' + esc(g) : '⚙️ NOYAU'}</td></tr>`;
+    for (const p of groups.get(g)) {
+      html += `<tr${p.present ? '' : ' style="opacity:.55;"'}><td><code>${esc(p.key)}</code>${p.description ? `<br><span style="font-size:11px;color:var(--muted);">${esc(p.description)}</span>` : ''}${p.present ? '' : ' <span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">disparue</span>'}</td>`
+        + roles.map(r => {
+          const locked = r.name === 'administrator' && p.key === 'admin.access';
+          return `<td style="text-align:center;"><input type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? 'disabled title="Indispensable à l\'accès au panel"' : ''}
+            onchange="toggleRolePerm('${esc(r.name)}','${esc(p.key)}',this.checked)"></td>`;
+        }).join('') + '</tr>';
+    }
+  }
+  document.getElementById('rbac-body').innerHTML = html || '<tr><td class="empty-state">Aucune permission.</td></tr>';
+}
+
+async function toggleRolePerm(role, permission, granted) {
+  const d = await apiFetch(`/admin/roles/${role}/permissions`, 'POST', { permission, granted });
+  if (d.ok) toast(`${role} — ${permission} ${granted ? 'accordée' : 'retirée'}`, 'success');
+  else toast(errMsg(d), 'error');
+  loadRbac();
+}
+
+async function createRole() {
+  const el = document.getElementById('rbac-new-role');
+  const name = el.value.trim().toLowerCase();
+  if (!name) { toast('Entrez un nom de rôle.', 'error'); return; }
+  const d = await apiFetch('/admin/roles', 'POST', { name });
+  if (d.ok) { toast(`Rôle « ${name} » créé.`, 'success'); el.value = ''; loadRolesPage(); }
+  else toast(errMsg(d), 'error');
+}
+
+async function deleteRole(name) {
+  const ok = await confirm('Supprimer le rôle', `Supprimer le rôle « ${name} » ?`, 'btn-confirm-danger');
+  if (!ok) return;
+  const d = await apiFetch(`/admin/roles/${name}`, 'DELETE');
+  if (d.ok) { toast('Rôle supprimé.', 'success'); loadRolesPage(); }
+  else toast(errMsg(d), 'error');
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -1834,36 +2096,6 @@ const DEFAULT_WORKER_URL = 'https://relink-auth.refugeemeraudien-direction.worke
   urlInput.addEventListener('input', () => localStorage.setItem('relink_worker_url', urlInput.value.trim()));
   authCard.insertBefore(urlInput, input.nextSibling);
 })();
-// ── Tout déverrouiller ──────────────────────────────────────────────────
-async function unlockAll() {
-  const ok = await confirm(
-    'Tout deverrouiller',
-    'Desactiver la connexion obligatoire globale et rendre toutes les sections visibles ? Les protections individuelles du site (modpack, servinfo, clans, equipe) restent gerees par le site lui-meme.',
-    'btn-confirm-ok'
-  );
-  if (!ok) return;
-  const keys = [
-    'flag:require_auth',
-    'flag:section:home', 'flag:section:modpack', 'flag:section:lore',
-    'flag:section:reglement', 'flag:section:partenaires', 'flag:section:ajouts',
-    'flag:section:server', 'flag:section:clans', 'flag:section:team',
-    'flag:section:about', 'flag:section:staff', 'flag:section:aide',
-    'flag:section:recompense',
-  ];
-  let errors = 0;
-  for (const key of keys) {
-    const val = key === 'flag:require_auth' ? 'false' : 'true';
-    const d = await apiFetch('/admin/flags', 'POST', { key, value: val });
-    if (!d.ok) errors++;
-  }
-  if (errors === 0) {
-    toast('Tout deverrouille avec succes.', 'success');
-  } else {
-    toast(errors + ' erreur(s) lors du deverrouillage.', 'error');
-  }
-  loadFlags();
-}
-
 // ══════════════════════════════════════════════════════════════════════════
 // Page Rôles
 // ══════════════════════════════════════════════════════════════════════════
@@ -1877,6 +2109,8 @@ async function loadRolesPage() {
   el.innerHTML = ALL_ROLES.length
     ? ALL_ROLES.map(r => `<span class="badge">${esc(r.name)}</span>`).join('')
     : '<span class="empty-state">Aucun rôle défini.</span>';
+
+  loadRbac(); // matrice rôles × permissions + scopes proposés
 
   // Si un discord_id est déjà dans le champ (venu d'un raccourci), on recharge
   const idField = document.getElementById('roles-discord-id').value.trim();
