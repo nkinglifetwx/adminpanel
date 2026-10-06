@@ -393,6 +393,47 @@
     .auth-card { width: min(92vw, 380px); padding: 30px 24px; }
   }
 
+
+/* ── Gestion des rôles : cartes simples et lisibles ───────────────────── */
+.roles-manager-card { overflow:hidden; }
+.roles-manager-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+.roles-manager-subtitle { color:var(--muted); font-size:12px; }
+.roles-count { padding:5px 9px; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:11px; white-space:nowrap; background:var(--surface); }
+.roles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(245px,1fr)); gap:12px; }
+.role-card { position:relative; min-height:168px; padding:15px; border:1px solid var(--border); border-radius:12px; background:linear-gradient(145deg,var(--card),var(--surface)); transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
+.role-card:hover { transform:translateY(-2px); border-color:#3a4260; box-shadow:var(--shadow-soft); }
+.role-card-builtin { border-color:rgba(92,110,247,.28); }
+.role-card-top { display:flex; align-items:center; gap:9px; min-width:0; }
+.role-icon { width:28px; height:28px; display:grid; place-items:center; flex:0 0 28px; border-radius:8px; background:rgba(92,110,247,.12); color:var(--accent); font-size:11px; }
+.role-card-builtin .role-icon { color:var(--amber); background:rgba(245,183,78,.10); }
+.role-card-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:700; font-size:14px; color:var(--text); }
+.role-builtin { margin-left:auto; padding:3px 6px; border-radius:5px; background:rgba(92,110,247,.10); color:#9aa5ff; font-size:8px; font-weight:800; letter-spacing:.06em; }
+.role-delete { margin-left:auto; width:26px; height:26px; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; font-size:18px; line-height:1; }
+.role-delete:hover { color:var(--red); background:rgba(239,91,91,.08); border-color:rgba(239,91,91,.16); }
+.role-card-meta { margin-top:10px; color:var(--muted); font-size:11px; }
+.role-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; min-height:27px; }
+.role-tag { max-width:100%; padding:4px 7px; border:1px solid #303649; border-radius:6px; background:var(--input-bg); color:#b7bfd7; font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.role-tag-more { color:var(--accent); border-color:rgba(92,110,247,.25); }
+.role-no-perms { color:var(--muted); font-size:11px; font-style:italic; }
+.role-configure { width:100%; margin-top:13px; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:var(--surface); color:var(--muted); cursor:pointer; text-align:left; font-size:11px; transition:.15s ease; }
+.role-configure span { float:right; color:var(--accent); }
+.role-configure:hover { border-color:var(--accent); color:var(--text); background:var(--input-bg); }
+.role-empty { grid-column:1/-1; min-height:90px; display:flex; align-items:center; justify-content:center; gap:10px; color:var(--muted); font-size:12px; }
+.role-empty > div { display:flex; flex-direction:column; gap:3px; }
+.role-empty strong { color:var(--text); font-size:13px; }
+.role-empty-icon { width:30px; height:30px; display:grid; place-items:center; border:1px dashed var(--border); border-radius:8px; color:var(--accent); }
+.role-create-box { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:13px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+.role-create-title { color:var(--text); font-size:12px; font-weight:700; }
+.role-create-help { margin-top:3px; color:var(--muted); font-size:10px; }
+.role-create-actions { display:flex; gap:8px; flex:0 0 auto; }
+.role-create-actions input { width:220px; }
+.role-highlight { background:rgba(92,110,247,.16) !important; color:var(--text) !important; transition:background .2s ease; }
+@media (max-width:680px) {
+  .roles-manager-head, .role-create-box { align-items:stretch; flex-direction:column; }
+  .role-create-actions { width:100%; }
+  .role-create-actions input { width:auto; flex:1; min-width:0; }
+  .roles-grid { grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
@@ -779,10 +820,16 @@
         <h2>Rôles</h2>
       </div>
 
-      <div class="card">
-        <div class="card-title">Rôles disponibles</div>
-        <div id="roles-list" style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span class="empty-state"><span class="spinner"></span>Chargement…</span>
+      <div class="card roles-manager-card">
+        <div class="roles-manager-head">
+          <div>
+            <div class="card-title" style="margin-bottom:3px;">Rôles</div>
+            <div class="roles-manager-subtitle">Crée, visualise et supprime tes rôles en un coup d’œil.</div>
+          </div>
+          <div class="roles-count" id="roles-count">0 rôle</div>
+        </div>
+        <div id="roles-list" class="roles-grid">
+          <div class="role-empty"><span class="spinner"></span>Chargement…</div>
         </div>
       </div>
 
@@ -798,9 +845,15 @@
             <tbody id="rbac-body"><tr><td class="empty-state"><span class="spinner"></span>Chargement…</td></tr></tbody>
           </table>
         </div>
-        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-          <input type="text" id="rbac-new-role" placeholder="nouveau rôle (ex: wiki-editor)" style="width:260px;" autocomplete="off">
-          <button class="btn-action btn-unlock" onclick="createRole()">+ Créer le rôle</button>
+        <div class="role-create-box">
+          <div>
+            <div class="role-create-title">Nouveau rôle</div>
+            <div class="role-create-help">Un nom simple, par exemple <code>wiki-editor</code>.</div>
+          </div>
+          <div class="role-create-actions">
+            <input type="text" id="rbac-new-role" placeholder="Nom du rôle…" autocomplete="off">
+            <button class="btn-action btn-unlock" onclick="createRole()">+ Créer</button>
+          </div>
         </div>
       </div>
 
@@ -1701,6 +1754,7 @@ async function loadRbac() {
   document.getElementById('scope-options').innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
 
   const roles = d.roles || [];
+  renderRoleCards(roles);
   document.getElementById('rbac-head').innerHTML = `<tr><th>Permission</th>${roles.map(r =>
     `<th style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${esc(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
 
@@ -1725,6 +1779,45 @@ async function loadRbac() {
     }
   }
   document.getElementById('rbac-body').innerHTML = html || '<tr><td class="empty-state">Aucune permission.</td></tr>';
+}
+
+function renderRoleCards(roles) {
+  const el = document.getElementById('roles-list');
+  const count = document.getElementById('roles-count');
+  if (count) count.textContent = `${roles.length} rôle${roles.length > 1 ? 's' : ''}`;
+  if (!roles.length) {
+    el.innerHTML = '<div class="role-empty"><span class="role-empty-icon">＋</span><div><strong>Aucun rôle</strong><span>Crée ton premier rôle juste en dessous.</span></div></div>';
+    return;
+  }
+
+  el.innerHTML = roles.map(r => {
+    const perms = Array.isArray(r.permissions) ? r.permissions : [];
+    const visible = perms.slice(0, 5);
+    const more = Math.max(0, perms.length - visible.length);
+    const builtin = !!r.builtin;
+    return `<div class="role-card ${builtin ? 'role-card-builtin' : ''}">
+      <div class="role-card-top">
+        <div class="role-icon">${builtin ? '★' : '◆'}</div>
+        <div class="role-card-name">${esc(r.name)}</div>
+        ${builtin ? '<span class="role-builtin">INTÉGRÉ</span>' : `<button class="role-delete" title="Supprimer le rôle" onclick="deleteRole('${escJsAttr(r.name)}')">×</button>`}
+      </div>
+      <div class="role-card-meta">${perms.length} permission${perms.length > 1 ? 's' : ''}</div>
+      <div class="role-tags">${visible.length ? visible.map(p => `<span class="role-tag">${esc(p)}</span>`).join('') : '<span class="role-no-perms">Aucune permission</span>'}${more ? `<span class="role-tag role-tag-more">+${more}</span>` : ''}</div>
+      <button class="role-configure" onclick="focusRolePermissions('${escJsAttr(r.name)}')">Gérer les permissions <span>→</span></button>
+    </div>`;
+  }).join('');
+}
+
+function focusRolePermissions(roleName) {
+  const input = document.getElementById('rbac-new-role');
+  const matrix = document.getElementById('rbac-body');
+  if (matrix) matrix.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('#rbac-head th').forEach((th, i) => {
+    if (i > 0 && th.textContent.trim().startsWith(roleName)) {
+      th.classList.add('role-highlight');
+      setTimeout(() => th.classList.remove('role-highlight'), 1800);
+    }
+  });
 }
 
 async function toggleRolePerm(role, permission, granted) {
@@ -2230,9 +2323,7 @@ async function loadRolesPage() {
   const data = await apiFetch('/admin/roles');
   ALL_ROLES = data.roles || [];
   const el = document.getElementById('roles-list');
-  el.innerHTML = ALL_ROLES.length
-    ? ALL_ROLES.map(r => `<span class="badge">${esc(r.name)}</span>`).join('')
-    : '<span class="empty-state">Aucun rôle défini.</span>';
+  el.innerHTML = '<div class="role-empty"><span class="spinner"></span>Chargement des rôles…</div>';
 
   loadRbac(); // matrice rôles × permissions + scopes proposés
 
