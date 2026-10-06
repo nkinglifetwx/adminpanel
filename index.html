@@ -107,6 +107,47 @@
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
   .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 16px; }
 
+  /* ── Recherche avancée / actions en masse ── */
+  .advanced-search-grid { display:grid; grid-template-columns:minmax(160px,190px) 1fr auto; gap:10px; align-items:center; }
+  .selection-toolbar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 12px; margin-top:12px; border:1px solid var(--accent); background:var(--accent-bg); border-radius:var(--radius); }
+  .selection-toolbar strong { color:var(--accent); }
+  .selection-toolbar .spacer { flex:1; }
+  .user-check { width:16px; height:16px; accent-color:var(--accent); cursor:pointer; }
+  .user-identifiers { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+  .identifier { font-size:10px; padding:2px 6px; border:1px solid var(--border); border-radius:12px; color:var(--muted); background:var(--surface); }
+  .bulk-menu { display:flex; gap:6px; flex-wrap:wrap; }
+  .health-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:12px; }
+  .health-item { padding:12px; border:1px solid var(--border); background:var(--surface); border-radius:var(--radius); }
+  .health-item .health-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+  .health-item .health-value { font-size:13px; font-weight:700; margin-top:3px; }
+  .permission-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+  .permission-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px; }
+  .permission-card { display:flex; align-items:flex-start; gap:9px; padding:10px 12px; border:1px solid var(--border); background:var(--surface); border-radius:var(--radius); }
+  .permission-card.danger { border-color:var(--red); background:var(--red-bg); }
+  .permission-card code { font-size:12px; }
+  .permission-card .permission-desc { font-size:11px; color:var(--muted); margin-top:2px; }
+  .danger-dot { color:var(--red); font-weight:800; }
+  .timeline { position:relative; padding-left:22px; }
+  .timeline::before { content:''; position:absolute; left:7px; top:4px; bottom:4px; width:1px; background:var(--border); }
+  .timeline-item { position:relative; padding:0 0 18px 14px; }
+  .timeline-item::before { content:''; position:absolute; left:-18px; top:5px; width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-bg); }
+  .timeline-meta { font-size:11px; color:var(--muted); }
+  .timeline-main { margin-top:3px; font-size:13px; }
+  .diff-box { margin-top:7px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .diff-box > div { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:7px; font-size:11px; }
+  .diff-title { color:var(--muted); font-weight:700; margin-bottom:4px; }
+  #auto-refresh-bar { display:none; position:sticky; top:0; z-index:30; padding:8px 32px; background:rgba(13,15,20,.94); border-bottom:1px solid var(--border); backdrop-filter:blur(8px); }
+  #auto-refresh-bar.visible { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
+  #command-palette-overlay { position:fixed; inset:0; background:rgba(0,0,0,.62); z-index:1200; display:none; align-items:flex-start; justify-content:center; padding-top:12vh; }
+  #command-palette-overlay.open { display:flex; }
+  .command-palette { width:min(680px,94vw); background:var(--card); border:1px solid var(--border-hi); border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,.5); overflow:hidden; }
+  .command-palette input { width:100%; border:0; border-bottom:1px solid var(--border); border-radius:0; min-height:52px; padding:14px 16px; font-size:15px; }
+  .command-results { max-height:420px; overflow:auto; padding:8px; }
+  .command-item { width:100%; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 12px; border:0; border-radius:8px; background:transparent; color:var(--text); text-align:left; cursor:pointer; }
+  .command-item:hover, .command-item.active { background:var(--accent-bg); color:var(--accent); }
+  .command-item small { color:var(--muted); }
+  @media (max-width:680px) { .advanced-search-grid { grid-template-columns:1fr; } #auto-refresh-bar { padding:8px 14px; } .diff-box { grid-template-columns:1fr; } }
+
   /* ── Search bar ── */
   .search-bar {
     display: flex; gap: 10px; align-items: center;
@@ -503,6 +544,12 @@
   </nav>
 
   <main id="main-content" style="display:none;">
+    <div id="auto-refresh-bar">
+      <span style="font-size:12px;color:var(--muted);">Auto-refresh :</span>
+      <select id="auto-refresh-interval" onchange="setAutoRefresh(this.value)" style="min-height:32px;padding:5px 30px 5px 9px;">
+        <option value="0">Désactivé</option><option value="15000">15s</option><option value="30000" selected>30s</option><option value="60000">60s</option>
+      </select>
+    </div>
 
     <!-- ── Page Utilisateurs ── -->
     <div id="page-users" class="page active">
@@ -514,8 +561,30 @@
       <div class="stats-row" id="user-stats"></div>
 
       <div class="card">
-        <div class="search-bar">
-          <input type="text" id="user-search" placeholder="Rechercher par pseudo…" oninput="debouncedSearch()">
+        <div class="advanced-search-grid">
+          <select id="user-search-field" onchange="debouncedSearch()" aria-label="Champ de recherche">
+            <option value="all">Tous les champs</option>
+            <option value="discord_username">Pseudo Discord</option>
+            <option value="discord_id">Discord ID</option>
+            <option value="minecraft_username">Pseudo Minecraft</option>
+            <option value="email">Email</option>
+            <option value="minecraft_uuid">UUID Minecraft</option>
+            <option value="role">Rôle</option>
+          </select>
+          <input type="text" id="user-search" placeholder="Rechercher instantanément…" oninput="debouncedSearch()" autocomplete="off">
+          <button class="btn-action btn-unlock" onclick="clearUserSearch()">Réinitialiser</button>
+        </div>
+        <div class="selection-toolbar" id="user-selection-toolbar" style="display:none;">
+          <strong id="selected-users-count">☑ 0 utilisateurs sélectionnés</strong>
+          <span class="spacer"></span>
+          <div class="bulk-menu">
+            <button class="btn-action btn-suspend" onclick="bulkUserAction('suspend')">Suspendre</button>
+            <button class="btn-action btn-ban" onclick="bulkUserAction('ban')">Bannir</button>
+            <button class="btn-action btn-unban" onclick="bulkUserAction('unban')">Débannir</button>
+            <button class="btn-action btn-unlock" onclick="bulkAssignRole()">🛡️ Attribuer un rôle</button>
+            <button class="btn-action btn-delete" onclick="bulkRemoveRole()">Retirer un rôle</button>
+            <button class="btn-action btn-eclats" onclick="bulkGiveEclats()">💎 Donner des Éclats</button>
+          </div>
         </div>
       </div>
 
@@ -524,6 +593,7 @@
           <table>
             <thead>
               <tr>
+                <th style="width:34px;"><input class="user-check" type="checkbox" id="select-all-users" onchange="toggleAllUsers(this.checked)" title="Tout sélectionner"></th>
                 <th>Utilisateur</th>
                 <th>Statut</th>
                 <th>Minecraft</th>
@@ -533,7 +603,7 @@
               </tr>
             </thead>
             <tbody id="users-tbody">
-              <tr><td colspan="6" class="empty-state"><span class="spinner"></span>Chargement…</td></tr>
+              <tr><td colspan="7" class="empty-state"><span class="spinner"></span>Chargement…</td></tr>
             </tbody>
           </table>
         </div>
@@ -920,11 +990,27 @@
       </div>
 
       <div class="card">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <input type="text" id="audit-filter-action" placeholder="Filtrer par action (ex: login, role.assign)…" style="flex:1;min-width:220px;">
-          <input type="text" id="audit-filter-actor" placeholder="Filtrer par Discord ID…" style="flex:1;min-width:180px;">
-          <button class="btn-action btn-unlock" onclick="loadAuditLogs()">Filtrer</button>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;">
+          <input type="datetime-local" id="audit-filter-from" title="Début">
+          <input type="datetime-local" id="audit-filter-to" title="Fin">
+          <input type="text" id="audit-filter-action" placeholder="Action…">
+          <input type="text" id="audit-filter-actor" placeholder="Acteur / Discord ID…">
+          <input type="text" id="audit-filter-resource" placeholder="Ressource…">
+          <input type="text" id="audit-filter-target" placeholder="Utilisateur ciblé…">
+          <input type="text" id="audit-filter-ip" placeholder="IP…">
+          <select id="audit-filter-result"><option value="">Succès / échec</option><option value="success">Succès</option><option value="error">Échec</option></select>
+          <input type="text" id="audit-filter-service" placeholder="Service…">
         </div>
+        <div class="actions" style="margin-top:10px;">
+          <button class="btn-action btn-unlock" onclick="loadAuditLogs()">🔎 Filtrer</button>
+          <button class="btn-action btn-link" onclick="exportAudit('csv')">⬇ CSV</button>
+          <button class="btn-action btn-link" onclick="exportAudit('json')">⬇ JSON</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Timeline</div>
+        <div id="audit-timeline" class="timeline"></div>
       </div>
 
       <div class="card">
@@ -1035,6 +1121,12 @@
 </div>
 
 <!-- Toast -->
+<div id="command-palette-overlay" onclick="if(event.target===this)closeCommandPalette()">
+  <div class="command-palette">
+    <input id="command-palette-input" type="search" placeholder="Rechercher une fonctionnalité…" oninput="renderCommandPalette()" onkeydown="commandPaletteKeydown(event)" autocomplete="off">
+    <div id="command-palette-results" class="command-results"></div>
+  </div>
+</div>
 <div id="toast"></div>
 
 <!-- Confirm modal -->
@@ -1292,39 +1384,75 @@ function loadPage(name) {
 
 // ── Page Utilisateurs ─────────────────────────────────────────────────────
 let searchTimer;
+let selectedUserIds = new Set();
+let selectedUserMap = new Map();
+let lastLoadedUsers = [];
+
 function debouncedSearch() {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => { userOffset = 0; loadUsers(); }, 350);
+  searchTimer = setTimeout(() => { userOffset = 0; selectedUserIds.clear(); selectedUserMap.clear(); loadUsers(); }, 180);
+}
+function clearUserSearch() {
+  document.getElementById('user-search').value = '';
+  document.getElementById('user-search-field').value = 'all';
+  debouncedSearch();
+}
+function getSelectedUserObjects() {
+  return [...selectedUserIds].map(id => selectedUserMap.get(id)).filter(Boolean);
+}
+function updateSelectionToolbar() {
+  const count = selectedUserIds.size;
+  const bar = document.getElementById('user-selection-toolbar');
+  if (!bar) return;
+  bar.style.display = count ? 'flex' : 'none';
+  document.getElementById('selected-users-count').textContent = `☑ ${count} utilisateur${count > 1 ? 's' : ''} sélectionné${count > 1 ? 's' : ''}`;
+  const all = document.getElementById('select-all-users');
+  if (all) {
+    const visible = lastLoadedUsers.map(u => String(u.discord_id));
+    all.checked = visible.length > 0 && visible.every(id => selectedUserIds.has(id));
+    all.indeterminate = visible.some(id => selectedUserIds.has(id)) && !all.checked;
+  }
+}
+function toggleUserSelection(id, checked) {
+  id = String(id);
+  if (checked) { selectedUserIds.add(id); const u=lastLoadedUsers.find(x=>String(x.discord_id)===id); if(u) selectedUserMap.set(id,u); } else { selectedUserIds.delete(id); selectedUserMap.delete(id); }
+  updateSelectionToolbar();
+}
+function toggleAllUsers(checked) {
+  lastLoadedUsers.forEach(u => {
+    const id = String(u.discord_id);
+    if (checked) { selectedUserIds.add(id); const u=lastLoadedUsers.find(x=>String(x.discord_id)===id); if(u) selectedUserMap.set(id,u); } else { selectedUserIds.delete(id); selectedUserMap.delete(id); }
+  });
+  document.querySelectorAll('.user-row-check').forEach(c => c.checked = checked);
+  updateSelectionToolbar();
 }
 
 async function loadUsers() {
   const q = document.getElementById('user-search').value.trim();
-  const qs = `?limit=${USER_LIMIT}&offset=${userOffset}` + (q.length >= 2 ? `&q=${encodeURIComponent(q)}` : '');
-  const data = await apiFetch('/admin/users' + qs);
+  const field = document.getElementById('user-search-field').value || 'all';
+  const params = new URLSearchParams({ limit: USER_LIMIT, offset: userOffset });
+  if (q.length >= 1) { params.set('q', q); params.set('field', field); params.set('search', q); }
+  const data = await apiFetch('/admin/users?' + params.toString());
+  if (data.error) { toast(errMsg(data), 'error'); return; }
 
   userTotal = data.total || 0;
   document.getElementById('user-count').textContent = userTotal + ' membres';
-
-  // Stats rapides
   const all = data.users || [];
-  const active = all.filter(u => !u.status || u.status === 'active').length;
-  const susp   = all.filter(u => u.status === 'suspended').length;
-  const banned = all.filter(u => u.status === 'banned').length;
+  lastLoadedUsers = all;
+  all.forEach(u => { if (selectedUserIds.has(String(u.discord_id))) selectedUserMap.set(String(u.discord_id), u); });
 
+  const active = all.filter(u => !u.status || u.status === 'active').length;
+  const susp = all.filter(u => u.status === 'suspended').length;
+  const banned = all.filter(u => u.status === 'banned').length;
   document.getElementById('user-stats').innerHTML = `
-    <div class="stat-card"><div class="stat-val" style="color:var(--green)">${active}</div><div class="stat-lbl">Actifs (page)</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--green)">${active}</div><div class="stat-lbl">Actifs (résultats)</div></div>
     <div class="stat-card"><div class="stat-val" style="color:var(--amber)">${susp}</div><div class="stat-lbl">Suspendus</div></div>
     <div class="stat-card"><div class="stat-val" style="color:var(--red)">${banned}</div><div class="stat-lbl">Bannis</div></div>
-    <div class="stat-card"><div class="stat-val">${userTotal}</div><div class="stat-lbl">Total</div></div>
-  `;
+    <div class="stat-card"><div class="stat-val">${userTotal}</div><div class="stat-lbl">Total</div></div>`;
 
   const tbody = document.getElementById('users-tbody');
-  if (!all.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Aucun utilisateur trouvé.</td></tr>';
-  } else {
-    tbody.innerHTML = all.map(u => userRow(u)).join('');
-  }
-
+  tbody.innerHTML = all.length ? all.map(u => userRow(u)).join('') : '<tr><td colspan="7" class="empty-state">Aucun utilisateur trouvé.</td></tr>';
+  updateSelectionToolbar();
   renderPagination();
 }
 
@@ -1334,42 +1462,59 @@ function userRow(u) {
   const avatar = u.avatar_url
     ? `<img class="avatar" src="${esc(u.avatar_url)}" alt="" onerror="this.style.display='none';this.nextSibling.style.display='inline-flex'"><span class="avatar-placeholder" style="display:none">${esc((u.pseudo||'?')[0].toUpperCase())}</span>`
     : `<span class="avatar-placeholder">${esc((u.pseudo||'?')[0].toUpperCase())}</span>`;
-
   const mcLinked = !!u.minecraft_uuid;
-  const mcCell = mcLinked
-    ? `<span class="badge-mc-linked" title="${esc(u.minecraft_uuid)}">✓ ${esc(u.minecraft_username)}</span>`
-    : `<span class="badge-mc-unlinked">Non lié</span>`;
-
+  const mcCell = mcLinked ? `<span class="badge-mc-linked" title="${esc(u.minecraft_uuid)}">✓ ${esc(u.minecraft_username)}</span>` : `<span class="badge-mc-unlinked">Non lié</span>`;
   let actions = '';
   if (status === 'active') {
-    actions += `<button class="btn-action btn-suspend" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','suspend')">Suspendre</button>`;
-    actions += `<button class="btn-action btn-ban"     onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','ban')">Bannir</button>`;
-  } else {
-    actions += `<button class="btn-action btn-unban"   onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','unban')">Débannir</button>`;
-  }
+    actions += `<button class="btn-action btn-suspend" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','suspend')">Suspendre</button><button class="btn-action btn-ban" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','ban')">Bannir</button>`;
+  } else actions += `<button class="btn-action btn-unban" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','unban')">Débannir</button>`;
   actions += `<button class="btn-action btn-link" onclick="openForceLink('${u.discord_id}','${escJsAttr(u.pseudo)}','${escJsAttr(u.minecraft_uuid||'')}','${escJsAttr(u.minecraft_username||'')}')">${mcLinked ? 'Relier' : 'Lier'}</button>`;
-  actions += `<button class="btn-action btn-eclats" onclick="openGiveEclatsFor('${u.discord_id}','${escJsAttr(u.pseudo)}',${u.eclats||0})">💎 Éclats</button>`;
-  actions += `<button class="btn-action btn-unlock" onclick="openRolesFor('${u.discord_id}','${escJsAttr(u.pseudo)}')">🛡️ Rôles</button>`;
-  actions += `<button class="btn-action btn-delete" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','delete')">Supprimer</button>`;
+  actions += `<button class="btn-action btn-eclats" onclick="openGiveEclatsFor('${u.discord_id}','${escJsAttr(u.pseudo)}',${u.eclats||0})">💎 Éclats</button><button class="btn-action btn-unlock" onclick="openRolesFor('${u.discord_id}','${escJsAttr(u.pseudo)}')">🛡️ Rôles</button><button class="btn-action btn-delete" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','delete')">Supprimer</button>`;
+  const eclatsCell = `<span class="eclats-badge">💎 ${u.eclats||0}</span>${u.is_partner ? `<br><span class="badge-partner">Partenaire ${u.partner_bonus_percent||0}%</span>` : ''}`;
+  const candBits = []; if (u.submitted_partner) candBits.push('🤝 Partenaire'); if (u.submitted_team) candBits.push('⚔️ Équipe');
+  const candCell = candBits.length ? `<span class="badge-sub">${candBits.join(' · ')}</span>` : `<span class="badge-nosub">—</span>`;
+  const roleText = Array.isArray(u.roles) ? u.roles.map(r => typeof r === 'string' ? r : r.role).filter(Boolean).join(', ') : (u.role || '');
+  const identifiers = [u.email ? `✉ ${u.email}` : '', u.minecraft_uuid ? `UUID ${u.minecraft_uuid}` : '', roleText ? `🛡️ ${roleText}` : ''].filter(Boolean).map(x => `<span class="identifier">${esc(x)}</span>`).join('');
+  return `<tr><td><input class="user-check user-row-check" type="checkbox" ${selectedUserIds.has(String(u.discord_id)) ? 'checked' : ''} onchange="toggleUserSelection('${escJsAttr(u.discord_id)}',this.checked)"></td>
+    <td>${avatar}<strong>${esc(u.pseudo || u.discord_username || '—')}</strong><br><span style="color:var(--muted);font-size:11px">${esc(u.discord_id)}</span><div class="user-identifiers">${identifiers}</div></td>
+    <td><span class="badge-status badge-${status}">${labelMap[status] || esc(status)}</span></td><td>${mcCell}</td><td>${eclatsCell}</td><td>${candCell}</td><td><div class="actions">${actions}</div></td></tr>`;
+}
 
-  const eclatsCell = `<span class="eclats-badge">💎 ${u.eclats||0}</span>` +
-    (u.is_partner ? `<br><span class="badge-partner">Partenaire ${u.partner_bonus_percent||0}%</span>` : '');
+async function bulkUserAction(action) {
+  const users = getSelectedUserObjects(); if (!users.length) return;
+  const labels = {suspend:'suspendre',ban:'bannir',unban:'débannir'};
+  const ok = await confirm(`Action en masse`, `Voulez-vous ${labels[action]} ${users.length} utilisateur(s) sélectionné(s) ?`, action === 'ban' ? 'btn-confirm-danger' : 'btn-confirm-warn');
+  if (!ok) return;
+  let done=0, failed=0;
+  for (const u of users) { const d = await apiFetch(`/admin/users/${u.discord_id}/status`, 'POST', {action}); if (d.ok) done++; else failed++; }
+  toast(`${done} action(s) effectuée(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+  selectedUserIds.clear(); selectedUserMap.clear(); loadUsers();
+}
 
-  const candBits = [];
-  if (u.submitted_partner) candBits.push('🤝 Partenaire');
-  if (u.submitted_team)    candBits.push('⚔️ Équipe');
-  const candCell = candBits.length
-    ? `<span class="badge-sub">${candBits.join(' · ')}</span>`
-    : `<span class="badge-nosub">—</span>`;
-
-  return `<tr>
-    <td>${avatar}<strong>${esc(u.pseudo)}</strong><br><span style="color:var(--muted);font-size:11px">${esc(u.discord_id)}</span></td>
-    <td><span class="badge-status badge-${status}">${labelMap[status]}</span></td>
-    <td>${mcCell}</td>
-    <td>${eclatsCell}</td>
-    <td>${candCell}</td>
-    <td><div class="actions">${actions}</div></td>
-  </tr>`;
+async function bulkAssignRole() {
+  const users = getSelectedUserObjects(); if (!users.length) return;
+  const role = prompt('Nom exact du rôle à attribuer :', 'moderator'); if (!role) return;
+  const scope = prompt('Scope du rôle :', 'global') || 'global';
+  let done=0, failed=0;
+  for (const u of users) { const d = await apiFetch(`/admin/users/${u.discord_id}/roles`, 'POST', {role, scope}); if (d.ok) done++; else failed++; }
+  toast(`${role} attribué à ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+}
+async function bulkRemoveRole() {
+  const users = getSelectedUserObjects(); if (!users.length) return;
+  const role = prompt('Nom exact du rôle à retirer :', 'moderator'); if (!role) return;
+  const scope = prompt('Scope du rôle :', 'global') || 'global';
+  let done=0, failed=0;
+  for (const u of users) { const d = await apiFetch(`/admin/users/${u.discord_id}/roles/${encodeURIComponent(role)}?scope=${encodeURIComponent(scope)}`, 'DELETE'); if (d.ok) done++; else failed++; }
+  toast(`${role} retiré de ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+}
+async function bulkGiveEclats() {
+  const users = getSelectedUserObjects(); if (!users.length) return;
+  const amount = parseInt(prompt(`Nombre d'Éclats à donner à chacun des ${users.length} utilisateurs :`, '100'),10);
+  if (!Number.isFinite(amount) || amount <= 0) return;
+  let done=0, failed=0;
+  for (const u of users) { const d = await apiFetch('/admin/eclats/grant','POST',{discord_id:u.discord_id,amount,reason:'admin_bulk_grant'}); if(d.ok) done++; else failed++; }
+  toast(`+${amount} 💎 donné à ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error':'success');
+  selectedUserIds.clear(); selectedUserMap.clear(); loadUsers();
 }
 
 // ── Raccourci : ouvrir l'onglet Rôles préchargé pour ce membre ──────────
@@ -1609,6 +1754,19 @@ function renderSite() {
       <button class="btn-action btn-delete" onclick="forgetSection('${slug}','${esc(x.key)}')">Oublier</button>
     </div>`;
 
+  const healthOk = s.builtin ? true : s.last_scan_status !== 'error' && !!s.last_seen_at;
+  const healthStatus = s.builtin ? 'Site opérationnel' : (healthOk ? 'Site opérationnel' : 'Manifest inaccessible');
+  const healthColor = healthOk ? 'var(--green)' : 'var(--red)';
+  const healthCard = `<div class="card">
+      <div class="card-title">Santé du site</div>
+      <div class="health-grid">
+        <div class="health-item"><div class="health-label">État</div><div class="health-value" style="color:${healthColor};">${healthOk ? '🟢' : '🔴'} ${healthStatus}</div></div>
+        <div class="health-item"><div class="health-label">Dernier scan</div><div class="health-value">${fmtDate(s.last_seen_at)}</div></div>
+        <div class="health-item"><div class="health-label">Manifest</div><div class="health-value" style="color:${s.builtin || !s.last_scan_status || s.last_scan_status !== 'error' ? 'var(--green)' : 'var(--red)'};">${s.builtin ? 'Intégré' : (s.last_scan_status === 'error' ? 'Erreur' : 'OK')}</div></div>
+      </div>
+      ${s.last_scan_error ? `<div style="margin-top:10px;color:var(--red);font-size:12px;">⚠️ ${esc(s.last_scan_error)}</div>` : ''}
+    </div>`;
+
   const infoCard = `<div class="card">
       <div class="card-title">${esc(s.name)} <span style="color:var(--muted);font-weight:400;">(${slug})</span> ${status}</div>
       ${s.description ? `<div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${esc(s.description)}</div>` : ''}
@@ -1644,13 +1802,25 @@ function renderSite() {
       ${absent.length ? `<div class="card-title" style="margin-top:18px;font-size:12px;">Disparues du manifeste</div><div class="flags-grid">${absent.map(absentItem).join('')}</div>` : ''}
     </div>`;
 
+  const permissionDanger = p => /(^|\.)(admin|delete|revoke|ban|destroy|write|manage|access)(\.|$)/i.test(p.key || '');
+  const permissionCards = s.permissions.map((p, i) => {
+    const dangerous = permissionDanger(p);
+    return `<label class="permission-card ${dangerous ? 'danger' : ''}" data-permission-key="${esc(p.key)}" data-permission-search="${esc((p.key+' '+(p.description||'')).toLowerCase())}">
+      <input type="checkbox" ${p.present ? 'checked' : ''} disabled>
+      <div><div>${dangerous ? '<span class="danger-dot">🔴</span> ' : ''}<code>${esc(p.key)}</code>${p.present ? '' : ' <span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">absente</span>'}</div>
+      <div class="permission-desc">${esc(p.description || 'Aucune description fournie.')}</div></div>
+    </label>`;
+  }).join('');
   const permsCard = s.builtin ? '' : `<div class="card">
       <div class="card-title">Permissions détectées (${s.permissions.filter(p => p.present).length})</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        ${s.permissions.length ? s.permissions.map(p => `<span class="badge" title="${esc(p.description || '')}" style="${p.present ? '' : 'opacity:.5;'}">${esc(p.key)}</span>`).join('')
-          : '<span class="empty-state">Ce site ne déclare aucune permission.</span>'}
+      <div class="permission-toolbar">
+        <input type="search" id="site-permission-search" placeholder="🔎 Rechercher une permission…" oninput="filterSitePermissions()" style="flex:1;min-width:220px;">
+        <span style="font-size:11px;color:var(--muted);">🔴 = permission sensible</span>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:10px;">À attribuer aux rôles dans la page « Rôles » (matrice « Permissions par rôle »).</div>
+      <div id="site-permission-grid" class="permission-grid">
+        ${permissionCards || '<span class="empty-state">Ce site ne déclare aucune permission.</span>'}
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;">Les permissions sont attribuées aux rôles dans la page « Rôles ».</div>
     </div>`;
 
   const integCard = s.builtin ? '' : `<div class="card">
@@ -1674,7 +1844,14 @@ function renderSite() {
       </details>
     </div>`;
 
-  el.innerHTML = infoCard + globalCard + sectionsCard + permsCard + integCard;
+  el.innerHTML = healthCard + infoCard + globalCard + sectionsCard + permsCard + integCard;
+}
+
+function filterSitePermissions() {
+  const q = (document.getElementById('site-permission-search')?.value || '').trim().toLowerCase();
+  document.querySelectorAll('#site-permission-grid .permission-card').forEach(el => {
+    el.style.display = !q || (el.dataset.permissionSearch || '').includes(q) ? 'flex' : 'none';
+  });
 }
 
 async function toggleSection(slug, key, enabled) {
@@ -2544,32 +2721,42 @@ const AUDIT_LIMIT = 50;
 
 async function loadAuditLogs(resetOffset = true) {
   if (resetOffset) auditOffset = 0;
-  const action = document.getElementById('audit-filter-action').value.trim();
-  const actorId = document.getElementById('audit-filter-actor').value.trim();
-
+  const ids = ['audit-filter-from','audit-filter-to','audit-filter-action','audit-filter-actor','audit-filter-resource','audit-filter-target','audit-filter-ip','audit-filter-result','audit-filter-service'];
+  const v = id => document.getElementById(id)?.value.trim() || '';
   const qs = new URLSearchParams({ limit: AUDIT_LIMIT, offset: auditOffset });
-  if (action) qs.set('action', action);
-  if (actorId) qs.set('actor_id', actorId);
-
+  const map = { 'audit-filter-from':'from', 'audit-filter-to':'to', 'audit-filter-action':'action', 'audit-filter-actor':'actor_id', 'audit-filter-resource':'resource', 'audit-filter-target':'target_user', 'audit-filter-ip':'ip', 'audit-filter-result':'result', 'audit-filter-service':'service' };
+  ids.forEach(id => { const x=v(id); if(x) qs.set(map[id],x); });
   const data = await apiFetch('/admin/audit-logs?' + qs.toString());
   const logs = data.logs || [];
-
+  window.__lastAuditLogs = logs;
   const tbody = document.getElementById('audit-tbody');
-  tbody.innerHTML = logs.length
-    ? logs.map(l => `<tr>
-        <td style="font-size:12px;color:var(--muted);">${new Date(l.created_at).toLocaleString()}</td>
-        <td>${esc(l.actor_id || '—')}<br><span style="color:var(--muted);font-size:11px">${esc(l.actor_type)}</span></td>
-        <td><span class="badge">${esc(l.action)}</span></td>
-        <td style="font-size:12px;">${esc(l.resource_type || '—')}${l.resource_id ? ' · ' + esc(l.resource_id) : ''}</td>
-        <td><span class="badge-status badge-${l.result === 'success' ? 'active' : 'banned'}">${esc(l.result)}</span></td>
-      </tr>`).join('')
-    : '<tr><td colspan="5" class="empty-state">Aucune entrée.</td></tr>';
-
+  tbody.innerHTML = logs.length ? logs.map(l => `<tr><td style="font-size:12px;color:var(--muted);">${fmtDate(l.created_at)}</td><td>${esc(l.actor_name || l.actor_pseudo || l.actor_id || '—')}<br><span style="color:var(--muted);font-size:11px">${esc(l.actor_id || l.actor_type || '')}</span></td><td><span class="badge">${esc(l.action)}</span></td><td style="font-size:12px;">${esc(l.resource_type || l.resource || '—')}${l.resource_id ? ' · '+esc(l.resource_id):''}</td><td><span class="badge-status badge-${l.result === 'success' ? 'active':'banned'}">${esc(l.result || '—')}</span></td></tr>`).join('') : '<tr><td colspan="5" class="empty-state">Aucune entrée.</td></tr>';
+  const timeline = document.getElementById('audit-timeline');
+  timeline.innerHTML = logs.length ? logs.slice(0,50).map(l => {
+    const actor = l.actor_name || l.actor_pseudo || l.actor_id || 'System';
+    const target = l.target_user_name || l.target_pseudo || l.target_user || l.resource_id || '';
+    let before = l.before, after = l.after;
+    if (typeof before === 'string') { try { before=JSON.parse(before); } catch {} }
+    if (typeof after === 'string') { try { after=JSON.parse(after); } catch {} }
+    const hasDiff = before && after && typeof before === 'object' && typeof after === 'object';
+    const keys = hasDiff ? [...new Set([...Object.keys(before),...Object.keys(after)])].filter(k => JSON.stringify(before[k]) !== JSON.stringify(after[k])).slice(0,8) : [];
+    const diff = keys.length ? `<div class="diff-box"><div><div class="diff-title">Avant</div>${keys.map(k=>`<code>${esc(k)} = ${esc(JSON.stringify(before[k]))}</code>`).join('<br>')}</div><div><div class="diff-title">Après</div>${keys.map(k=>`<code>${esc(k)} = ${esc(JSON.stringify(after[k]))}</code>`).join('<br>')}</div></div>` : '';
+    return `<div class="timeline-item"><div class="timeline-meta">${fmtDate(l.created_at)} · ${esc(actor)}</div><div class="timeline-main"><strong>${esc(l.action || 'Action')}</strong>${target ? ` <span style="color:var(--muted);">→ ${esc(target)}</span>`:''}${diff}</div></div>`;
+  }).join('') : '<div class="empty-state">Aucune entrée.</div>';
   const pagEl = document.getElementById('audit-pagination');
-  pagEl.innerHTML = `
-    <button class="btn-action btn-unlock" ${auditOffset === 0 ? 'disabled' : ''} onclick="auditOffset=Math.max(0,auditOffset-${AUDIT_LIMIT});loadAuditLogs(false)">← Précédent</button>
-    <button class="btn-action btn-unlock" ${logs.length < AUDIT_LIMIT ? 'disabled' : ''} onclick="auditOffset+=${AUDIT_LIMIT};loadAuditLogs(false)">Suivant →</button>
-  `;
+  pagEl.innerHTML = `<button class="btn-action btn-unlock" ${auditOffset===0?'disabled':''} onclick="auditOffset=Math.max(0,auditOffset-${AUDIT_LIMIT});loadAuditLogs(false)">← Précédent</button><button class="btn-action btn-unlock" ${logs.length<AUDIT_LIMIT?'disabled':''} onclick="auditOffset+=${AUDIT_LIMIT};loadAuditLogs(false)">Suivant →</button>`;
+}
+
+function exportAudit(format) {
+  const rows = window.__lastAuditLogs || [];
+  if (!rows.length) { toast('Aucune entrée à exporter.', 'error'); return; }
+  let content, mime, ext;
+  if (format === 'json') { content = JSON.stringify(rows, null, 2); mime='application/json'; ext='json'; }
+  else {
+    const cols=['created_at','actor_id','actor_name','action','resource_type','resource_id','result','target_user','ip','service'];
+    const csv=[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(r[c] ?? '').replace(/"/g,'""')}"`).join(','))].join('\n'); content='\\ufeff'+csv; mime='text/csv;charset=utf-8'; ext='csv';
+  }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type:mime})); a.download=`audit-export-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.${ext}`; a.click(); URL.revokeObjectURL(a.href);
 }
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -2745,6 +2932,49 @@ async function openSetFormWebhook(formType) {
     toast(data.error || 'Erreur', 'error');
   }
 }
+
+// ── Auto-refresh ──────────────────────────────────────────────────────────
+let autoRefreshTimer = null;
+function setAutoRefresh(ms) {
+  clearInterval(autoRefreshTimer); autoRefreshTimer = null;
+  const value = Number(ms) || 0;
+  if (!value) return;
+  autoRefreshTimer = setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    const refreshable = ['commandes','webhooks','audit','submissions'];
+    if (refreshable.includes(currentPage)) loadPage(currentPage);
+  }, value);
+}
+function updateAutoRefreshBar() {
+  const bar=document.getElementById('auto-refresh-bar');
+  if (!bar) return;
+  bar.classList.toggle('visible', ['commandes','webhooks','audit','submissions'].includes(currentPage));
+}
+
+// ── Command palette ──────────────────────────────────────────────────────
+const COMMANDS = [
+  {label:'Utilisateurs', hint:'Gestion et recherche', run:()=>showPage('users')},
+  {label:'Commandes', hint:'Suivi des commandes', run:()=>showPage('commandes')},
+  {label:'Créer un rôle', hint:'Rôles & permissions', run:()=>{showPage('roles');setTimeout(()=>document.getElementById('rbac-new-role')?.focus(),150)}},
+  {label:'Voir audit', hint:'Journal d’audit', run:()=>showPage('audit')},
+  {label:'Ajouter Éclats', hint:'Économie', run:()=>{showPage('eclats');setTimeout(()=>showEclatsTab('give'),100)}},
+  {label:'Sites & visibilité', hint:'Manifests et permissions', run:()=>showPage('sites')},
+  {label:'Webhooks', hint:'Livraisons et retries', run:()=>showPage('webhooks')},
+  {label:'Services & clés API', hint:'Accès machine', run:()=>showPage('services')},
+  {label:'Formulaires', hint:'Candidatures', run:()=>showPage('submissions')}
+];
+let commandIndex=0;
+function openCommandPalette() { const o=document.getElementById('command-palette-overlay'); o.classList.add('open'); document.getElementById('command-palette-input').value=''; commandIndex=0; renderCommandPalette(); setTimeout(()=>document.getElementById('command-palette-input').focus(),0); }
+function closeCommandPalette() { document.getElementById('command-palette-overlay').classList.remove('open'); }
+function filteredCommands() { const q=(document.getElementById('command-palette-input')?.value||'').toLowerCase().trim(); return COMMANDS.filter(c=>!q || (c.label+' '+c.hint).toLowerCase().includes(q)); }
+function renderCommandPalette() { const list=filteredCommands(); commandIndex=Math.min(commandIndex,Math.max(0,list.length-1)); document.getElementById('command-palette-results').innerHTML=list.map((c,i)=>`<button class="command-item ${i===commandIndex?'active':''}" onclick="runCommand(${COMMANDS.indexOf(c)})"><span>${esc(c.label)}</span><small>${esc(c.hint)}</small></button>`).join('') || '<div class="empty-state">Aucun résultat.</div>'; }
+function runCommand(i) { const c=COMMANDS[i]; if(!c)return; closeCommandPalette(); c.run(); }
+function commandPaletteKeydown(e) { const list=filteredCommands(); if(e.key==='ArrowDown'){e.preventDefault();commandIndex=Math.min(commandIndex+1,list.length-1);renderCommandPalette();} else if(e.key==='ArrowUp'){e.preventDefault();commandIndex=Math.max(commandIndex-1,0);renderCommandPalette();} else if(e.key==='Enter'){e.preventDefault();if(list[commandIndex])runCommand(COMMANDS.indexOf(list[commandIndex]));} else if(e.key==='Escape')closeCommandPalette(); }
+document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='k') { e.preventDefault(); openCommandPalette(); } else if(e.key==='Escape') closeCommandPalette(); });
+
+// showPage hook: conserve le comportement existant tout en actualisant le sélecteur auto-refresh.
+const __originalShowPage = showPage;
+showPage = function(name) { __originalShowPage(name); updateAutoRefreshBar(); };
 
 // ── Point d'entrée : si on revient de Discord (?code=...), on traite ça
 // avant d'afficher l'écran de login normal.
