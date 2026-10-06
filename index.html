@@ -269,6 +269,130 @@
   .subtabs { display: flex; gap: 8px; flex-wrap: wrap; }
   .subtab { padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--muted); }
   .subtab.active { color: var(--accent); border-color: var(--accent); background: var(--accent-bg); }
+\n  /* ── Polissage UI : champs, formulaires et responsive ── */
+  :root {
+    --surface-2: #191d27;
+    --input-bg: #11141b;
+    --input-hover: #141821;
+    --focus-ring: rgba(92,110,247,.18);
+    --shadow-soft: 0 8px 24px rgba(0,0,0,.16);
+  }
+
+  input, select, textarea, button { font: inherit; }
+
+  input, select, textarea {
+    color-scheme: dark;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]),
+  select, textarea {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--input-bg);
+    color: var(--text);
+    border: 1px solid #303649;
+    border-radius: 9px;
+    min-height: 40px;
+    padding: 9px 12px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+    transition: border-color .16s ease, box-shadow .16s ease, background .16s ease, transform .16s ease;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):hover,
+  select:hover, textarea:hover {
+    background: var(--input-hover);
+    border-color: #3a4258;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):focus,
+  select:focus, textarea:focus {
+    background: #10131a;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    outline: none;
+  }
+
+  input::placeholder, textarea::placeholder { color: #626b87; opacity: 1; }
+
+  select {
+    cursor: pointer;
+    padding-right: 36px;
+    background-image: linear-gradient(45deg, transparent 50%, #77809c 50%), linear-gradient(135deg, #77809c 50%, transparent 50%);
+    background-position: calc(100% - 16px) 17px, calc(100% - 11px) 17px;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+
+  option { background: #151923; color: var(--text); }
+
+  .form-field label, .field-label, .modal label.field-label {
+    color: #929ab5;
+    letter-spacing: .01em;
+  }
+
+  .form-field input, .form-field select { min-height: 42px; }
+
+  .search-bar input { min-height: 42px; }
+
+  .card {
+    box-shadow: 0 1px 0 rgba(255,255,255,.018), var(--shadow-soft);
+  }
+
+  .btn-primary, .btn-action, .subtab, .pagination button, .modal-actions button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-primary {
+    min-height: 42px;
+    box-shadow: 0 6px 16px rgba(92,110,247,.16);
+    transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover { opacity: 1; filter: brightness(1.06); box-shadow: 0 8px 20px rgba(92,110,247,.22); }
+  .btn-primary:active { transform: translateY(1px); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .btn-action { min-height: 32px; }
+
+  .subtab { transition: color .15s, border-color .15s, background .15s, transform .15s; }
+  .subtab:hover { color: var(--text); border-color: var(--border-hi); transform: translateY(-1px); }
+
+  .auth-card {
+    box-shadow: 0 24px 70px rgba(0,0,0,.35);
+    background: linear-gradient(180deg, #202433 0%, #1c1f2b 100%);
+  }
+  .auth-card input { min-height: 44px; margin-bottom: 14px; }
+
+  .modal { box-shadow: 0 24px 80px rgba(0,0,0,.42); }
+
+  .nav-item { min-height: 38px; }
+  .nav-item.active { box-shadow: inset 3px 0 0 var(--accent); }
+
+  @media (max-width: 900px) {
+    #app { overflow: auto; }
+    nav { width: 190px; }
+    .page { padding: 22px 20px; }
+    .form-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+  }
+
+  @media (max-width: 680px) {
+    #app { display: block; }
+    nav { width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+    .nav-logo { padding: 14px 16px; }
+    .nav-items { flex-direction: row; overflow-x: auto; padding: 8px; gap: 4px; }
+    .nav-section-label { display: none; }
+    .nav-item { width: auto; min-width: max-content; }
+    .nav-footer { display: none; }
+    main { min-height: calc(100vh - 65px); overflow: visible; }
+    .page { padding: 18px 14px; gap: 14px; }
+    .page-header h2 { font-size: 18px; }
+    .card { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-field[style*="span 2"] { grid-column: auto !important; }
+    .table-wrap { margin-inline: -4px; }
+    table { min-width: 680px; }
+    .auth-card { width: min(92vw, 380px); padding: 30px 24px; }
+  }
+
 </style>
 </head>
 <body>
