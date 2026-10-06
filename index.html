@@ -29,6 +29,29 @@
 
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; }
 
+
+  /* ── RBAC permissions explorer ── */
+  .rbac-tools { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:0 0 14px; }
+  .rbac-search { flex:1; min-width:240px; position:relative; }
+  .rbac-search input { width:100%; padding-left:38px !important; }
+  .rbac-search::before { content:'🔎'; position:absolute; left:13px; top:10px; z-index:2; font-size:14px; pointer-events:none; }
+  .rbac-result-count { font-size:12px; color:var(--muted); white-space:nowrap; }
+  .rbac-danger-legend { display:flex; gap:8px; align-items:center; font-size:11px; color:var(--muted); }
+  .rbac-perm-cell { min-width:280px; }
+  .rbac-perm-main { display:flex; align-items:flex-start; gap:9px; }
+  .rbac-perm-icon { width:24px; height:24px; flex:0 0 24px; border-radius:6px; display:flex; align-items:center; justify-content:center; background:var(--accent-bg); }
+  .rbac-perm-name { font-size:12px; font-weight:700; color:var(--text); line-height:1.35; }
+  .rbac-perm-key { display:block; margin-top:2px; color:var(--muted); font-size:10px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .rbac-perm-desc { margin-top:4px; color:#aeb5cc; font-size:11px; line-height:1.35; }
+  .rbac-danger { display:inline-flex; align-items:center; gap:4px; margin-left:5px; color:var(--red); font-size:10px; font-weight:700; }
+  .rbac-danger-dot { color:var(--red); }
+  .rbac-filter-empty { display:none; }
+  #rbac-body tr.rbac-hidden { display:none; }
+  #rbac-body tr.rbac-group-hidden { display:none; }
+  .rbac-check { width:17px; height:17px; accent-color:var(--accent); cursor:pointer; }
+  .rbac-role-head { min-width:110px; }
+  @media (max-width:680px) { .rbac-perm-cell { min-width:240px; } .rbac-search { min-width:100%; } }
+
   /* ── Layout ── */
   #app { display: flex; height: 100vh; overflow: hidden; }
 
@@ -906,8 +929,14 @@
       <div class="card">
         <div class="card-title">Permissions par rôle</div>
         <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
-          Les permissions des sites apparaissent ici dès qu'elles sont détectées. Une case cochée accorde la permission au rôle ;
-          elle ne vaut ensuite que dans le <strong>scope</strong> où le rôle est attribué à l'utilisateur (ex : scope « wiki »).
+          Les permissions des sites apparaissent ici dès qu'elles sont détectées. Recherche instantanée, descriptions lisibles et marquage des permissions sensibles. Une case cochée accorde la permission au rôle ; elle ne vaut ensuite que dans le <strong>scope</strong> où le rôle est attribué à l'utilisateur (ex : scope « wiki »).
+        </div>
+        <div class="rbac-tools">
+          <div class="rbac-search">
+            <input type="search" id="rbac-permission-search" placeholder="Rechercher une permission : wiki, users.delete…" autocomplete="off" oninput="filterRbacPermissions(this.value)">
+          </div>
+          <span class="rbac-result-count" id="rbac-result-count">0 permission</span>
+          <span class="rbac-danger-legend">🔴 Permission dangereuse</span>
         </div>
         <div class="table-wrap">
           <table>
@@ -1950,38 +1979,110 @@ async function loadRbac() {
       return;
     }
     RBAC = d;
-  document.getElementById('scope-options').innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
+    document.getElementById('scope-options').innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
 
-  const roles = d.roles || [];
-  renderRoleCards(roles);
-  document.getElementById('rbac-head').innerHTML = `<tr><th>Permission</th>${roles.map(r =>
-    `<th style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${esc(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
+    const roles = d.roles || [];
+    renderRoleCards(roles);
+    headEl.innerHTML = `<tr><th class="rbac-role-head">Permission</th>${roles.map(r =>
+      `<th class="rbac-role-head" style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${esc(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
 
-  // Groupes : noyau (sans propriétaire) puis un groupe par site
-  const groups = new Map();
-  for (const p of d.permissions || []) {
-    const g = p.site || '';
-    if (!groups.has(g)) groups.set(g, []);
-    groups.get(g).push(p);
-  }
-  const order = ['', ...[...groups.keys()].filter(k => k !== '').sort()].filter(k => groups.has(k));
-  let html = '';
-  for (const g of order) {
-    html += `<tr><td colspan="${roles.length + 1}" style="background:var(--surface);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);">${g ? '🌐 ' + esc(g) : '⚙️ NOYAU'}</td></tr>`;
-    for (const p of groups.get(g)) {
-      html += `<tr${p.present ? '' : ' style="opacity:.55;"'}><td><code>${esc(p.key)}</code>${p.description ? `<br><span style="font-size:11px;color:var(--muted);">${esc(p.description)}</span>` : ''}${p.present ? '' : ' <span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">disparue</span>'}</td>`
-        + roles.map(r => {
-          const locked = r.name === 'administrator' && p.key === 'admin.access';
-          return `<td style="text-align:center;"><input type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? 'disabled title="Indispensable à l\'accès au panel"' : ''}
-            onchange="toggleRolePerm('${esc(r.name)}','${esc(p.key)}',this.checked)"></td>`;
-        }).join('') + '</tr>';
+    const groups = new Map();
+    for (const p of d.permissions || []) {
+      const g = p.site || '';
+      if (!groups.has(g)) groups.set(g, []);
+      groups.get(g).push(p);
     }
-  }
-  document.getElementById('rbac-body').innerHTML = html || '<tr><td class="empty-state">Aucune permission.</td></tr>';
+    const order = ['', ...[...groups.keys()].filter(k => k !== '').sort()].filter(k => groups.has(k));
+    let html = '';
+    for (const g of order) {
+      html += `<tr class="rbac-group" data-group="${esc(g)}"><td colspan="${roles.length + 1}" style="background:var(--surface);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);">${g ? '🌐 ' + esc(g) : '⚙️ NOYAU'}</td></tr>`;
+      for (const p of groups.get(g)) {
+        const meta = permissionPresentation(p);
+        const searchText = `${p.key} ${p.description || ''} ${meta.description} ${g}`.toLowerCase();
+        html += `<tr class="rbac-permission-row" data-permission-search="${esc(searchText)}"${p.present ? '' : ' style="opacity:.55;"'}>`
+          + `<td class="rbac-perm-cell"><div class="rbac-perm-main"><span class="rbac-perm-icon">${meta.icon}</span><div><div class="rbac-perm-name">${esc(meta.label)}${meta.danger ? '<span class="rbac-danger"><span class="rbac-danger-dot">🔴</span> DANGEREUSE</span>' : ''}</div><code class="rbac-perm-key">${esc(p.key)}</code><div class="rbac-perm-desc">${esc(meta.description)}</div>${!p.present ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);margin-top:5px;">permission disparue du manifeste</span>' : ''}</div></div></td>`
+          + roles.map(r => {
+            const locked = r.name === 'administrator' && p.key === 'admin.access';
+            return `<td style="text-align:center;"><input class="rbac-check" type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? 'disabled title="Indispensable à l\'accès au panel"' : ''} onchange="toggleRolePerm('${esc(r.name)}','${esc(p.key)}',this.checked)"></td>`;
+          }).join('') + '</tr>';
+      }
+    }
+    bodyEl.innerHTML = html || '<tr><td class="empty-state">Aucune permission.</td></tr>';
+    filterRbacPermissions(document.getElementById('rbac-permission-search')?.value || '');
   } catch (e) {
     headEl.innerHTML = '<tr><th>Permissions par rôle</th></tr>';
     bodyEl.innerHTML = `<tr><td class="empty-state"><strong>Impossible de charger les permissions.</strong><br><span style="font-size:11px;">${esc(e?.message || 'Erreur réseau.')}</span></td></tr>`;
   }
+}
+
+const RBAC_DANGEROUS_PERMISSIONS = new Set([
+  'admin.access', 'users.delete', 'keys.revoke', 'roles.delete', 'roles.manage',
+  'services.delete', 'webhooks.delete', 'audit.export', 'admin.impersonate'
+]);
+
+const RBAC_PERMISSION_PRESENTATION = [
+  { test:/^wiki\\.read$/i, icon:'📖', label:'Lire les pages du wiki', desc:'Consulter les pages et le contenu du wiki.' },
+  { test:/^wiki\\.write$/i, icon:'✏️', label:'Modifier les pages du wiki', desc:'Créer et modifier les pages du wiki.' },
+  { test:/^wiki\\.delete$/i, icon:'🗑️', label:'Supprimer les pages du wiki', desc:'Supprimer des pages du wiki.' },
+  { test:/^users\\.read$/i, icon:'👤', label:'Consulter les utilisateurs', desc:'Voir les informations et profils des utilisateurs.' },
+  { test:/^users\\.write$/i, icon:'✏️', label:'Modifier les utilisateurs', desc:'Modifier les informations ou paramètres des utilisateurs.' },
+  { test:/^users\\.delete$/i, icon:'🗑️', label:'Supprimer des utilisateurs', desc:'Supprimer définitivement des utilisateurs.' },
+  { test:/^orders\\.read$/i, icon:'🛒', label:'Consulter les commandes', desc:'Voir les commandes et leur état.' },
+  { test:/^orders\\.write$/i, icon:'📝', label:'Gérer les commandes', desc:'Modifier ou traiter les commandes.' },
+  { test:/^admin\\.access$/i, icon:'🛡️', label:'Accéder à l’administration', desc:'Accéder aux fonctions d’administration du panel.' },
+  { test:/^keys\\.revoke$/i, icon:'🔑', label:'Révoquer les clés API', desc:'Révoquer les clés d’accès des services.' },
+  { test:/^keys\\.read$/i, icon:'🔐', label:'Consulter les clés API', desc:'Voir les clés et leurs métadonnées.' },
+  { test:/^services\\.read$/i, icon:'⚙️', label:'Consulter les services', desc:'Voir les services connectés et leurs configurations.' },
+  { test:/^services\\.write$/i, icon:'⚙️', label:'Gérer les services', desc:'Créer ou modifier les services connectés.' },
+  { test:/^roles\\.read$/i, icon:'🎭', label:'Consulter les rôles', desc:'Voir les rôles et leurs permissions.' },
+  { test:/^roles\\.write$/i, icon:'🎭', label:'Gérer les rôles', desc:'Créer ou modifier les rôles et leurs permissions.' },
+  { test:/^webhooks\\.read$/i, icon:'🔗', label:'Consulter les webhooks', desc:'Voir les webhooks et leur état.' },
+  { test:/^webhooks\\.write$/i, icon:'🔗', label:'Gérer les webhooks', desc:'Créer ou modifier les webhooks.' },
+  { test:/^audit\\.read$/i, icon:'📋', label:'Consulter le journal d’audit', desc:'Consulter les événements enregistrés dans le journal d’audit.' },
+  { test:/^audit\\.export$/i, icon:'📤', label:'Exporter le journal d’audit', desc:'Exporter les événements du journal d’audit.' }
+];
+
+function permissionPresentation(p) {
+  const key = String(p?.key || '');
+  const known = RBAC_PERMISSION_PRESENTATION.find(x => x.test.test(key));
+  const danger = RBAC_DANGEROUS_PERMISSIONS.has(key) || /(^|\\.)(delete|revoke|impersonate)$/i.test(key) || /(^|\\.)admin\\.access$/i.test(key);
+  if (known) return { icon:known.icon, label:known.label, description:p.description || known.desc, danger };
+  const parts = key.split('.');
+  const action = parts.pop() || key;
+  const resource = parts.join('.') || 'ressource';
+  const actionLabels = { read:'Consulter', write:'Modifier', create:'Créer', delete:'Supprimer', manage:'Gérer', export:'Exporter', revoke:'Révoquer', execute:'Exécuter', approve:'Approuver' };
+  const icons = { read:'👁️', write:'✏️', create:'➕', delete:'🗑️', manage:'⚙️', export:'📤', revoke:'🔑', execute:'⚡', approve:'✅' };
+  const label = actionLabels[action] ? `${actionLabels[action]} ${resource}` : key;
+  return { icon:icons[action] || '🔹', label, description:p.description || `Permission permettant d’effectuer l’action « ${action} » sur ${resource}.`, danger };
+}
+
+function filterRbacPermissions(query) {
+  const q = String(query || '').trim().toLowerCase();
+  const body = document.getElementById('rbac-body');
+  if (!body) return;
+  const groups = new Map();
+  let currentGroup = null;
+  let visible = 0;
+  [...body.children].forEach(row => {
+    if (row.classList.contains('rbac-group')) {
+      currentGroup = row;
+      groups.set(row, { visible: 0, name: (row.dataset.group || '').toLowerCase() });
+      return;
+    }
+    if (!row.classList.contains('rbac-permission-row')) return;
+    const match = !q || (row.dataset.permissionSearch || '').includes(q);
+    row.classList.toggle('rbac-hidden', !match);
+    if (match) {
+      visible++;
+      if (currentGroup) groups.get(currentGroup).visible++;
+    }
+  });
+  groups.forEach((info, group) => {
+    const groupMatches = q && info.name.includes(q);
+    group.classList.toggle('rbac-group-hidden', !!q && info.visible === 0 && !groupMatches);
+  });
+  const count = document.getElementById('rbac-result-count');
+  if (count) count.textContent = `${visible} permission${visible > 1 ? 's' : ''}${q ? ' trouvée' + (visible > 1 ? 's' : '') : ''}`;
 }
 
 function renderRoleCards(roles) {
