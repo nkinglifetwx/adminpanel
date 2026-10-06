@@ -29,7 +29,6 @@
 
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; }
 
-
   /* ── RBAC permissions explorer ── */
   .rbac-tools { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:0 0 14px; }
   .rbac-search { flex:1; min-width:240px; position:relative; }
@@ -71,7 +70,7 @@
   .nav-logo h1 { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -.2px; }
   .nav-logo span { font-size: 11px; color: var(--muted); display: block; margin-top: 1px; }
 
-  .nav-items { padding: 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .nav-items { padding: 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
   .nav-item {
     display: flex; align-items: center; gap: 10px;
     padding: 8px 12px; border-radius: var(--radius);
@@ -202,6 +201,7 @@
 
   .badge-sub { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--accent-bg); color: var(--accent); }
   .badge-nosub { display: inline-block; font-size: 11px; color: var(--muted); padding: 2px 8px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--accent-bg); color: var(--accent); }
 
   /* ── Action buttons ── */
   .actions { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -307,7 +307,7 @@
   .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── Éclats & Boutique (NOUVEAU) ── */
+  /* ── Éclats & Boutique ── */
   .eclats-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--amber); }
   .badge-partner { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--amber-bg); color: var(--amber); }
   .btn-eclats  { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
@@ -333,7 +333,8 @@
   .subtabs { display: flex; gap: 8px; flex-wrap: wrap; }
   .subtab { padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--muted); }
   .subtab.active { color: var(--accent); border-color: var(--accent); background: var(--accent-bg); }
-\n  /* ── Polissage UI : champs, formulaires et responsive ── */
+
+  /* ── Polissage UI : champs, formulaires et responsive ── */
   :root {
     --surface-2: #191d27;
     --input-bg: #11141b;
@@ -457,47 +458,46 @@
     .auth-card { width: min(92vw, 380px); padding: 30px 24px; }
   }
 
-
-/* ── Gestion des rôles : cartes simples et lisibles ───────────────────── */
-.roles-manager-card { overflow:hidden; }
-.roles-manager-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
-.roles-manager-subtitle { color:var(--muted); font-size:12px; }
-.roles-count { padding:5px 9px; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:11px; white-space:nowrap; background:var(--surface); }
-.roles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(245px,1fr)); gap:12px; }
-.role-card { position:relative; min-height:168px; padding:15px; border:1px solid var(--border); border-radius:12px; background:linear-gradient(145deg,var(--card),var(--surface)); transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
-.role-card:hover { transform:translateY(-2px); border-color:#3a4260; box-shadow:var(--shadow-soft); }
-.role-card-builtin { border-color:rgba(92,110,247,.28); }
-.role-card-top { display:flex; align-items:center; gap:9px; min-width:0; }
-.role-icon { width:28px; height:28px; display:grid; place-items:center; flex:0 0 28px; border-radius:8px; background:rgba(92,110,247,.12); color:var(--accent); font-size:11px; }
-.role-card-builtin .role-icon { color:var(--amber); background:rgba(245,183,78,.10); }
-.role-card-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:700; font-size:14px; color:var(--text); }
-.role-builtin { margin-left:auto; padding:3px 6px; border-radius:5px; background:rgba(92,110,247,.10); color:#9aa5ff; font-size:8px; font-weight:800; letter-spacing:.06em; }
-.role-delete { margin-left:auto; width:26px; height:26px; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; font-size:18px; line-height:1; }
-.role-delete:hover { color:var(--red); background:rgba(239,91,91,.08); border-color:rgba(239,91,91,.16); }
-.role-card-meta { margin-top:10px; color:var(--muted); font-size:11px; }
-.role-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; min-height:27px; }
-.role-tag { max-width:100%; padding:4px 7px; border:1px solid #303649; border-radius:6px; background:var(--input-bg); color:#b7bfd7; font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.role-tag-more { color:var(--accent); border-color:rgba(92,110,247,.25); }
-.role-no-perms { color:var(--muted); font-size:11px; font-style:italic; }
-.role-configure { width:100%; margin-top:13px; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:var(--surface); color:var(--muted); cursor:pointer; text-align:left; font-size:11px; transition:.15s ease; }
-.role-configure span { float:right; color:var(--accent); }
-.role-configure:hover { border-color:var(--accent); color:var(--text); background:var(--input-bg); }
-.role-empty { grid-column:1/-1; min-height:90px; display:flex; align-items:center; justify-content:center; gap:10px; color:var(--muted); font-size:12px; }
-.role-empty > div { display:flex; flex-direction:column; gap:3px; }
-.role-empty strong { color:var(--text); font-size:13px; }
-.role-empty-icon { width:30px; height:30px; display:grid; place-items:center; border:1px dashed var(--border); border-radius:8px; color:var(--accent); }
-.role-create-box { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:13px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
-.role-create-title { color:var(--text); font-size:12px; font-weight:700; }
-.role-create-help { margin-top:3px; color:var(--muted); font-size:10px; }
-.role-create-actions { display:flex; gap:8px; flex:0 0 auto; }
-.role-create-actions input { width:220px; }
-.role-highlight { background:rgba(92,110,247,.16) !important; color:var(--text) !important; transition:background .2s ease; }
-@media (max-width:680px) {
-  .roles-manager-head, .role-create-box { align-items:stretch; flex-direction:column; }
-  .role-create-actions { width:100%; }
-  .role-create-actions input { width:auto; flex:1; min-width:0; }
-  .roles-grid { grid-template-columns:1fr; }
-}
+  /* ── Gestion des rôles : cartes simples et lisibles ── */
+  .roles-manager-card { overflow:hidden; }
+  .roles-manager-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+  .roles-manager-subtitle { color:var(--muted); font-size:12px; }
+  .roles-count { padding:5px 9px; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:11px; white-space:nowrap; background:var(--surface); }
+  .roles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(245px,1fr)); gap:12px; }
+  .role-card { position:relative; min-height:168px; padding:15px; border:1px solid var(--border); border-radius:12px; background:linear-gradient(145deg,var(--card),var(--surface)); transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
+  .role-card:hover { transform:translateY(-2px); border-color:#3a4260; box-shadow:var(--shadow-soft); }
+  .role-card-builtin { border-color:rgba(92,110,247,.28); }
+  .role-card-top { display:flex; align-items:center; gap:9px; min-width:0; }
+  .role-icon { width:28px; height:28px; display:grid; place-items:center; flex:0 0 28px; border-radius:8px; background:rgba(92,110,247,.12); color:var(--accent); font-size:11px; }
+  .role-card-builtin .role-icon { color:var(--amber); background:rgba(245,183,78,.10); }
+  .role-card-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:700; font-size:14px; color:var(--text); }
+  .role-builtin { margin-left:auto; padding:3px 6px; border-radius:5px; background:rgba(92,110,247,.10); color:#9aa5ff; font-size:8px; font-weight:800; letter-spacing:.06em; }
+  .role-delete { margin-left:auto; width:26px; height:26px; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; font-size:18px; line-height:1; }
+  .role-delete:hover { color:var(--red); background:rgba(239,91,91,.08); border-color:rgba(239,91,91,.16); }
+  .role-card-meta { margin-top:10px; color:var(--muted); font-size:11px; }
+  .role-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; min-height:27px; }
+  .role-tag { max-width:100%; padding:4px 7px; border:1px solid #303649; border-radius:6px; background:var(--input-bg); color:#b7bfd7; font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .role-tag-more { color:var(--accent); border-color:rgba(92,110,247,.25); }
+  .role-no-perms { color:var(--muted); font-size:11px; font-style:italic; }
+  .role-configure { width:100%; margin-top:13px; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:var(--surface); color:var(--muted); cursor:pointer; text-align:left; font-size:11px; transition:.15s ease; }
+  .role-configure span { float:right; color:var(--accent); }
+  .role-configure:hover { border-color:var(--accent); color:var(--text); background:var(--input-bg); }
+  .role-empty { grid-column:1/-1; min-height:90px; display:flex; align-items:center; justify-content:center; gap:10px; color:var(--muted); font-size:12px; }
+  .role-empty > div { display:flex; flex-direction:column; gap:3px; }
+  .role-empty strong { color:var(--text); font-size:13px; }
+  .role-empty-icon { width:30px; height:30px; display:grid; place-items:center; border:1px dashed var(--border); border-radius:8px; color:var(--accent); }
+  .role-create-box { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:13px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+  .role-create-title { color:var(--text); font-size:12px; font-weight:700; }
+  .role-create-help { margin-top:3px; color:var(--muted); font-size:10px; }
+  .role-create-actions { display:flex; gap:8px; flex:0 0 auto; }
+  .role-create-actions input { width:220px; }
+  .role-highlight { background:rgba(92,110,247,.16) !important; color:var(--text) !important; transition:background .2s ease; }
+  @media (max-width:680px) {
+    .roles-manager-head, .role-create-box { align-items:stretch; flex-direction:column; }
+    .role-create-actions { width:100%; }
+    .role-create-actions input { width:auto; flex:1; min-width:0; }
+    .roles-grid { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -665,7 +665,7 @@
       </div>
     </div>
 
-    <!-- ── Page Éclats & Boutique (NOUVEAU) ── -->
+    <!-- ── Page Éclats & Boutique ── -->
     <div id="page-eclats" class="page">
       <div class="page-header">
         <h2>Éclats &amp; Boutique</h2>
@@ -1027,7 +1027,7 @@
           <input type="text" id="audit-filter-resource" placeholder="Ressource…">
           <input type="text" id="audit-filter-target" placeholder="Utilisateur ciblé…">
           <input type="text" id="audit-filter-ip" placeholder="IP…">
-          <select id="audit-filter-result"><option value="">Succès / échec</option><option value="success">Succès</option><option value="error">Échec</option></select>
+          <select id="audit-filter-result"><option value="">Succès / échec</option><option value="success">Succès</option><option value="failure">Échec</option></select>
           <input type="text" id="audit-filter-service" placeholder="Service…">
         </div>
         <div class="actions" style="margin-top:10px;">
@@ -1149,13 +1149,15 @@
   </main>
 </div>
 
-<!-- Toast -->
+<!-- Command palette -->
 <div id="command-palette-overlay" onclick="if(event.target===this)closeCommandPalette()">
   <div class="command-palette">
     <input id="command-palette-input" type="search" placeholder="Rechercher une fonctionnalité…" oninput="renderCommandPalette()" onkeydown="commandPaletteKeydown(event)" autocomplete="off">
     <div id="command-palette-results" class="command-results"></div>
   </div>
 </div>
+
+<!-- Toast -->
 <div id="toast"></div>
 
 <!-- Confirm modal -->
@@ -1220,6 +1222,61 @@ const USER_LIMIT = 20;
 let currentSubFilter = null;
 let modalResolve = null;
 
+// ── Session persistante (connexion Discord) ───────────────────────────────
+const SESSION_KEY    = 'relink_admin_session';
+const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // durée d'inactivité max : 7 jours (modifiable)
+
+function decodeJwt(token) {
+  try {
+    const b = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(b));
+  } catch { return null; }
+}
+
+function saveSession() {
+  if (AUTH_MODE !== 'bearer' || !ACCESS_TOKEN) return;
+  const jwtExpMs = (decodeJwt(ACCESS_TOKEN)?.exp || 0) * 1000;
+  const expiresAt = Math.min(Date.now() + SESSION_TTL_MS, jwtExpMs || Infinity);
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ token: ACCESS_TOKEN, url: WORKER_URL, expiresAt }));
+  } catch { /* stockage indisponible : pas de persistance, rien ne casse */ }
+}
+
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch {}
+}
+
+// Tente de rouvrir le panel avec la session sauvegardée. Renvoie true si OK.
+async function restoreSession() {
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch {}
+  if (!s || !s.token || !s.url || Date.now() > s.expiresAt) { clearSession(); return false; }
+
+  const payload = decodeJwt(s.token);
+  if (!payload || !payload.exp || payload.exp * 1000 < Date.now()) { clearSession(); return false; }
+
+  try {
+    const r = await fetch(s.url.replace(/\/$/, '') + '/me/permissions?scope=global', {
+      headers: { Authorization: `Bearer ${s.token}` },
+    });
+    // Token révoqué, compte banni/supprimé, session expirée côté serveur
+    if (r.status === 401 || r.status === 403) { clearSession(); return false; }
+    const d = await r.json();
+    if (!d.permissions?.includes('admin.access')) { clearSession(); return false; }
+  } catch {
+    // Réseau/Worker injoignable : on NE supprime PAS la session (panne temporaire),
+    // on retombe simplement sur l'écran de connexion.
+    return false;
+  }
+
+  WORKER_URL   = s.url.replace(/\/$/, '');
+  ACCESS_TOKEN = s.token;
+  AUTH_MODE    = 'bearer';
+  saveSession(); // prolonge la fenêtre d'inactivité à chaque ouverture
+  enterPanel();
+  return true;
+}
+
 // ── Auth ──────────────────────────────────────────────────────────────────
 async function login() {
   const secretVal = document.getElementById('secret-input').value.trim();
@@ -1231,6 +1288,7 @@ async function login() {
 
   ADMIN_SECRET = secretVal;
   WORKER_URL   = url.replace(/\/$/, '');
+  AUTH_MODE    = 'secret';
 
   try {
     const r = await apiFetch('/admin/flags', 'GET');
@@ -1255,7 +1313,18 @@ function enterPanel() {
   loadPage('users');
 }
 
-function logout() {
+async function logout() {
+  if (AUTH_MODE === 'bearer' && ACCESS_TOKEN) {
+    const sid = decodeJwt(ACCESS_TOKEN)?.sid;
+    if (sid) {
+      try {
+        await fetch(`${WORKER_URL}/me/sessions/${encodeURIComponent(sid)}`, {
+          method: 'DELETE', headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+        });
+      } catch { /* pas bloquant */ }
+    }
+  }
+  clearSession();
   ADMIN_SECRET = ''; WORKER_URL = ''; ACCESS_TOKEN = ''; AUTH_MODE = 'secret';
   location.href = location.pathname; // nettoie aussi un éventuel ?code= restant dans l'URL
 }
@@ -1309,7 +1378,7 @@ async function handleDiscordCallback() {
     });
     const authData = await authRes.json();
     if (!authRes.ok || !authData.access_token) {
-      showError(authData?.error?.message || 'Connexion Discord impossible.');
+      showError(authData?.error?.message || authData?.error || 'Connexion Discord impossible.');
       return;
     }
 
@@ -1326,6 +1395,7 @@ async function handleDiscordCallback() {
 
     ACCESS_TOKEN = authData.access_token;
     AUTH_MODE = 'bearer';
+    saveSession();
     enterPanel();
   } catch (e) {
     showError('Impossible de joindre le Worker : ' + e.message);
@@ -1343,7 +1413,6 @@ async function apiFetch(path, method = 'GET', body = null) {
   const r = await fetch(WORKER_URL + path, opts);
 
   // Toujours tenter de lire la réponse, même lorsque le Worker renvoie 4xx/5xx.
-  // Cela évite les chargements infinis quand une route backend tombe en erreur.
   let data = null;
   const contentType = r.headers.get('content-type') || '';
   try {
@@ -1352,8 +1421,23 @@ async function apiFetch(path, method = 'GET', body = null) {
     data = { error: `Réponse invalide du serveur (HTTP ${r.status}).` };
   }
 
+  // Session expirée / révoquée pendant l'utilisation
+  if (r.status === 401 && AUTH_MODE === 'bearer') {
+    clearSession();
+    toast('Session expirée, reconnecte-toi.', 'error');
+    setTimeout(() => { location.href = location.pathname; }, 1200);
+  }
+
   if (!r.ok) {
-    const message = data?.error || data?.message || `Erreur serveur (HTTP ${r.status}).`;
+    // Normalise l'erreur en TEXTE (le Worker renvoie parfois { code, message, details }),
+    // pour que « data.error || 'Erreur' » n'affiche jamais « [object Object] ».
+    let message = `Erreur serveur (HTTP ${r.status}).`;
+    const e = data && (data.error ?? data.message);
+    if (typeof e === 'string' && e) message = e;
+    else if (e && typeof e === 'object') {
+      message = e.message || message;
+      if (Array.isArray(e.details) && e.details.length) message += ' — ' + e.details.join(' ; ');
+    }
     return { ...(data && typeof data === 'object' ? data : {}), error: message, status: r.status, ok: false };
   }
   return data && typeof data === 'object' ? data : { data };
@@ -1450,7 +1534,7 @@ function toggleUserSelection(id, checked) {
 function toggleAllUsers(checked) {
   lastLoadedUsers.forEach(u => {
     const id = String(u.discord_id);
-    if (checked) { selectedUserIds.add(id); const u=lastLoadedUsers.find(x=>String(x.discord_id)===id); if(u) selectedUserMap.set(id,u); } else { selectedUserIds.delete(id); selectedUserMap.delete(id); }
+    if (checked) { selectedUserIds.add(id); selectedUserMap.set(id, u); } else { selectedUserIds.delete(id); selectedUserMap.delete(id); }
   });
   document.querySelectorAll('.user-row-check').forEach(c => c.checked = checked);
   updateSelectionToolbar();
@@ -1541,7 +1625,7 @@ async function bulkGiveEclats() {
   const amount = parseInt(prompt(`Nombre d'Éclats à donner à chacun des ${users.length} utilisateurs :`, '100'),10);
   if (!Number.isFinite(amount) || amount <= 0) return;
   let done=0, failed=0;
-  for (const u of users) { const d = await apiFetch('/admin/eclats/grant','POST',{discord_id:u.discord_id,amount,reason:'admin_bulk_grant'}); if(d.ok) done++; else failed++; }
+  for (const u of users) { const d = await apiFetch('/admin/eclats/grant','POST',{discord_id:u.discord_id,amount,reason:'staff_bonus'}); if(d.ok) done++; else failed++; }
   toast(`+${amount} 💎 donné à ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error':'success');
   selectedUserIds.clear(); selectedUserMap.clear(); loadUsers();
 }
@@ -1658,8 +1742,8 @@ async function loadSubmissions(type) {
 
   tbody.innerHTML = subs.map(s => {
     const avatar = s.avatar_url
-      ? `<img class="avatar" src="${s.avatar_url}" alt="">`
-      : `<span class="avatar-placeholder">${(s.pseudo||'?')[0].toUpperCase()}</span>`;
+      ? `<img class="avatar" src="${esc(s.avatar_url)}" alt="">`
+      : `<span class="avatar-placeholder">${esc((s.pseudo||'?')[0].toUpperCase())}</span>`;
     const typeLabel = s.type === 'partner' ? '🤝 Partenaire' : '⚔️ Équipe';
     const date = new Date(s.created_at).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
@@ -1667,7 +1751,7 @@ async function loadSubmissions(type) {
       <td>${avatar}<strong>${esc(s.pseudo || s.discord_id)}</strong><br><span style="color:var(--muted);font-size:11px">${esc(s.discord_id)}</span></td>
       <td><span class="badge-status badge-active">${typeLabel}</span></td>
       <td style="color:var(--muted);font-size:12px">${date}</td>
-      <td><button class="btn-action btn-unlock" onclick="unlockSub('${s.discord_id}','${esc(s.pseudo||s.discord_id)}','${s.type}')">Débloquer</button></td>
+      <td><button class="btn-action btn-unlock" onclick="unlockSub('${esc(s.discord_id)}','${escJsAttr(s.pseudo||s.discord_id)}','${esc(s.type)}')">Débloquer</button></td>
     </tr>`;
   }).join('');
 }
@@ -1984,7 +2068,7 @@ async function loadRbac() {
     const roles = d.roles || [];
     renderRoleCards(roles);
     headEl.innerHTML = `<tr><th class="rbac-role-head">Permission</th>${roles.map(r =>
-      `<th class="rbac-role-head" style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${esc(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
+      `<th class="rbac-role-head" style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${escJsAttr(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
 
     const groups = new Map();
     for (const p of d.permissions || []) {
@@ -2003,7 +2087,7 @@ async function loadRbac() {
           + `<td class="rbac-perm-cell"><div class="rbac-perm-main"><span class="rbac-perm-icon">${meta.icon}</span><div><div class="rbac-perm-name">${esc(meta.label)}${meta.danger ? '<span class="rbac-danger"><span class="rbac-danger-dot">🔴</span> DANGEREUSE</span>' : ''}</div><code class="rbac-perm-key">${esc(p.key)}</code><div class="rbac-perm-desc">${esc(meta.description)}</div>${!p.present ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);margin-top:5px;">permission disparue du manifeste</span>' : ''}</div></div></td>`
           + roles.map(r => {
             const locked = r.name === 'administrator' && p.key === 'admin.access';
-            return `<td style="text-align:center;"><input class="rbac-check" type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? 'disabled title="Indispensable à l\'accès au panel"' : ''} onchange="toggleRolePerm('${esc(r.name)}','${esc(p.key)}',this.checked)"></td>`;
+            return `<td style="text-align:center;"><input class="rbac-check" type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? 'disabled title="Indispensable à l\'accès au panel"' : ''} onchange="toggleRolePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"></td>`;
           }).join('') + '</tr>';
       }
     }
@@ -2021,31 +2105,31 @@ const RBAC_DANGEROUS_PERMISSIONS = new Set([
 ]);
 
 const RBAC_PERMISSION_PRESENTATION = [
-  { test:/^wiki\\.read$/i, icon:'📖', label:'Lire les pages du wiki', desc:'Consulter les pages et le contenu du wiki.' },
-  { test:/^wiki\\.write$/i, icon:'✏️', label:'Modifier les pages du wiki', desc:'Créer et modifier les pages du wiki.' },
-  { test:/^wiki\\.delete$/i, icon:'🗑️', label:'Supprimer les pages du wiki', desc:'Supprimer des pages du wiki.' },
-  { test:/^users\\.read$/i, icon:'👤', label:'Consulter les utilisateurs', desc:'Voir les informations et profils des utilisateurs.' },
-  { test:/^users\\.write$/i, icon:'✏️', label:'Modifier les utilisateurs', desc:'Modifier les informations ou paramètres des utilisateurs.' },
-  { test:/^users\\.delete$/i, icon:'🗑️', label:'Supprimer des utilisateurs', desc:'Supprimer définitivement des utilisateurs.' },
-  { test:/^orders\\.read$/i, icon:'🛒', label:'Consulter les commandes', desc:'Voir les commandes et leur état.' },
-  { test:/^orders\\.write$/i, icon:'📝', label:'Gérer les commandes', desc:'Modifier ou traiter les commandes.' },
-  { test:/^admin\\.access$/i, icon:'🛡️', label:'Accéder à l’administration', desc:'Accéder aux fonctions d’administration du panel.' },
-  { test:/^keys\\.revoke$/i, icon:'🔑', label:'Révoquer les clés API', desc:'Révoquer les clés d’accès des services.' },
-  { test:/^keys\\.read$/i, icon:'🔐', label:'Consulter les clés API', desc:'Voir les clés et leurs métadonnées.' },
-  { test:/^services\\.read$/i, icon:'⚙️', label:'Consulter les services', desc:'Voir les services connectés et leurs configurations.' },
-  { test:/^services\\.write$/i, icon:'⚙️', label:'Gérer les services', desc:'Créer ou modifier les services connectés.' },
-  { test:/^roles\\.read$/i, icon:'🎭', label:'Consulter les rôles', desc:'Voir les rôles et leurs permissions.' },
-  { test:/^roles\\.write$/i, icon:'🎭', label:'Gérer les rôles', desc:'Créer ou modifier les rôles et leurs permissions.' },
-  { test:/^webhooks\\.read$/i, icon:'🔗', label:'Consulter les webhooks', desc:'Voir les webhooks et leur état.' },
-  { test:/^webhooks\\.write$/i, icon:'🔗', label:'Gérer les webhooks', desc:'Créer ou modifier les webhooks.' },
-  { test:/^audit\\.read$/i, icon:'📋', label:'Consulter le journal d’audit', desc:'Consulter les événements enregistrés dans le journal d’audit.' },
-  { test:/^audit\\.export$/i, icon:'📤', label:'Exporter le journal d’audit', desc:'Exporter les événements du journal d’audit.' }
+  { test:/^wiki\.read$/i, icon:'📖', label:'Lire les pages du wiki', desc:'Consulter les pages et le contenu du wiki.' },
+  { test:/^wiki\.write$/i, icon:'✏️', label:'Modifier les pages du wiki', desc:'Créer et modifier les pages du wiki.' },
+  { test:/^wiki\.delete$/i, icon:'🗑️', label:'Supprimer les pages du wiki', desc:'Supprimer des pages du wiki.' },
+  { test:/^users\.read$/i, icon:'👤', label:'Consulter les utilisateurs', desc:'Voir les informations et profils des utilisateurs.' },
+  { test:/^users\.write$/i, icon:'✏️', label:'Modifier les utilisateurs', desc:'Modifier les informations ou paramètres des utilisateurs.' },
+  { test:/^users\.delete$/i, icon:'🗑️', label:'Supprimer des utilisateurs', desc:'Supprimer définitivement des utilisateurs.' },
+  { test:/^orders\.read$/i, icon:'🛒', label:'Consulter les commandes', desc:'Voir les commandes et leur état.' },
+  { test:/^orders\.write$/i, icon:'📝', label:'Gérer les commandes', desc:'Modifier ou traiter les commandes.' },
+  { test:/^admin\.access$/i, icon:'🛡️', label:'Accéder à l’administration', desc:'Accéder aux fonctions d’administration du panel.' },
+  { test:/^keys\.revoke$/i, icon:'🔑', label:'Révoquer les clés API', desc:'Révoquer les clés d’accès des services.' },
+  { test:/^keys\.read$/i, icon:'🔐', label:'Consulter les clés API', desc:'Voir les clés et leurs métadonnées.' },
+  { test:/^services\.read$/i, icon:'⚙️', label:'Consulter les services', desc:'Voir les services connectés et leurs configurations.' },
+  { test:/^services\.write$/i, icon:'⚙️', label:'Gérer les services', desc:'Créer ou modifier les services connectés.' },
+  { test:/^roles\.read$/i, icon:'🎭', label:'Consulter les rôles', desc:'Voir les rôles et leurs permissions.' },
+  { test:/^roles\.write$/i, icon:'🎭', label:'Gérer les rôles', desc:'Créer ou modifier les rôles et leurs permissions.' },
+  { test:/^webhooks\.read$/i, icon:'🔗', label:'Consulter les webhooks', desc:'Voir les webhooks et leur état.' },
+  { test:/^webhooks\.write$/i, icon:'🔗', label:'Gérer les webhooks', desc:'Créer ou modifier les webhooks.' },
+  { test:/^audit\.read$/i, icon:'📋', label:'Consulter le journal d’audit', desc:'Consulter les événements enregistrés dans le journal d’audit.' },
+  { test:/^audit\.export$/i, icon:'📤', label:'Exporter le journal d’audit', desc:'Exporter les événements du journal d’audit.' }
 ];
 
 function permissionPresentation(p) {
   const key = String(p?.key || '');
   const known = RBAC_PERMISSION_PRESENTATION.find(x => x.test.test(key));
-  const danger = RBAC_DANGEROUS_PERMISSIONS.has(key) || /(^|\\.)(delete|revoke|impersonate)$/i.test(key) || /(^|\\.)admin\\.access$/i.test(key);
+  const danger = RBAC_DANGEROUS_PERMISSIONS.has(key) || /(^|\.)(delete|revoke|impersonate)$/i.test(key) || /(^|\.)admin\.access$/i.test(key);
   if (known) return { icon:known.icon, label:known.label, description:p.description || known.desc, danger };
   const parts = key.split('.');
   const action = parts.pop() || key;
@@ -2113,7 +2197,6 @@ function renderRoleCards(roles) {
 }
 
 function focusRolePermissions(roleName) {
-  const input = document.getElementById('rbac-new-role');
   const matrix = document.getElementById('rbac-body');
   if (matrix) matrix.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   document.querySelectorAll('#rbac-head th').forEach((th, i) => {
@@ -2149,7 +2232,7 @@ async function deleteRole(name) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// Page Éclats & Boutique (NOUVEAU)
+// Page Éclats & Boutique
 // ════════════════════════════════════════════════════════════════════════════
 
 function showEclatsTab(name) {
@@ -2301,8 +2384,8 @@ function shopRow(it) {
     <td><label class="toggle"><input type="checkbox" ${it.purchasable ? 'checked' : ''} onchange="updateShopField(${it.id},'purchasable',this.checked)"><span class="slider"></span></label></td>
     <td>
       <div class="actions">
-        <button class="btn-action btn-eclats" onclick="openGrantItem(${it.id},'${esc(it.name)}')">Offrir</button>
-        <button class="btn-action btn-delete" onclick="removeShopItem(${it.id},'${esc(it.name)}')">Supprimer</button>
+        <button class="btn-action btn-eclats" onclick="openGrantItem(${it.id},'${escJsAttr(it.name)}')">Offrir</button>
+        <button class="btn-action btn-delete" onclick="removeShopItem(${it.id},'${escJsAttr(it.name)}')">Supprimer</button>
       </div>
     </td>
   </tr>`;
@@ -2438,14 +2521,15 @@ function commandeRow(p) {
     cancelled: '<span class="badge" style="background:#3d0f0f;color:#e05a5a;">❌ Annulée</span>',
   }[p.status] || esc(p.status);
 
+  // Une commande annulée est remboursée définitivement : le Worker refuse de la rouvrir,
+  // donc on ne propose plus « Remettre en attente ».
   const actions = p.status === 'pending'
     ? `<button class="btn-action btn-unban" style="font-size:12px;padding:6px 12px;" onclick="setCommandeStatus(${p.id},'fulfilled')">✅ Marquer livrée</button>
        <button class="btn-action btn-ban" style="font-size:12px;padding:6px 12px;" onclick="setCommandeStatus(${p.id},'cancelled')">❌ Annuler</button>`
     : p.status === 'fulfilled'
       ? `<button class="btn-action btn-ban" style="font-size:12px;padding:6px 12px;" onclick="setCommandeStatus(${p.id},'cancelled')">❌ Annuler</button>
          <button class="btn-action btn-delete" style="font-size:12px;padding:6px 12px;" onclick="deleteCommande(${p.id})">🗑️</button>`
-      : `<button class="btn-action btn-unlock" style="font-size:12px;padding:6px 12px;" onclick="setCommandeStatus(${p.id},'pending')">↩️ Remettre en attente</button>
-         <button class="btn-action btn-delete" style="font-size:12px;padding:6px 12px;" onclick="deleteCommande(${p.id})">🗑️</button>`;
+      : `<button class="btn-action btn-delete" style="font-size:12px;padding:6px 12px;" onclick="deleteCommande(${p.id})">🗑️</button>`;
 
   return `<tr>
     <td>${esc(p.pseudo || p.discord_id)}${p.minecraft_username ? ` <span style="color:var(--muted);font-size:11px;">(${esc(p.minecraft_username)})</span>` : ''}</td>
@@ -2471,7 +2555,7 @@ async function setCommandeStatus(id, status) {
   }
 }
 
-// Supprime une commande précise de l'historique (livrée/annulée uniquement — aucun remboursement).
+// Supprime une commande précise de l'historique (aucun remboursement).
 async function deleteCommande(id) {
   const ok = await confirm('Supprimer la commande', 'Supprimer définitivement cette commande de l\'historique ? Cette action est irréversible.', 'btn-confirm-danger');
   if (!ok) return;
@@ -2484,8 +2568,7 @@ async function deleteCommande(id) {
   }
 }
 
-// Supprime en masse toutes les commandes "passées" (livrées + annulées) — les
-// commandes en attente ne sont jamais touchées.
+// Supprime en masse toutes les commandes "passées" (livrées + annulées).
 async function purgePastCommandes() {
   const ok = await confirm(
     'Supprimer les commandes passées',
@@ -2502,7 +2585,7 @@ async function purgePastCommandes() {
   }
 }
 
-// ── Onglet : Calendrier de streak (NOUVEAU v12) ──────────────────────────
+// ── Onglet : Calendrier de streak ────────────────────────────────────────
 let streakMilestones = [];
 
 async function loadStreakConfig() {
@@ -2575,16 +2658,13 @@ async function saveStreakConfig() {
 
 // ── Utils ─────────────────────────────────────────────────────────────────
 function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // Échappement pour une valeur insérée dans une chaîne JS à guillemets simples
 // à l'intérieur d'un attribut HTML (ex: onclick="fn('${escJsAttr(x)}')").
 // esc() seul NE SUFFIT PAS ici : il n'échappe pas l'apostrophe, qui casserait
 // la chaîne JS dès qu'elle apparaît dans une valeur libre comme un pseudo.
-// Ordre : échapper d'abord le JS (backslash puis apostrophe), PUIS l'HTML
-// (& et ") pour que le tout reste correct une fois décodé par le navigateur
-// avant compilation du gestionnaire onclick.
 function escJsAttr(s) {
   return String(s ?? '')
     .replace(/\\/g, '\\\\')
@@ -2596,11 +2676,8 @@ function escJsAttr(s) {
 }
 
 // ── Auth screen — champ URL ────────────────────────────────────────────────
-// Ajoute le champ URL dynamiquement sous le champ secret.
-// Pré-rempli avec l'URL de prod par défaut (pas un secret, juste une adresse
-// publique — voir échange avec l'utilisateur), mais reste modifiable :
-// dès que l'utilisateur tape autre chose, ça écrase la valeur par défaut et
-// c'est cette nouvelle valeur qui est retenue pour la suite.
+// Pré-rempli avec l'URL de prod par défaut (adresse publique, pas un secret),
+// mais modifiable : ce que tu tapes est retenu pour la suite.
 const DEFAULT_WORKER_URL = 'https://relink-auth.refugeemeraudien-direction.workers.dev';
 (function() {
   const authCard = document.querySelector('.auth-card');
@@ -2617,6 +2694,7 @@ const DEFAULT_WORKER_URL = 'https://relink-auth.refugeemeraudien-direction.worke
   urlInput.addEventListener('input', () => localStorage.setItem('relink_worker_url', urlInput.value.trim()));
   authCard.insertBefore(urlInput, input.nextSibling);
 })();
+
 // ══════════════════════════════════════════════════════════════════════════
 // Page Rôles
 // ══════════════════════════════════════════════════════════════════════════
@@ -2641,12 +2719,11 @@ async function loadUserRoles(pseudoHint) {
   if (!discordId) { toast('Entrez un Discord ID.', 'error'); return; }
   rolesCurrentDiscordId = discordId;
 
-  document.getElementById('roles-user-pseudo').textContent = pseudoHint
+  document.getElementById('roles-user-pseudo').textContent = (typeof pseudoHint === 'string' && pseudoHint)
     ? `Utilisateur : ${pseudoHint} (${discordId})` : `Discord ID : ${discordId}`;
 
   const data = await apiFetch(`/admin/users/${discordId}/roles`);
-  // data.roles est maintenant [{ role, scope }, ...] : un même rôle peut
-  // apparaître plusieurs fois avec des scopes différents.
+  // data.roles est [{ role, scope }, ...] : un même rôle peut apparaître plusieurs fois.
   const current = data.roles || [];
 
   const currentEl = document.getElementById('roles-user-current');
@@ -2654,16 +2731,14 @@ async function loadUserRoles(pseudoHint) {
     ? current.map(r => `
         <span class="badge" style="display:inline-flex;align-items:center;gap:6px;">
           ${esc(r.role)} <span style="color:var(--muted);font-size:10px;">· ${esc(r.scope)}</span>
-          <button onclick="removeRoleFromUser('${esc(r.role)}','${esc(r.scope)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>
+          <button onclick="removeRoleFromUser('${escJsAttr(r.role)}','${escJsAttr(r.scope)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>
         </span>`).join('')
     : '<span class="empty-state">Aucun rôle assigné.</span>';
 
   const addEl = document.getElementById('roles-user-add');
   const addButtonsEl = document.getElementById('roles-add-buttons');
-  // Tous les rôles restent proposables : le même rôle peut être ajouté à
-  // nouveau sur un scope différent de ceux déjà attribués.
   addButtonsEl.innerHTML = ALL_ROLES.length
-    ? ALL_ROLES.map(r => `<button class="btn-action btn-unlock" onclick="assignRoleToUser('${esc(r.name)}')">+ ${esc(r.name)}</button>`).join('')
+    ? ALL_ROLES.map(r => `<button class="btn-action btn-unlock" onclick="assignRoleToUser('${escJsAttr(r.name)}')">+ ${esc(r.name)}</button>`).join('')
     : '<span class="empty-state">Aucun rôle défini.</span>';
   addEl.style.display = 'block';
 }
@@ -2677,9 +2752,7 @@ async function assignRoleToUser(roleName) {
   if (!rolesCurrentDiscordId) return;
   const scope = document.getElementById('roles-add-scope').value.trim() || 'global';
 
-  // admin.access n'est reconnu par le Worker qu'en scope 'global' — attribuer
-  // le rôle 'administrator' ailleurs ne donne jamais l'accès admin réel.
-  // On avertit avant de créer une attribution qui ne servira à rien.
+  // admin.access n'est reconnu par le Worker qu'en scope 'global'.
   if (roleName === 'administrator' && scope !== 'global') {
     const proceed = await confirm(
       'Ce rôle n\'aura aucun effet admin',
@@ -2704,7 +2777,7 @@ async function removeRoleFromUser(roleName, scope) {
   if (!rolesCurrentDiscordId) return;
   const ok = await confirm('Retirer le rôle', `Retirer le rôle "${roleName}" (scope: ${scope}) à cet utilisateur ?`, 'btn-confirm-danger');
   if (!ok) return;
-  const data = await apiFetch(`/admin/users/${rolesCurrentDiscordId}/roles/${roleName}?scope=${encodeURIComponent(scope)}`, 'DELETE');
+  const data = await apiFetch(`/admin/users/${rolesCurrentDiscordId}/roles/${encodeURIComponent(roleName)}?scope=${encodeURIComponent(scope)}`, 'DELETE');
   if (data.ok) {
     toast(`Rôle "${roleName}" retiré (scope: ${scope}).`, 'success');
     loadUserRoles();
@@ -2716,8 +2789,6 @@ async function removeRoleFromUser(roleName, scope) {
 // ══════════════════════════════════════════════════════════════════════════
 // Page Services & clés API
 // ══════════════════════════════════════════════════════════════════════════
-// Scopes récupérés dynamiquement depuis GET /permissions (plus de liste
-// codée en dur — l'ajout d'une permission côté Worker suffit désormais).
 let CACHED_PERMISSIONS = null;
 async function getKnownPermissions() {
   if (CACHED_PERMISSIONS) return CACHED_PERMISSIONS;
@@ -2753,7 +2824,7 @@ async function loadServices() {
           return `<div style="margin-bottom:6px;font-size:12px;">
             <span style="color:${statusColor};">●</span> ${esc(scopes.join(', '))}
             <span style="color:var(--muted);">(${status})</span>
-            ${status === 'active' ? `<button onclick="revokeKey(${s.id},'${k.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;">révoquer</button>` : ''}
+            ${status === 'active' ? `<button onclick="revokeKey(${s.id},'${esc(k.id)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;">révoquer</button>` : ''}
           </div>`;
         }).join('')
       : '<span class="empty-state">Aucune clé.</span>';
@@ -2761,7 +2832,7 @@ async function loadServices() {
     return `<tr>
       <td><strong>${esc(s.name)}</strong><br><span style="color:var(--muted);font-size:11px">créé le ${new Date(s.created_at).toLocaleDateString()}</span></td>
       <td>${keysHtml}</td>
-      <td><button class="btn-action btn-unlock" onclick="openCreateKey(${s.id},'${esc(s.name)}')">+ Nouvelle clé</button></td>
+      <td><button class="btn-action btn-unlock" onclick="openCreateKey(${s.id},'${escJsAttr(s.name)}')">+ Nouvelle clé</button></td>
     </tr>`;
   }).join('');
 }
@@ -2822,21 +2893,31 @@ const AUDIT_LIMIT = 50;
 
 async function loadAuditLogs(resetOffset = true) {
   if (resetOffset) auditOffset = 0;
-  const ids = ['audit-filter-from','audit-filter-to','audit-filter-action','audit-filter-actor','audit-filter-resource','audit-filter-target','audit-filter-ip','audit-filter-result','audit-filter-service'];
   const v = id => document.getElementById(id)?.value.trim() || '';
   const qs = new URLSearchParams({ limit: AUDIT_LIMIT, offset: auditOffset });
-  const map = { 'audit-filter-from':'from', 'audit-filter-to':'to', 'audit-filter-action':'action', 'audit-filter-actor':'actor_id', 'audit-filter-resource':'resource', 'audit-filter-target':'target_user', 'audit-filter-ip':'ip', 'audit-filter-result':'result', 'audit-filter-service':'service' };
-  ids.forEach(id => { const x=v(id); if(x) qs.set(map[id],x); });
+  // Noms de paramètres alignés sur ce que lit le Worker (/admin/audit-logs)
+  const map = {
+    'audit-filter-from': 'since', 'audit-filter-to': 'until', 'audit-filter-action': 'action',
+    'audit-filter-actor': 'actor_id', 'audit-filter-resource': 'resource_id',
+    'audit-filter-target': 'target_user_id', 'audit-filter-ip': 'ip',
+    'audit-filter-result': 'result', 'audit-filter-service': 'service',
+  };
+  for (const [id, key] of Object.entries(map)) {
+    let x = v(id);
+    if (x && (key === 'since' || key === 'until')) x = new Date(x).toISOString().slice(0, 19).replace('T', ' ');
+    if (x) qs.set(key, x);
+  }
   const data = await apiFetch('/admin/audit-logs?' + qs.toString());
+  if (data.error) { toast(errMsg(data), 'error'); }
   const logs = data.logs || [];
   window.__lastAuditLogs = logs;
   const tbody = document.getElementById('audit-tbody');
-  tbody.innerHTML = logs.length ? logs.map(l => `<tr><td style="font-size:12px;color:var(--muted);">${fmtDate(l.created_at)}</td><td>${esc(l.actor_name || l.actor_pseudo || l.actor_id || '—')}<br><span style="color:var(--muted);font-size:11px">${esc(l.actor_id || l.actor_type || '')}</span></td><td><span class="badge">${esc(l.action)}</span></td><td style="font-size:12px;">${esc(l.resource_type || l.resource || '—')}${l.resource_id ? ' · '+esc(l.resource_id):''}</td><td><span class="badge-status badge-${l.result === 'success' ? 'active':'banned'}">${esc(l.result || '—')}</span></td></tr>`).join('') : '<tr><td colspan="5" class="empty-state">Aucune entrée.</td></tr>';
+  tbody.innerHTML = logs.length ? logs.map(l => `<tr><td style="font-size:12px;color:var(--muted);">${fmtDate(l.created_at)}</td><td>${esc(l.actor_name || l.actor_pseudo || l.actor_id || '—')}<br><span style="color:var(--muted);font-size:11px">${esc(l.actor_type || '')}</span></td><td><span class="badge">${esc(l.action)}</span></td><td style="font-size:12px;">${esc(l.resource_type || l.resource || '—')}${l.resource_id ? ' · '+esc(l.resource_id):''}</td><td><span class="badge-status badge-${l.result === 'success' ? 'active':'banned'}">${esc(l.result || '—')}</span></td></tr>`).join('') : '<tr><td colspan="5" class="empty-state">Aucune entrée.</td></tr>';
   const timeline = document.getElementById('audit-timeline');
   timeline.innerHTML = logs.length ? logs.slice(0,50).map(l => {
     const actor = l.actor_name || l.actor_pseudo || l.actor_id || 'System';
     const target = l.target_user_name || l.target_pseudo || l.target_user || l.resource_id || '';
-    let before = l.before, after = l.after;
+    let before = l.before ?? l.before_json, after = l.after ?? l.after_json;
     if (typeof before === 'string') { try { before=JSON.parse(before); } catch {} }
     if (typeof after === 'string') { try { after=JSON.parse(after); } catch {} }
     const hasDiff = before && after && typeof before === 'object' && typeof after === 'object';
@@ -2854,8 +2935,9 @@ function exportAudit(format) {
   let content, mime, ext;
   if (format === 'json') { content = JSON.stringify(rows, null, 2); mime='application/json'; ext='json'; }
   else {
-    const cols=['created_at','actor_id','actor_name','action','resource_type','resource_id','result','target_user','ip','service'];
-    const csv=[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(r[c] ?? '').replace(/"/g,'""')}"`).join(','))].join('\n'); content='\\ufeff'+csv; mime='text/csv;charset=utf-8'; ext='csv';
+    const cols=['created_at','actor_type','actor_id','action','resource_type','resource_id','result','ip','service'];
+    const csv=[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(r[c] ?? '').replace(/"/g,'""')}"`).join(','))].join('\n');
+    content='\ufeff'+csv; mime='text/csv;charset=utf-8'; ext='csv';
   }
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type:mime})); a.download=`audit-export-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.${ext}`; a.click(); URL.revokeObjectURL(a.href);
 }
@@ -2863,8 +2945,6 @@ function exportAudit(format) {
 // ══════════════════════════════════════════════════════════════════════════
 // Page Webhooks
 // ══════════════════════════════════════════════════════════════════════════
-// Événements récupérés dynamiquement depuis GET /events (catalogue séparé de
-// /permissions : ce ne sont pas des droits mais des noms d'événements métier).
 let CACHED_EVENTS = null;
 async function getKnownEvents() {
   if (CACHED_EVENTS) return CACHED_EVENTS;
@@ -2910,10 +2990,10 @@ async function loadWebhooks() {
       <td style="font-size:11px;">${lastDelivery}</td>
       <td>
         <div style="display:flex;gap:4px;flex-wrap:wrap;">
-          <button class="btn-action btn-unlock" onclick="testWebhook('${w.id}')">Tester</button>
-          <button class="btn-action btn-unlock" onclick="toggleWebhook('${w.id}','${w.status === 'active' ? 'disabled' : 'active'}')">${w.status === 'active' ? 'Désactiver' : 'Activer'}</button>
-          <button class="btn-action btn-unlock" onclick="viewWebhookDeliveries('${w.id}','${esc(w.name)}')">Historique</button>
-          <button class="btn-action btn-delete" onclick="deleteWebhook('${w.id}','${esc(w.name)}')">Supprimer</button>
+          <button class="btn-action btn-unlock" onclick="testWebhook('${esc(w.id)}')">Tester</button>
+          <button class="btn-action btn-unlock" onclick="toggleWebhook('${esc(w.id)}','${w.status === 'active' ? 'disabled' : 'active'}')">${w.status === 'active' ? 'Désactiver' : 'Activer'}</button>
+          <button class="btn-action btn-unlock" onclick="viewWebhookDeliveries('${esc(w.id)}','${escJsAttr(w.name)}')">Historique</button>
+          <button class="btn-action btn-delete" onclick="deleteWebhook('${esc(w.id)}','${escJsAttr(w.name)}')">Supprimer</button>
         </div>
       </td>
     </tr>`;
@@ -2992,7 +3072,7 @@ async function viewWebhookDeliveries(id, name) {
       <td><span class="badge-status badge-${d.status === 'success' ? 'active' : 'banned'}">${esc(d.status)}</span></td>
       <td>${d.http_status ?? '—'}</td>
       <td style="font-size:11px;color:var(--red);">${esc(d.error || '—')}</td>
-      <td>${d.status !== 'success' ? `<button class="btn-action btn-unlock" onclick="retryWebhookDelivery('${id}','${d.id}')">Retry</button>` : ''}</td>
+      <td>${d.status !== 'success' ? `<button class="btn-action btn-unlock" onclick="retryWebhookDelivery('${esc(id)}','${esc(d.id)}')">Retry</button>` : ''}</td>
     </tr>`).join('') : '<tr><td colspan="7" class="empty-state">Aucune livraison.</td></tr>';
 }
 
@@ -3017,7 +3097,7 @@ async function loadFormWebhooks() {
           : `<span style="color:var(--muted);">●</span> Variable d'environnement (${esc(r.env_key)})`}
       </td>
       <td>
-        <button class="btn-action btn-unlock" onclick="openSetFormWebhook('${r.form_type}')">Configurer</button>
+        <button class="btn-action btn-unlock" onclick="openSetFormWebhook('${esc(r.form_type)}')">Configurer</button>
       </td>
     </tr>`).join('') : '<tr><td colspan="3" class="empty-state">Aucun formulaire.</td></tr>';
 }
@@ -3065,7 +3145,7 @@ const COMMANDS = [
   {label:'Formulaires', hint:'Candidatures', run:()=>showPage('submissions')}
 ];
 let commandIndex=0;
-function openCommandPalette() { const o=document.getElementById('command-palette-overlay'); o.classList.add('open'); document.getElementById('command-palette-input').value=''; commandIndex=0; renderCommandPalette(); setTimeout(()=>document.getElementById('command-palette-input').focus(),0); }
+function openCommandPalette() { if (document.getElementById('sidebar').style.display === 'none') return; const o=document.getElementById('command-palette-overlay'); o.classList.add('open'); document.getElementById('command-palette-input').value=''; commandIndex=0; renderCommandPalette(); setTimeout(()=>document.getElementById('command-palette-input').focus(),0); }
 function closeCommandPalette() { document.getElementById('command-palette-overlay').classList.remove('open'); }
 function filteredCommands() { const q=(document.getElementById('command-palette-input')?.value||'').toLowerCase().trim(); return COMMANDS.filter(c=>!q || (c.label+' '+c.hint).toLowerCase().includes(q)); }
 function renderCommandPalette() { const list=filteredCommands(); commandIndex=Math.min(commandIndex,Math.max(0,list.length-1)); document.getElementById('command-palette-results').innerHTML=list.map((c,i)=>`<button class="command-item ${i===commandIndex?'active':''}" onclick="runCommand(${COMMANDS.indexOf(c)})"><span>${esc(c.label)}</span><small>${esc(c.hint)}</small></button>`).join('') || '<div class="empty-state">Aucun résultat.</div>'; }
@@ -3077,10 +3157,19 @@ document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.ke
 const __originalShowPage = showPage;
 showPage = function(name) { __originalShowPage(name); updateAutoRefreshBar(); };
 
-// ── Point d'entrée : si on revient de Discord (?code=...), on traite ça
-// avant d'afficher l'écran de login normal.
-handleDiscordCallback();
+// ── Point d'entrée ────────────────────────────────────────────────────────
+// 1) retour de Discord (?code=…) → échange du code
+// 2) sinon, tente de rouvrir la session sauvegardée
+// 3) sinon, écran de connexion normal
+(async function init() {
+  const p = new URLSearchParams(location.search);
+  if (p.has('code') || p.has('error')) { await handleDiscordCallback(); return; }
 
+  const auth = document.getElementById('auth-screen');
+  auth.style.visibility = 'hidden'; // évite le flash du login pendant la vérification
+  const ok = await restoreSession();
+  if (!ok) auth.style.visibility = 'visible';
+})();
 </script>
 </body>
 </html>
