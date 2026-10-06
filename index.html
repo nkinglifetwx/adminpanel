@@ -1897,11 +1897,25 @@ function renderSite() {
       </div>`}
     </div>`;
 
-  const globalCard = `<div class="card">
-      <div class="card-title">Accès global</div>
+  const maintOn = !s.site_enabled;
+  const globalCard = `<div class="card" ${maintOn ? 'style="border-color:var(--amber);"' : ''}>
+      <div class="card-title">🚧 Maintenance &amp; accès ${maintOn ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">MAINTENANCE ACTIVE</span>' : ''}</div>
       <div class="flags-grid">
-        ${flagToggle('Site actif', 'Désactivé : le site peut s\'afficher en maintenance', s.site_enabled, `toggleSetting('${slug}','site_enabled',this.checked)`)}
+        ${flagToggle('Mode maintenance', 'Affiche une page de maintenance aux visiteurs (les admins peuvent toujours entrer)', maintOn, `toggleMaintenance('${slug}',this.checked)`)}
         ${flagToggle('Connexion obligatoire', 'Force tous les visiteurs à se connecter pour voir ce site', s.require_auth, `toggleSetting('${slug}','require_auth',this.checked)`)}
+      </div>
+      <div class="form-grid" style="margin-top:16px;">
+        <div class="form-field" style="grid-column: span 2;">
+          <label>Message affiché aux visiteurs</label>
+          <input type="text" id="maint-message" maxlength="300" placeholder="Ex : Mise à jour du serveur en cours, on revient vite !" value="${esc(s.maintenance_message || '')}">
+        </div>
+        <div class="form-field">
+          <label>Retour prévu (optionnel)</label>
+          <input type="datetime-local" id="maint-until" value="${esc(toLocalInput(s.maintenance_until))}">
+        </div>
+        <div class="form-field">
+          <button class="btn-primary" onclick="saveMaintenance('${slug}')">💾 Enregistrer</button>
+        </div>
       </div>
     </div>`;
 
@@ -1978,6 +1992,39 @@ async function toggleSetting(slug, field, value) {
   const d = await apiFetch(`/admin/sites/${slug}/settings`, 'PUT', { [field]: value });
   if (d.ok) toast(`${field === 'site_enabled' ? 'Site actif' : 'Connexion obligatoire'} — ${value ? 'oui' : 'non'}`, 'success');
   else toast(errMsg(d), 'error');
+  loadSites();
+}
+
+// ── Maintenance ───────────────────────────────────────────────────────────
+function toLocalInput(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+// Le Worker stocke « site_enabled » : maintenance ON = site_enabled false.
+async function toggleMaintenance(slug, on) {
+  const ok = await confirm(
+    on ? 'Activer la maintenance' : 'Désactiver la maintenance',
+    on ? 'Les visiteurs verront la page de maintenance à la place du site. Continuer ?'
+       : 'Le site redevient accessible à tout le monde. Continuer ?',
+    on ? 'btn-confirm-warn' : 'btn-confirm-ok');
+  if (!ok) { loadSites(); return; }
+  const d = await apiFetch(`/admin/sites/${slug}/settings`, 'PUT', { site_enabled: !on });
+  toast(d.ok ? (on ? '🚧 Maintenance activée.' : '✅ Maintenance désactivée.') : errMsg(d), d.ok ? 'success' : 'error');
+  loadSites();
+}
+
+async function saveMaintenance(slug) {
+  const message = document.getElementById('maint-message').value.trim();
+  const untilRaw = document.getElementById('maint-until').value;
+  const d = await apiFetch(`/admin/sites/${slug}/settings`, 'PUT', {
+    maintenance_message: message,
+    maintenance_until: untilRaw ? new Date(untilRaw).toISOString() : '',
+  });
+  toast(d.ok ? 'Message de maintenance enregistré.' : errMsg(d), d.ok ? 'success' : 'error');
   loadSites();
 }
 
