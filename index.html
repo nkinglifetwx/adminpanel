@@ -1220,7 +1220,22 @@ async function apiFetch(path, method = 'GET', body = null) {
   const opts = { method, headers };
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(WORKER_URL + path, opts);
-  return r.json();
+
+  // Toujours tenter de lire la réponse, même lorsque le Worker renvoie 4xx/5xx.
+  // Cela évite les chargements infinis quand une route backend tombe en erreur.
+  let data = null;
+  const contentType = r.headers.get('content-type') || '';
+  try {
+    data = contentType.includes('application/json') ? await r.json() : { error: await r.text() };
+  } catch {
+    data = { error: `Réponse invalide du serveur (HTTP ${r.status}).` };
+  }
+
+  if (!r.ok) {
+    const message = data?.error || data?.message || `Erreur serveur (HTTP ${r.status}).`;
+    return { ...(data && typeof data === 'object' ? data : {}), error: message, status: r.status, ok: false };
+  }
+  return data && typeof data === 'object' ? data : { data };
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────
@@ -1748,9 +1763,16 @@ async function forgetSection(slug, key) {
 let RBAC = null;
 
 async function loadRbac() {
-  const d = await apiFetch('/admin/rbac');
-  if (d.error) { document.getElementById('rbac-body').innerHTML = `<tr><td class="empty-state">${esc(errMsg(d))}</td></tr>`; return; }
-  RBAC = d;
+  const bodyEl = document.getElementById('rbac-body');
+  const headEl = document.getElementById('rbac-head');
+  try {
+    const d = await apiFetch('/admin/rbac');
+    if (d.error) {
+      headEl.innerHTML = '<tr><th>Permissions par rôle</th></tr>';
+      bodyEl.innerHTML = `<tr><td class="empty-state"><strong>Impossible de charger les permissions.</strong><br><span style="font-size:11px;">${esc(errMsg(d))}</span></td></tr>`;
+      return;
+    }
+    RBAC = d;
   document.getElementById('scope-options').innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
 
   const roles = d.roles || [];
@@ -1779,6 +1801,10 @@ async function loadRbac() {
     }
   }
   document.getElementById('rbac-body').innerHTML = html || '<tr><td class="empty-state">Aucune permission.</td></tr>';
+  } catch (e) {
+    headEl.innerHTML = '<tr><th>Permissions par rôle</th></tr>';
+    bodyEl.innerHTML = `<tr><td class="empty-state"><strong>Impossible de charger les permissions.</strong><br><span style="font-size:11px;">${esc(e?.message || 'Erreur réseau.')}</span></td></tr>`;
+  }
 }
 
 function renderRoleCards(roles) {
