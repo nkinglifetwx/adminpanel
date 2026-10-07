@@ -273,6 +273,47 @@
   #toast.success { border-color: var(--green); color: var(--green); }
   #toast.error   { border-color: var(--red); color: var(--red); }
 
+  /* ── Page Sites & visibilité (présentation) ── */
+  #sites-tabs { gap:10px; margin-bottom:16px; }
+  #sites-tabs .subtab { padding:9px 16px; border-radius:12px; font-size:13px; }
+  .sv-fold > summary { list-style:none; display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none; }
+  .sv-fold > summary::-webkit-details-marker { display:none; }
+  .sv-chev { font-size:10px; color:var(--muted); transition:transform .15s; display:inline-block; }
+  .sv-fold:not([open]) > summary .sv-chev { transform:rotate(-90deg); }
+  .sv-sum-title { font-size:14px; font-weight:700; }
+  .sv-count { font-size:12px; color:var(--muted); }
+  .sv-minibar { margin-left:auto; width:110px; height:6px; border-radius:99px; background:var(--border); overflow:hidden; flex:0 0 110px; }
+  .sv-minibar i { display:block; height:100%; border-radius:99px; background:var(--accent); transition:width .25s; }
+  .sv-body { margin-top:16px; }
+  .sv-hero { padding:0; overflow:hidden; border-top:3px solid var(--c); background:linear-gradient(135deg,color-mix(in srgb,var(--c) 18%,var(--card)) 0%,var(--card) 70%); }
+  .sv-hero-in { padding:22px; }
+  .sv-hero-top { display:flex; gap:16px; align-items:flex-start; }
+  .sv-logo { width:60px; height:60px; flex:0 0 60px; border-radius:17px; display:flex; align-items:center; justify-content:center; font-size:27px; font-weight:800; color:#fff; background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 55%,#000)); box-shadow:0 8px 26px color-mix(in srgb,var(--c) 30%,transparent); }
+  .sv-hero-main { min-width:0; flex:1; }
+  .sv-hero-main h3 { margin:0 0 6px; font-size:21px; font-weight:800; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .sv-slug { font:11px ui-monospace,Menlo,monospace; color:var(--muted); background:rgba(255,255,255,.06); padding:3px 8px; border-radius:6px; font-weight:500; }
+  .sv-hero-main p { margin:0 0 6px; font-size:13px; color:#b7bfd7; line-height:1.5; }
+  .sv-hero-main a { font-size:12px; color:var(--accent); text-decoration:none; word-break:break-all; }
+  .sv-hero-main a:hover { text-decoration:underline; }
+  .sv-tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:18px; }
+  .sv-tile { padding:12px 14px; border-radius:12px; background:rgba(0,0,0,.22); border:1px solid var(--border); }
+  .sv-tile b { display:block; font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .sv-tile span { font-size:13px; font-weight:600; }
+  .sv-meta { margin-top:14px; font-size:12px; color:var(--muted); line-height:1.8; }
+  .sv-err { margin-top:12px; padding:9px 12px; border-radius:9px; background:var(--red-bg); color:var(--red); border:1px solid var(--red); font-size:12px; }
+  .sv-actions { display:flex; gap:8px; flex-wrap:wrap; padding:14px 22px; border-top:1px solid var(--border); background:rgba(0,0,0,.15); }
+  .sv-maint { position:relative; overflow:hidden; }
+  .sv-maint.on { border-color:var(--amber); background:linear-gradient(135deg,rgba(245,166,35,.10),var(--card) 60%); }
+  .sv-maint-head { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .sv-maint-ico { width:44px; height:44px; flex:0 0 44px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:21px; background:var(--surface); border:1px solid var(--border); }
+  .sv-maint.on .sv-maint-ico { background:var(--amber-bg); border-color:var(--amber); }
+  .sv-maint-head h3 { margin:0; font-size:15px; font-weight:700; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .sv-maint-head p { margin:3px 0 0; font-size:12px; color:var(--muted); }
+  .sv-sec.on { border-color:color-mix(in srgb,var(--accent) 55%,var(--border)); background:color-mix(in srgb,var(--accent) 7%,var(--surface)); }
+  .sv-bulk { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .sv-sub { margin:20px 0 10px; font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .sv-add > summary .sv-sum-title { font-size:13px; }
+
   /* ── Page Rôles (éditeur : un rôle à la fois) ── */
   .re-layout { display:grid; grid-template-columns:280px minmax(0,1fr); gap:16px; align-items:start; }
   .re-side { padding:14px; position:sticky; top:12px; }
@@ -1008,18 +1049,20 @@
 
       <div class="subtabs" id="sites-tabs"></div>
 
-      <div class="card">
-        <div class="card-title">Détecter un nouveau site</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <input type="text" id="site-new-slug" placeholder="nom court (ex: wiki)" style="width:170px;" autocomplete="off">
-          <input type="text" id="site-new-manifest" placeholder="https://mon-site.fr/relink.manifest.json" style="flex:1;min-width:260px;" autocomplete="off">
-          <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addSite()">🔍 Détecter</button>
+      <details class="card sv-fold sv-add">
+        <summary><span class="sv-chev">▼</span><span class="sv-sum-title">➕ Détecter un nouveau site</span></summary>
+        <div class="sv-body">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="text" id="site-new-slug" placeholder="nom court (ex: wiki)" style="width:170px;" autocomplete="off">
+            <input type="text" id="site-new-manifest" placeholder="https://mon-site.fr/relink.manifest.json" style="flex:1;min-width:260px;" autocomplete="off">
+            <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addSite()">🔍 Détecter</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;">
+            Le Worker lit le manifeste du site (sections + permissions) puis le relit chaque jour automatiquement :
+            toute nouvelle page ou permission apparaît ici toute seule.
+          </div>
         </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:8px;">
-          Le Worker lit le manifeste du site (sections + permissions) puis le relit chaque jour automatiquement :
-          toute nouvelle page ou permission apparaît ici toute seule.
-        </div>
-      </div>
+      </details>
 
       <div id="site-detail"><span class="empty-state"><span class="spinner"></span>Chargement…</span></div>
     </div>
@@ -1915,6 +1958,11 @@ function flagToggle(label, desc, checked, onchange) {
     </div>`;
 }
 
+// État ouvert/fermé des blocs repliables (conservé quand la page se réaffiche)
+const SV_FOLD = {};
+const svOpen = (k, def) => ((k in SV_FOLD) ? SV_FOLD[k] : def) ? 'open' : '';
+function svFold(k, open) { SV_FOLD[k] = open; }
+
 function renderSite() {
   const s = SITES.find(x => x.slug === currentSite);
   const el = document.getElementById('site-detail');
@@ -1929,7 +1977,7 @@ function renderSite() {
   const present = s.sections.filter(x => x.present);
   const absent = s.sections.filter(x => !x.present);
 
-  const sectionItem = x => `<div class="flag-item">
+  const sectionItem = x => `<div class="flag-item sv-sec ${x.enabled ? 'on' : ''}">
       <div class="flag-info">
         <div class="flag-label">${esc(x.label)}
           ${x.requires_auth ? '<span class="badge-sub" title="Le site demande une connexion pour cette section">🔒 connexion</span>' : ''}
@@ -1954,27 +2002,30 @@ function renderSite() {
   const healthOk = s.builtin ? true : s.last_scan_status !== 'error' && !!s.last_seen_at;
   const healthStatus = s.builtin ? 'Site opérationnel' : (healthOk ? 'Site opérationnel' : 'Manifest inaccessible');
   const healthColor = healthOk ? 'var(--green)' : 'var(--red)';
-  const healthCard = `<div class="card">
-      <div class="card-title">Santé du site</div>
-      <div class="health-grid">
-        <div class="health-item"><div class="health-label">État</div><div class="health-value" style="color:${healthColor};">${healthOk ? '🟢' : '🔴'} ${healthStatus}</div></div>
-        <div class="health-item"><div class="health-label">Dernier scan</div><div class="health-value">${fmtDate(s.last_seen_at)}</div></div>
-        <div class="health-item"><div class="health-label">Manifest</div><div class="health-value" style="color:${s.builtin || !s.last_scan_status || s.last_scan_status !== 'error' ? 'var(--green)' : 'var(--red)'};">${s.builtin ? 'Intégré' : (s.last_scan_status === 'error' ? 'Erreur' : 'OK')}</div></div>
+  const manifestOk = s.builtin || !s.last_scan_status || s.last_scan_status !== 'error';
+  const initial = String(s.name || s.slug || '?').trim().charAt(0).toUpperCase();
+  const infoCard = `<div class="card sv-hero" style="--c:${ucColor(s.slug)}">
+      <div class="sv-hero-in">
+        <div class="sv-hero-top">
+          <div class="sv-logo">${esc(initial)}</div>
+          <div class="sv-hero-main">
+            <h3>${esc(s.name)} <span class="sv-slug">${slug}</span> ${status}</h3>
+            ${s.description ? `<p>${esc(s.description)}</p>` : ''}
+            ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)} ↗</a>` : ''}
+          </div>
+        </div>
+        <div class="sv-tiles">
+          <div class="sv-tile"><b>État</b><span style="color:${healthColor};">${healthOk ? '🟢' : '🔴'} ${healthStatus}</span></div>
+          <div class="sv-tile"><b>Dernier scan</b><span>${fmtDate(s.last_seen_at)}</span></div>
+          <div class="sv-tile"><b>Manifest</b><span style="color:${manifestOk ? 'var(--green)' : 'var(--red)'};">${s.builtin ? 'Intégré' : (s.last_scan_status === 'error' ? 'Erreur' : 'OK')}</span></div>
+        </div>
+        <div class="sv-meta">
+          ${s.builtin ? 'Les sections du site principal sont intégrées au Worker.' :
+            `Manifeste : ${s.manifest_url ? `<code>${esc(s.manifest_url)}</code>` : '<em>aucune URL — renseigne-la pour activer la détection automatique</em>'}`}
+        </div>
+        ${s.last_scan_error ? `<div class="sv-err">⚠️ ${esc(s.last_scan_error)}</div>` : ''}
       </div>
-      ${s.last_scan_error ? `<div style="margin-top:10px;color:var(--red);font-size:12px;">⚠️ ${esc(s.last_scan_error)}</div>` : ''}
-    </div>`;
-
-  const infoCard = `<div class="card">
-      <div class="card-title">${esc(s.name)} <span style="color:var(--muted);font-weight:400;">(${slug})</span> ${status}</div>
-      ${s.description ? `<div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${esc(s.description)}</div>` : ''}
-      <div style="font-size:12px;color:var(--muted);line-height:1.8;">
-        ${s.url ? `Site : <a href="${esc(s.url)}" target="_blank" rel="noopener" style="color:var(--accent);">${esc(s.url)}</a><br>` : ''}
-        ${s.builtin ? 'Les sections du site principal sont intégrées au Worker.' :
-          `Manifeste : ${s.manifest_url ? `<code>${esc(s.manifest_url)}</code>` : '<em>aucune URL — renseigne-la pour activer la détection automatique</em>'}<br>
-           Dernière détection : ${fmtDate(s.last_seen_at)}`}
-        ${s.last_scan_error ? `<br><span style="color:var(--red);">⚠️ ${esc(s.last_scan_error)}</span>` : ''}
-      </div>
-      ${s.builtin ? '' : `<div class="actions" style="margin-top:12px;">
+      ${s.builtin ? '' : `<div class="sv-actions">
         ${s.manifest_url ? `<button class="btn-action btn-unlock" onclick="rescanSite('${slug}')">🔍 Détecter maintenant</button>` : ''}
         <button class="btn-action btn-link" onclick="editManifestUrl('${slug}')">✏️ ${s.manifest_url ? 'Changer' : 'Définir'} l'URL du manifeste</button>
         <button class="btn-action btn-delete" onclick="deleteSite('${slug}')">🗑️ Supprimer le site</button>
@@ -1982,8 +2033,10 @@ function renderSite() {
     </div>`;
 
   const maintOn = !s.site_enabled || !!s.maintenance;
-  const globalCard = `<div class="card" ${maintOn ? 'style="border-color:var(--amber);"' : ''}>
-      <div class="card-title">🚧 Maintenance &amp; accès ${maintOn ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">MAINTENANCE ACTIVE</span>' : ''}</div>
+  const globalCard = `<div class="card sv-maint ${maintOn ? 'on' : ''}">
+      <div class="sv-maint-head"><div class="sv-maint-ico">🚧</div>
+        <div><h3>Maintenance &amp; accès ${maintOn ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">MAINTENANCE ACTIVE</span>' : ''}</h3>
+          <p>${maintOn ? 'Les visiteurs voient la page de maintenance, les admins passent.' : 'Le site est accessible normalement.'}</p></div></div>
       <div class="flags-grid">
         ${flagToggle('Mode maintenance', 'Affiche une page de maintenance aux visiteurs (les admins peuvent toujours entrer)', maintOn, `toggleMaintenance('${slug}',this.checked)`)}
         ${flagToggle('Connexion obligatoire', 'Force tous les visiteurs à se connecter pour voir ce site', s.require_auth, `toggleSetting('${slug}','require_auth',this.checked)`)}
@@ -2003,15 +2056,18 @@ function renderSite() {
       </div>
     </div>`;
 
-  const sectionsCard = `<div class="card">
-      <div class="card-title">Sections détectées (${present.length})</div>
-      ${present.length ? `<div class="actions" style="margin-bottom:12px;">
+  const activeCount = present.filter(x => x.enabled).length, secPct = present.length ? Math.round(activeCount / present.length * 100) : 0;
+  const sectionsCard = `<details class="card sv-fold" ${svOpen('sections:' + s.slug, true)} ontoggle="svFold('sections:${slug}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">📄 Sections détectées</span><span class="sv-count">${activeCount} / ${present.length} actives</span><span class="sv-minibar"><i style="width:${secPct}%"></i></span></summary>
+      <div class="sv-body">
+      ${present.length ? `<div class="sv-bulk">
         <button class="btn-action btn-unban" onclick="setAllSections('${slug}', true)">Tout activer</button>
         <button class="btn-action btn-suspend" onclick="setAllSections('${slug}', false)">Tout désactiver</button>
       </div>` : ''}
       <div class="flags-grid">${present.length ? present.map(sectionItem).join('') : '<span class="empty-state">Aucune section détectée pour le moment.</span>'}</div>
-      ${absent.length ? `<div class="card-title" style="margin-top:18px;font-size:12px;">Disparues du manifeste</div><div class="flags-grid">${absent.map(absentItem).join('')}</div>` : ''}
-    </div>`;
+      ${absent.length ? `<div class="sv-sub">Disparues du manifeste (${absent.length})</div><div class="flags-grid">${absent.map(absentItem).join('')}</div>` : ''}
+      </div>
+    </details>`;
 
   const permissionDanger = p => /(^|\.)(admin|delete|revoke|ban|destroy|write|manage|access)(\.|$)/i.test(p.key || '');
   const permissionCards = s.permissions.map((p, i) => {
@@ -2022,8 +2078,9 @@ function renderSite() {
       <div class="permission-desc">${esc(p.description || 'Aucune description fournie.')}</div></div>
     </label>`;
   }).join('');
-  const permsCard = s.builtin ? '' : `<div class="card">
-      <div class="card-title">Permissions détectées (${s.permissions.filter(p => p.present).length})</div>
+  const permsCard = s.builtin ? '' : `<details class="card sv-fold" ${svOpen('perms:' + s.slug, false)} ontoggle="svFold('perms:${slug}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">🔑 Permissions détectées</span><span class="sv-count">${s.permissions.filter(p => p.present).length} permission(s)</span></summary>
+      <div class="sv-body">
       <div class="permission-toolbar">
         <input type="search" id="site-permission-search" placeholder="🔎 Rechercher une permission…" oninput="filterSitePermissions()" style="flex:1;min-width:220px;">
         <span style="font-size:11px;color:var(--muted);">🔴 = permission sensible</span>
@@ -2032,7 +2089,8 @@ function renderSite() {
         ${permissionCards || '<span class="empty-state">Ce site ne déclare aucune permission.</span>'}
       </div>
       <div style="font-size:11px;color:var(--muted);margin-top:10px;">Les permissions sont attribuées aux rôles dans la page « Rôles ».</div>
-    </div>`;
+      </div>
+    </details>`;
 
   const integCard = s.builtin ? '' : `<div class="card">
       <details>
@@ -2055,7 +2113,7 @@ function renderSite() {
       </details>
     </div>`;
 
-  el.innerHTML = healthCard + infoCard + globalCard + sectionsCard + permsCard + integCard;
+  el.innerHTML = infoCard + globalCard + sectionsCard + permsCard + integCard;
 }
 
 function filterSitePermissions() {
