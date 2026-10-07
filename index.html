@@ -273,6 +273,62 @@
   #toast.success { border-color: var(--green); color: var(--green); }
   #toast.error   { border-color: var(--red); color: var(--red); }
 
+  /* ── Page Rôles (éditeur à deux colonnes) ── */
+  .re-tabs { display:flex; gap:8px; margin-bottom:16px; }
+  .re-layout { display:grid; grid-template-columns:270px minmax(0,1fr); gap:16px; align-items:start; }
+  .re-side { padding:14px; position:sticky; top:12px; }
+  .re-side-title { display:flex; justify-content:space-between; font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:0 4px 10px; }
+  .re-list { display:flex; flex-direction:column; gap:3px; }
+  .re-role { display:flex; align-items:center; gap:9px; width:100%; padding:9px 10px; border:1px solid transparent; border-radius:9px; background:transparent; color:var(--text); font-size:13px; font-weight:600; text-align:left; cursor:pointer; }
+  .re-role:hover { background:var(--accent-bg); }
+  .re-role.on { background:var(--accent-bg); border-color:var(--accent); }
+  .re-dot { width:11px; height:11px; border-radius:50%; background:var(--c); flex:0 0 11px; }
+  .re-role small { margin-left:auto; color:var(--muted); font-size:10px; font-weight:500; }
+  .re-new { display:flex; gap:6px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
+  .re-new input { flex:1; min-width:0; padding:8px 10px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; outline:none; }
+  .re-new input:focus { border-color:var(--accent); }
+  .re-new button { width:34px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; font-size:17px; cursor:pointer; }
+  .re-main { padding:0; overflow:hidden; }
+  .re-hero { padding:18px 20px; border-bottom:1px solid var(--border); border-top:3px solid var(--c); }
+  .re-hero-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .re-hero h3 { font-size:18px; font-weight:700; margin:0; }
+  .re-tag { font-size:9px; font-weight:800; letter-spacing:.06em; padding:3px 7px; border-radius:5px; background:var(--accent-bg); color:var(--accent); }
+  .re-desc { margin:7px 0 0; font-size:12px; color:var(--muted); line-height:1.5; }
+  .re-stats { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted); }
+  .re-stats b { color:var(--text); }
+  .re-del { margin-left:auto; }
+  .re-members { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; align-items:center; }
+  .re-member { display:inline-flex; align-items:center; gap:6px; padding:3px 9px 3px 4px; border:1px solid var(--border); border-radius:99px; background:var(--surface); color:var(--text); font-size:12px; cursor:pointer; }
+  .re-member:hover { border-color:var(--accent); }
+  .re-member img, .re-member span.ph { width:20px; height:20px; border-radius:50%; object-fit:cover; background:var(--accent-bg); color:var(--accent); display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; }
+  .re-note { margin:14px 20px 0; padding:10px 12px; border-radius:9px; font-size:12px; line-height:1.5; background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber); }
+  .re-tools { display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:14px 20px; }
+  .re-tools input[type=search] { flex:1; min-width:200px; padding:9px 12px 9px 36px; background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Ctext y='12' font-size='12'%3E🔎%3C/text%3E%3C/svg%3E") no-repeat 12px center; border:1px solid var(--border); border-radius:9px; color:var(--text); font-size:13px; outline:none; }
+  .re-tools input[type=search]:focus { border-color:var(--accent); }
+  .re-only { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap; }
+  .re-group { border-top:1px solid var(--border); }
+  .re-ghead { display:flex; align-items:center; gap:10px; padding:11px 20px; background:var(--surface); }
+  .re-ghead button.re-gtoggle { display:flex; align-items:center; gap:8px; flex:1; background:none; border:none; color:var(--text); font-size:12px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; text-align:left; padding:0; }
+  .re-chev { display:inline-block; transition:transform .15s; color:var(--muted); font-size:10px; }
+  .re-group.closed .re-chev { transform:rotate(-90deg); }
+  .re-group.closed .re-rows { display:none; }
+  .re-gcount { color:var(--muted); font-weight:600; font-size:11px; letter-spacing:0; text-transform:none; }
+  .re-gbtn { background:none; border:1px solid var(--border); color:var(--muted); font-size:10px; border-radius:6px; padding:3px 8px; cursor:pointer; }
+  .re-gbtn:hover { color:var(--text); border-color:var(--accent); }
+  .re-perm { display:flex; align-items:center; gap:12px; padding:11px 20px; border-top:1px solid var(--border); }
+  .re-perm:hover { background:rgba(92,110,247,.04); }
+  .re-picon { width:28px; height:28px; flex:0 0 28px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:var(--accent-bg); font-size:13px; }
+  .re-pmain { flex:1; min-width:0; }
+  .re-pname { font-size:13px; font-weight:600; }
+  .re-pkey { font:10px ui-monospace,Menlo,monospace; color:var(--muted); }
+  .re-pdesc { font-size:11px; color:#aeb5cc; margin-top:2px; line-height:1.4; }
+  .re-danger { margin-left:6px; font-size:9px; font-weight:800; color:var(--red); }
+  .re-lock { font-size:11px; color:var(--muted); margin-right:6px; }
+  .re-empty { padding:30px 20px; text-align:center; color:var(--muted); font-size:13px; }
+  .re-found { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .re-found .re-member { border-radius:10px; padding:7px 10px; }
+  @media (max-width:860px) { .re-layout { grid-template-columns:1fr; } .re-side { position:static; } }
+
   /* ── Fiche utilisateur (tiroir façon Discord) ── */
   .usercard-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:90; display:none; justify-content:flex-end; }
   .usercard-overlay.open { display:flex; }
@@ -958,69 +1014,59 @@
         <h2>Rôles</h2>
       </div>
 
-      <div class="card roles-manager-card">
-        <div class="roles-manager-head">
-          <div>
-            <div class="card-title" style="margin-bottom:3px;">Rôles</div>
-            <div class="roles-manager-subtitle">Crée, visualise et supprime tes rôles en un coup d’œil.</div>
-          </div>
-          <div class="roles-count" id="roles-count">0 rôle</div>
+      <div class="re-tabs">
+        <button class="subtab active" id="re-tab-editor" onclick="reTab('editor')">🎭 Éditeur de rôles</button>
+        <button class="subtab" id="re-tab-matrix" onclick="reTab('matrix')">📊 Matrice (comparer)</button>
+      </div>
+
+      <div id="re-pane-editor">
+        <div class="re-layout">
+          <aside class="card re-side">
+            <div class="re-side-title"><span>Rôles</span><span id="re-count"></span></div>
+            <div class="re-list" id="re-list"><div class="empty-state"><span class="spinner"></span></div></div>
+            <div class="re-new">
+              <input type="text" id="rbac-new-role" placeholder="Nouveau rôle…" autocomplete="off" onkeydown="if(event.key==='Enter')reCreate()">
+              <button title="Créer le rôle" onclick="reCreate()">+</button>
+            </div>
+          </aside>
+
+          <section class="card re-main">
+            <div id="re-head"></div>
+            <div class="re-tools">
+              <input type="search" id="re-search" placeholder="Rechercher une permission (wiki, emeraldian, users…)" autocomplete="off" oninput="RE.q=this.value;renderRoleGroups()">
+              <label class="re-only"><input type="checkbox" id="re-only" onchange="RE.onlyOn=this.checked;renderRoleGroups()"> Activées seulement</label>
+            </div>
+            <div id="re-groups"></div>
+          </section>
         </div>
-        <div id="roles-list" class="roles-grid">
-          <div class="role-empty"><span class="spinner"></span>Chargement…</div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">Trouver un membre</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Cherche par pseudo, Discord ID ou e-mail, puis clique pour ouvrir sa fiche et lui ajouter des rôles.</div>
+          <input type="text" id="re-find" placeholder="Pseudo ou Discord ID…" autocomplete="off" oninput="reSearchMember(this.value)" style="width:100%;">
+          <div class="re-found" id="re-found"></div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Permissions par rôle</div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
-          Les permissions des sites apparaissent ici dès qu'elles sont détectées. Recherche instantanée, descriptions lisibles et marquage des permissions sensibles. Une case cochée accorde la permission au rôle ; elle ne vaut ensuite que dans le <strong>scope</strong> où le rôle est attribué à l'utilisateur (ex : scope « wiki »).
-        </div>
-        <div class="rbac-tools">
-          <div class="rbac-search">
-            <input type="search" id="rbac-permission-search" placeholder="Rechercher une permission : wiki, users.delete…" autocomplete="off" oninput="filterRbacPermissions(this.value)">
+      <div id="re-pane-matrix" style="display:none;">
+        <div class="card">
+          <div class="card-title">Permissions par rôle</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
+            Vue d'ensemble pour comparer tous les rôles côte à côte. Une case cochée accorde la permission au rôle ; elle ne vaut ensuite que dans la portée où le rôle est attribué à l'utilisateur.
           </div>
-          <span class="rbac-result-count" id="rbac-result-count">0 permission</span>
-          <span class="rbac-danger-legend">🔴 Permission dangereuse</span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead id="rbac-head"></thead>
-            <tbody id="rbac-body"><tr><td class="empty-state"><span class="spinner"></span>Chargement…</td></tr></tbody>
-          </table>
-        </div>
-        <div class="role-create-box">
-          <div>
-            <div class="role-create-title">Nouveau rôle</div>
-            <div class="role-create-help">Un nom simple, par exemple <code>wiki-editor</code>.</div>
+          <div class="rbac-tools">
+            <div class="rbac-search">
+              <input type="search" id="rbac-permission-search" placeholder="Rechercher une permission : wiki, users.delete…" autocomplete="off" oninput="filterRbacPermissions(this.value)">
+            </div>
+            <span class="rbac-result-count" id="rbac-result-count">0 permission</span>
+            <span class="rbac-danger-legend">🔴 Permission dangereuse</span>
           </div>
-          <div class="role-create-actions">
-            <input type="text" id="rbac-new-role" placeholder="Nom du rôle…" autocomplete="off">
-            <button class="btn-action btn-unlock" onclick="createRole()">+ Créer</button>
+          <div class="table-wrap">
+            <table>
+              <thead id="rbac-head"></thead>
+              <tbody id="rbac-body"><tr><td class="empty-state"><span class="spinner"></span>Chargement…</td></tr></tbody>
+            </table>
           </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Gérer les rôles d'un utilisateur</div>
-        <div class="search-bar" style="display:flex;gap:8px;">
-          <input type="text" id="roles-discord-id" placeholder="Discord ID de l'utilisateur…" style="flex:1;">
-          <button class="btn-action btn-unlock" onclick="loadUserRoles()">Charger</button>
-        </div>
-        <div id="roles-user-pseudo" style="margin-top:10px;font-size:13px;color:var(--muted);"></div>
-        <div id="roles-user-current" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;"></div>
-        <div id="roles-user-add" style="margin-top:16px;display:none;">
-          <div class="card-title" style="font-size:12px;">Ajouter un rôle</div>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
-            <label for="roles-add-scope" style="font-size:12px;color:var(--muted);">Scope :</label>
-            <input type="text" id="roles-add-scope" value="global" list="scope-options" placeholder="global, wiki, admin-panel…" style="width:180px;" oninput="updateRolesScopeWarning()">
-            <datalist id="scope-options"></datalist>
-            <span style="font-size:11px;color:var(--muted);">« global » = valable sur tous les sites. Un nom de service = valable uniquement là-bas.</span>
-          </div>
-          <div id="roles-scope-warning" style="display:none;margin-bottom:10px;font-size:11px;color:var(--red);">
-            ⚠️ Le rôle "administrator" ne donnera PAS l'accès admin en dehors du scope "global".
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;" id="roles-add-buttons"></div>
         </div>
       </div>
     </div>
@@ -1681,11 +1727,7 @@ async function bulkGiveEclats() {
 }
 
 // ── Raccourci : ouvrir l'onglet Rôles préchargé pour ce membre ──────────
-function openRolesFor(discordId, pseudo) {
-  showPage('roles');
-  document.getElementById('roles-discord-id').value = discordId;
-  loadUserRoles(pseudo);
-}
+function openRolesFor(discordId) { openUserCard(discordId); }
 
 // ── Raccourci : ouvrir l'onglet Éclats prérempli avec ce membre ─────────
 function openGiveEclatsFor(discordId, pseudo, eclats) {
@@ -2160,7 +2202,7 @@ async function loadRbac() {
       return;
     }
     RBAC = d;
-    document.getElementById('scope-options').innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
+    const so = document.getElementById('scope-options'); if (so) so.innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
 
     const roles = d.roles || [];
     renderRoleCards(roles);
@@ -2269,31 +2311,187 @@ function filterRbacPermissions(query) {
   if (count) count.textContent = `${visible} permission${visible > 1 ? 's' : ''}${q ? ' trouvée' + (visible > 1 ? 's' : '') : ''}`;
 }
 
-function renderRoleCards(roles) {
-  const el = document.getElementById('roles-list');
-  const count = document.getElementById('roles-count');
-  if (count) count.textContent = `${roles.length} rôle${roles.length > 1 ? 's' : ''}`;
-  if (!roles.length) {
-    el.innerHTML = '<div class="role-empty"><span class="role-empty-icon">＋</span><div><strong>Aucun rôle</strong><span>Crée ton premier rôle juste en dessous.</span></div></div>';
-    return;
-  }
+// ── Page Rôles : liste à gauche, éditeur du rôle à droite ─────────────────
+const RE = { selected: 'user', q: '', onlyOn: false, closed: new Set(), tab: 'editor', seq: 0 };
+const UC_CACHE = {};
+const reRole = n => (RBAC?.roles || []).find(r => r.name === n);
+const RE_DESC = {
+  user: 'S’applique automatiquement à TOUS les comptes, sur tous les sites : à utiliser pour les droits de base.',
+  moderator: 'Équipe de modération : s’ajoute au rôle user.',
+  editor: 'Édition de contenu (wiki, sites) : s’ajoute au rôle user.',
+  administrator: 'Accès complet. Reçoit automatiquement toutes les permissions, y compris celles des futurs sites.',
+  developer: 'Rôle technique : s’ajoute au rôle user.'
+};
+function reLocked(role, key) {
+  if (role === 'administrator' && key === 'admin.access') return 'Indispensable à l’accès au panel';
+  if (role === 'user' && USER_ROLE_BLOCKED.test(key)) return 'Permission d’administration : interdite au rôle user (il s’applique à tous les comptes)';
+  return '';
+}
+function reGroupLabel(g) {
+  if (!g) return '⚙️ Noyau ReLink';
+  const s = (typeof SITES !== 'undefined' && SITES.find(x => x.slug === g));
+  return '🌐 ' + (s ? s.name : g);
+}
 
-  el.innerHTML = roles.map(r => {
-    const perms = Array.isArray(r.permissions) ? r.permissions : [];
-    const visible = perms.slice(0, 5);
-    const more = Math.max(0, perms.length - visible.length);
-    const builtin = !!r.builtin;
-    return `<div class="role-card ${builtin ? 'role-card-builtin' : ''}">
-      <div class="role-card-top">
-        <div class="role-icon">${builtin ? '★' : '◆'}</div>
-        <div class="role-card-name">${esc(r.name)}</div>
-        ${builtin ? '<span class="role-builtin">INTÉGRÉ</span>' : `<button class="role-delete" title="Supprimer le rôle" onclick="deleteRole('${escJsAttr(r.name)}')">×</button>`}
-      </div>
-      <div class="role-card-meta">${perms.length} permission${perms.length > 1 ? 's' : ''}</div>
-      <div class="role-tags">${visible.length ? visible.map(p => `<span class="role-tag">${esc(p)}</span>`).join('') : '<span class="role-no-perms">Aucune permission</span>'}${more ? `<span class="role-tag role-tag-more">+${more}</span>` : ''}</div>
-      <button class="role-configure" onclick="focusRolePermissions('${escJsAttr(r.name)}')">Gérer les permissions <span>→</span></button>
-    </div>`;
+function renderRoleCards() { renderRolesList(); renderRoleEditor(); }
+
+function renderRolesList() {
+  const roles = RBAC?.roles || [];
+  const c = document.getElementById('re-count'); if (c) c.textContent = roles.length;
+  document.getElementById('re-list').innerHTML = roles.length ? roles.map(r =>
+    `<button class="re-role ${r.name === RE.selected ? 'on' : ''}" style="--c:${ucColor(r.name)}" onclick="reSelect('${escJsAttr(r.name)}')">
+      <span class="re-dot"></span>${esc(r.name)}${r.builtin ? ' <span style="color:var(--amber);font-size:10px" title="Rôle intégré">★</span>' : ''}<small>${r.permissions.length}</small></button>`).join('')
+    : '<div class="empty-state">Aucun rôle.</div>';
+}
+
+function reSelect(name) { RE.selected = name; renderRolesList(); renderRoleEditor(); }
+
+function renderRoleEditor() {
+  const roles = RBAC?.roles || [];
+  if (!reRole(RE.selected)) RE.selected = roles[0]?.name;
+  const r = reRole(RE.selected), head = document.getElementById('re-head');
+  if (!r) { head.innerHTML = '<div class="re-empty">Aucun rôle à afficher.</div>'; document.getElementById('re-groups').innerHTML = ''; return; }
+  const total = (RBAC.permissions || []).length;
+  const note = r.name === 'user'
+    ? '<div class="re-note">⚠️ Ce rôle est donné à <b>tous les comptes</b>. N’active ici que ce que n’importe quel membre connecté peut faire. Les permissions d’administration sont verrouillées.</div>'
+    : (r.name === 'administrator' ? '<div class="re-note" style="background:var(--accent-bg);color:var(--accent);border-color:var(--accent)">🛡️ Les nouvelles permissions détectées sont ajoutées automatiquement à ce rôle.</div>' : '');
+  head.innerHTML = `<div class="re-hero" style="--c:${ucColor(r.name)}">
+      <div class="re-hero-top"><span class="re-dot" style="width:14px;height:14px"></span><h3>${esc(r.name)}</h3>
+        ${r.builtin ? '<span class="re-tag">INTÉGRÉ</span>' : '<span class="re-tag" style="background:rgba(62,207,142,.12);color:var(--green)">PERSONNALISÉ</span>'}
+        ${r.builtin ? '' : `<button class="btn-action btn-delete re-del" onclick="deleteRole('${escJsAttr(r.name)}')">Supprimer</button>`}</div>
+      <p class="re-desc">${esc(RE_DESC[r.name] || 'Rôle personnalisé : coche les permissions qu’il accorde, puis attribue-le depuis la fiche d’un membre.')}</p>
+      <div class="re-stats"><span><b>${r.permissions.length}</b> / ${total} permissions</span><span id="re-count-members"></span></div>
+      <div class="re-members" id="re-members"></div></div>${note}`;
+  renderRoleGroups();
+  reLoadMembers(r.name);
+}
+
+function renderRoleGroups() {
+  const r = reRole(RE.selected), box = document.getElementById('re-groups');
+  if (!r || !box) return;
+  const on = new Set(r.permissions), q = RE.q.trim().toLowerCase();
+  const groups = new Map();
+  for (const p of (RBAC.permissions || [])) {
+    const meta = permissionPresentation(p);
+    const hay = `${p.key} ${p.description || ''} ${meta.label} ${meta.description} ${p.site || ''}`.toLowerCase();
+    if (q && !hay.includes(q)) continue;
+    if (RE.onlyOn && !on.has(p.key)) continue;
+    const g = p.site || '';
+    if (!groups.has(g)) groups.set(g, []);
+    groups.get(g).push({ p, meta });
+  }
+  const order = ['', ...[...groups.keys()].filter(k => k).sort()].filter(k => groups.has(k));
+  if (!order.length) { box.innerHTML = `<div class="re-empty">${q || RE.onlyOn ? 'Aucune permission ne correspond.' : 'Aucune permission détectée.'}</div>`; return; }
+  box.innerHTML = order.map(g => {
+    const items = groups.get(g).sort((a, b) => a.p.key.localeCompare(b.p.key));
+    const allOfGroup = (RBAC.permissions || []).filter(x => (x.site || '') === g);
+    const n = allOfGroup.filter(x => on.has(x.key)).length;
+    const gid = g || '__core', closed = RE.closed.has(gid) && !q;
+    return `<div class="re-group ${closed ? 'closed' : ''}">
+      <div class="re-ghead"><button class="re-gtoggle" onclick="reToggleGroup('${escJsAttr(gid)}')"><span class="re-chev">▼</span>${esc(reGroupLabel(g))} <span class="re-gcount">${n}/${allOfGroup.length}</span></button>
+        <button class="re-gbtn" onclick="reGroupAll('${escJsAttr(g)}',true)">Tout activer</button><button class="re-gbtn" onclick="reGroupAll('${escJsAttr(g)}',false)">Tout désactiver</button></div>
+      <div class="re-rows">${items.map(({ p, meta }) => {
+        const lock = reLocked(r.name, p.key), checked = on.has(p.key);
+        return `<div class="re-perm"${p.present ? '' : ' style="opacity:.6"'}><span class="re-picon">${meta.icon}</span>
+          <div class="re-pmain"><div class="re-pname">${esc(meta.label)}${meta.danger ? '<span class="re-danger">🔴 SENSIBLE</span>' : ''}${p.present ? '' : '<span class="re-danger" style="color:var(--amber)">DISPARUE DU MANIFESTE</span>'}</div>
+            <div class="re-pkey">${esc(p.key)}</div><div class="re-pdesc">${esc(meta.description)}</div></div>
+          ${lock ? `<span class="re-lock" title="${esc(lock)}">🔒</span>` : ''}
+          <label class="toggle" title="${esc(lock)}"><input type="checkbox" ${checked ? 'checked' : ''} ${lock ? 'disabled' : ''} onchange="rePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"><span class="slider"></span></label></div>`;
+      }).join('')}</div></div>`;
   }).join('');
+}
+
+function reToggleGroup(gid) { RE.closed.has(gid) ? RE.closed.delete(gid) : RE.closed.add(gid); renderRoleGroups(); }
+
+async function reApplyPerm(role, key, granted) {
+  const d = await apiFetch(`/admin/roles/${encodeURIComponent(role)}/permissions`, 'POST', { permission: key, granted });
+  if (!d.ok) return errMsg(d);
+  const r = reRole(role);
+  if (r) { const s = new Set(r.permissions); granted ? s.add(key) : s.delete(key); r.permissions = [...s].sort(); }
+  return null;
+}
+
+async function rePerm(role, key, granted) {
+  const meta = permissionPresentation({ key });
+  if (granted && meta.danger && !(await confirm('Permission sensible', `Donner « ${key} » au rôle « ${role} » ? Cette permission est sensible.`, 'btn-confirm-warn'))) { renderRoleGroups(); return; }
+  const err = await reApplyPerm(role, key, granted);
+  if (err) toast(err, 'error'); else toast(`${role} — ${key} ${granted ? 'accordée' : 'retirée'}`, 'success');
+  renderRolesList(); renderRoleEditor();
+}
+
+async function reGroupAll(g, granted) {
+  const r = reRole(RE.selected); if (!r) return;
+  const on = new Set(r.permissions);
+  const targets = (RBAC.permissions || []).filter(p => (p.site || '') === g && !reLocked(r.name, p.key) && on.has(p.key) !== granted);
+  if (!targets.length) { toast('Rien à changer dans ce groupe.', 'success'); return; }
+  const dangerous = granted ? targets.filter(p => permissionPresentation(p).danger) : [];
+  const ok = await confirm(granted ? 'Tout activer' : 'Tout désactiver',
+    `${granted ? 'Activer' : 'Désactiver'} ${targets.length} permission(s) de « ${reGroupLabel(g).replace(/^\S+\s/, '')} » pour le rôle « ${r.name} » ?${dangerous.length ? ` (dont ${dangerous.length} sensible(s))` : ''}`,
+    granted && dangerous.length ? 'btn-confirm-warn' : 'btn-confirm-ok');
+  if (!ok) return;
+  let done = 0, fail = 0;
+  for (const p of targets) { (await reApplyPerm(r.name, p.key, granted)) ? fail++ : done++; }
+  toast(`${done} permission(s) ${granted ? 'activée(s)' : 'retirée(s)'}${fail ? `, ${fail} échec(s)` : ''}.`, fail ? 'error' : 'success');
+  renderRolesList(); renderRoleEditor();
+}
+
+async function reLoadMembers(name) {
+  const box = document.getElementById('re-members'), cnt = document.getElementById('re-count-members');
+  if (!box) return;
+  if (name === 'user') { box.innerHTML = ''; if (cnt) cnt.innerHTML = '👥 <b>Tous les comptes</b> (automatique)'; return; }
+  const seq = ++RE.seq;
+  box.innerHTML = '<span class="spinner"></span>';
+  const d = await apiFetch(`/admin/users?role=${encodeURIComponent(name)}&limit=12`);
+  if (seq !== RE.seq) return;
+  if (d.error) { box.innerHTML = `<span class="empty-state">${esc(errMsg(d))}</span>`; return; }
+  const users = d.users || [];
+  users.forEach(u => { UC_CACHE[String(u.discord_id)] = u; });
+  if (cnt) cnt.innerHTML = `👥 <b>${d.total || 0}</b> membre${(d.total || 0) > 1 ? 's' : ''}`;
+  box.innerHTML = users.length
+    ? users.map(reMemberChip).join('') + ((d.total || 0) > users.length ? `<span class="empty-state">+${d.total - users.length} autre(s)</span>` : '')
+    : '<span class="empty-state">Personne n’a ce rôle pour l’instant.</span>';
+}
+
+function reMemberChip(u) {
+  const pseudo = u.pseudo || u.discord_id;
+  const av = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="">` : `<span class="ph">${esc((pseudo[0] || '?').toUpperCase())}</span>`;
+  return `<span class="re-member" onclick="openUserCard('${escJsAttr(u.discord_id)}')">${av}${esc(pseudo)}</span>`;
+}
+
+let reSearchT;
+function reSearchMember(v) {
+  clearTimeout(reSearchT);
+  const box = document.getElementById('re-found'), q = v.trim();
+  if (q.length < 2) { box.innerHTML = ''; return; }
+  reSearchT = setTimeout(async () => {
+    const d = await apiFetch('/admin/users?limit=6&q=' + encodeURIComponent(q));
+    if (document.getElementById('re-find').value.trim() !== q) return;
+    if (d.error) { box.innerHTML = `<span class="empty-state">${esc(errMsg(d))}</span>`; return; }
+    const users = d.users || [];
+    users.forEach(u => { UC_CACHE[String(u.discord_id)] = u; });
+    box.innerHTML = users.length ? users.map(u => {
+      const roles = (u.roles || []).map(r => `<span class="uc-chip" style="--c:${ucColor(r.role)};padding:2px 7px;font-size:10px"><i></i>${esc(r.role)}</span>`).join('');
+      return `<div class="re-member" onclick="openUserCard('${escJsAttr(u.discord_id)}')" style="gap:10px">${reMemberChip(u).replace(/^<span class="re-member"[^>]*>/, '').replace(/<\/span>$/, '')}<span style="color:var(--muted);font-size:10px">${esc(u.discord_id)}</span><span style="margin-left:auto;display:flex;gap:4px">${roles}</span></div>`;
+    }).join('') : '<span class="empty-state">Aucun membre trouvé.</span>';
+  }, 250);
+}
+
+function reTab(name) {
+  RE.tab = name;
+  document.getElementById('re-pane-editor').style.display = name === 'editor' ? '' : 'none';
+  document.getElementById('re-pane-matrix').style.display = name === 'matrix' ? '' : 'none';
+  document.getElementById('re-tab-editor').classList.toggle('active', name === 'editor');
+  document.getElementById('re-tab-matrix').classList.toggle('active', name === 'matrix');
+  if (name === 'matrix') loadRbac();
+}
+
+async function reCreate() {
+  const el = document.getElementById('rbac-new-role');
+  const name = el.value.trim().toLowerCase();
+  if (!name) { toast('Entre un nom de rôle.', 'error'); return; }
+  const d = await apiFetch('/admin/roles', 'POST', { name });
+  if (d.ok) { toast(`Rôle « ${name} » créé.`, 'success'); el.value = ''; RE.selected = name; loadRolesPage(); }
+  else toast(errMsg(d), 'error');
 }
 
 function focusRolePermissions(roleName) {
@@ -2773,7 +2971,7 @@ function ucRowClick(e, id) { if (e.target.closest('button,input,a,select,label')
 
 async function openUserCard(discordId) {
   const id = String(discordId);
-  const u = (typeof lastLoadedUsers !== 'undefined' && lastLoadedUsers.find(x => String(x.discord_id) === id)) || { discord_id: id };
+  const u = (typeof lastLoadedUsers !== 'undefined' && lastLoadedUsers.find(x => String(x.discord_id) === id)) || UC_CACHE[id] || { discord_id: id };
   UC = { id, user: u, roles: Array.isArray(u.roles) ? u.roles.slice() : [], scope: 'global', picker: false, changed: false };
   document.getElementById('usercard-overlay').classList.add('open');
   renderUserCard(true);
@@ -2788,6 +2986,7 @@ function closeUserCard() {
   document.getElementById('usercard-overlay').classList.remove('open');
   const changed = UC.changed; UC.id = null; UC.changed = false;
   if (changed && typeof loadUsers === 'function') loadUsers();
+  if (changed && document.getElementById('page-roles')?.classList.contains('active')) { loadRolesPage(); }
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('usercard-overlay')?.classList.contains('open') && !document.getElementById('modal-overlay').classList.contains('open')) closeUserCard(); });
 
@@ -2950,93 +3149,17 @@ const DEFAULT_WORKER_URL = 'https://relink-auth.refugeemeraudien-direction.worke
 // Page Rôles
 // ══════════════════════════════════════════════════════════════════════════
 let ALL_ROLES = [];
-let rolesCurrentDiscordId = null;
 
 async function loadRolesPage() {
-  const data = await apiFetch('/admin/roles');
-  ALL_ROLES = data.roles || [];
-  const el = document.getElementById('roles-list');
-  el.innerHTML = '<div class="role-empty"><span class="spinner"></span>Chargement des rôles…</div>';
-
-  loadRbac(); // matrice rôles × permissions + scopes proposés
-
-  // Si un discord_id est déjà dans le champ (venu d'un raccourci), on recharge
-  const idField = document.getElementById('roles-discord-id').value.trim();
-  if (idField) loadUserRoles();
+  const d = await apiFetch('/admin/rbac');
+  if (d.error) { document.getElementById('re-head').innerHTML = `<div class="re-empty">${esc(errMsg(d))}</div>`; return; }
+  RBAC = d;
+  ALL_ROLES = (d.roles || []).map(r => ({ name: r.name }));
+  if (!reRole(RE.selected)) RE.selected = d.roles?.[0]?.name;
+  renderRolesList(); renderRoleEditor();
+  if (RE.tab === 'matrix') loadRbac();
 }
 
-async function loadUserRoles(pseudoHint) {
-  const discordId = document.getElementById('roles-discord-id').value.trim();
-  if (!discordId) { toast('Entrez un Discord ID.', 'error'); return; }
-  rolesCurrentDiscordId = discordId;
-
-  document.getElementById('roles-user-pseudo').textContent = (typeof pseudoHint === 'string' && pseudoHint)
-    ? `Utilisateur : ${pseudoHint} (${discordId})` : `Discord ID : ${discordId}`;
-
-  const data = await apiFetch(`/admin/users/${discordId}/roles`);
-  // data.roles est [{ role, scope }, ...] : un même rôle peut apparaître plusieurs fois.
-  const current = data.roles || [];
-
-  const currentEl = document.getElementById('roles-user-current');
-  const implicitChip = `<span class="badge" style="display:inline-flex;align-items:center;gap:6px;opacity:.8;" title="Rôle appliqué automatiquement à tous les comptes, sur tous les sites">user <span style="color:var(--muted);font-size:10px;">· automatique</span></span>`;
-  currentEl.innerHTML = implicitChip + (current.length
-    ? current.map(r => `
-        <span class="badge" style="display:inline-flex;align-items:center;gap:6px;">
-          ${esc(r.role)} <span style="color:var(--muted);font-size:10px;">· ${esc(r.scope)}</span>
-          <button onclick="removeRoleFromUser('${escJsAttr(r.role)}','${escJsAttr(r.scope)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>
-        </span>`).join('')
-    : '');
-
-  const addEl = document.getElementById('roles-user-add');
-  const addButtonsEl = document.getElementById('roles-add-buttons');
-  addButtonsEl.innerHTML = ALL_ROLES.length
-    ? ALL_ROLES.map(r => `<button class="btn-action btn-unlock" onclick="assignRoleToUser('${escJsAttr(r.name)}')">+ ${esc(r.name)}</button>`).join('')
-    : '<span class="empty-state">Aucun rôle défini.</span>';
-  addEl.style.display = 'block';
-}
-
-function updateRolesScopeWarning() {
-  const scope = document.getElementById('roles-add-scope').value.trim() || 'global';
-  document.getElementById('roles-scope-warning').style.display = scope !== 'global' ? 'block' : 'none';
-}
-
-async function assignRoleToUser(roleName) {
-  if (!rolesCurrentDiscordId) return;
-  const scope = document.getElementById('roles-add-scope').value.trim() || 'global';
-
-  // admin.access n'est reconnu par le Worker qu'en scope 'global'.
-  if (roleName === 'administrator' && scope !== 'global') {
-    const proceed = await confirm(
-      'Ce rôle n\'aura aucun effet admin',
-      `Le rôle "administrator" donne la permission admin.access, qui n'est reconnue par le Worker qu'en scope "global". ` +
-      `Attribué en scope "${scope}", cet utilisateur n'aura PAS accès aux routes /admin/*. ` +
-      `Continuer quand même ?`,
-      'btn-confirm-danger'
-    );
-    if (!proceed) return;
-  }
-
-  const data = await apiFetch(`/admin/users/${rolesCurrentDiscordId}/roles`, 'POST', { role: roleName, scope });
-  if (data.ok) {
-    toast(`Rôle "${roleName}" ajouté (scope: ${scope}).`, 'success');
-    loadUserRoles();
-  } else {
-    toast(data.error || 'Erreur', 'error');
-  }
-}
-
-async function removeRoleFromUser(roleName, scope) {
-  if (!rolesCurrentDiscordId) return;
-  const ok = await confirm('Retirer le rôle', `Retirer le rôle "${roleName}" (scope: ${scope}) à cet utilisateur ?`, 'btn-confirm-danger');
-  if (!ok) return;
-  const data = await apiFetch(`/admin/users/${rolesCurrentDiscordId}/roles/${encodeURIComponent(roleName)}?scope=${encodeURIComponent(scope)}`, 'DELETE');
-  if (data.ok) {
-    toast(`Rôle "${roleName}" retiré (scope: ${scope}).`, 'success');
-    loadUserRoles();
-  } else {
-    toast(data.error || 'Erreur', 'error');
-  }
-}
 
 // ══════════════════════════════════════════════════════════════════════════
 // Page Services & clés API
