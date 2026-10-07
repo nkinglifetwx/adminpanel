@@ -302,6 +302,21 @@
   .sv-meta { margin-top:14px; font-size:12px; color:var(--muted); line-height:1.8; }
   .sv-err { margin-top:12px; padding:9px 12px; border-radius:9px; background:var(--red-bg); color:var(--red); border:1px solid var(--red); font-size:12px; }
   .sv-actions { display:flex; gap:8px; flex-wrap:wrap; padding:14px 22px; border-top:1px solid var(--border); background:rgba(0,0,0,.15); }
+  .sv-logo-wrap { position:relative; flex:0 0 60px; }
+  .sv-logo { overflow:hidden; }
+  .sv-logo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .sv-logo-edit { position:absolute; right:-6px; bottom:-6px; width:26px; height:26px; border-radius:50%; border:2px solid var(--card); background:var(--accent); color:#fff; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .sv-logo-edit:hover { transform:scale(1.1); }
+  .lk-row { display:flex; align-items:center; gap:16px; margin-bottom:18px; }
+  .lk-row .sv-logo { width:72px; height:72px; flex:0 0 72px; font-size:34px; }
+  .lk-label { font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:16px 0 8px; display:block; }
+  .lk-chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .lk-chip { width:36px; height:36px; border-radius:10px; border:1px solid var(--border); background:var(--surface); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .lk-chip:hover, .lk-chip.on { border-color:var(--accent); background:var(--accent-bg); }
+  .lk-sw { width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer; padding:0; box-shadow:0 0 0 1px var(--border); }
+  .lk-sw.on { border-color:#fff; }
+  .lk-line { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .lk-actions { display:flex; gap:8px; margin-top:22px; justify-content:flex-end; flex-wrap:wrap; }
   .sv-maint { position:relative; overflow:hidden; }
   .sv-maint.on { border-color:var(--amber); background:linear-gradient(135deg,rgba(245,166,35,.10),var(--card) 60%); }
   .sv-maint-head { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
@@ -1316,6 +1331,39 @@
   </div>
 </div>
 
+<!-- Apparence d'un site -->
+<div id="look-overlay" class="modal-overlay" onclick="if(event.target===this)closeLook()">
+  <div class="modal" style="max-width:480px;width:94vw;text-align:left;max-height:92vh;overflow-y:auto;">
+    <h3>🎨 Apparence du site</h3>
+    <div class="lk-row"><div class="sv-logo" id="lk-preview"></div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">Ce que tu règles ici change l'icône et la couleur du site dans ce panel. Priorité : image, puis emoji, puis lettre.</div></div>
+
+    <span class="lk-label">Image</span>
+    <div class="lk-line">
+      <input type="file" id="lk-file" accept="image/png,image/jpeg,image/webp,image/gif" onchange="lkPickImage(this)" style="flex:1;min-width:180px;">
+      <button class="btn-action btn-delete" id="lk-rmimg" onclick="LK.logo=null;document.getElementById('lk-file').value='';lkRender()">Retirer l'image</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;">Recadrée en carré et réduite automatiquement.</div>
+
+    <span class="lk-label">Emoji</span>
+    <div class="lk-chips" id="lk-emojis"></div>
+    <input type="text" id="lk-emoji" maxlength="8" placeholder="ou écris le tien…" oninput="LK.emoji=this.value.trim()||null;LK.logo=this.value.trim()?null:LK.logo;lkRender()" style="margin-top:8px;width:160px;">
+
+    <span class="lk-label">Couleur du reflet</span>
+    <div class="lk-line" id="lk-colors"></div>
+    <div class="lk-line" style="margin-top:8px;">
+      <input type="color" id="lk-color" oninput="LK.color=this.value;lkRender()" style="width:46px;height:34px;padding:2px;">
+      <button class="btn-action btn-link" onclick="LK.color=null;lkRender()">Couleur automatique</button>
+    </div>
+
+    <div class="lk-actions">
+      <button class="btn-action btn-link" onclick="LK.color=null;LK.emoji=null;LK.logo=null;document.getElementById('lk-file').value='';lkRender()" style="margin-right:auto;">↺ Tout par défaut</button>
+      <button class="btn-action" onclick="closeLook()">Annuler</button>
+      <button class="btn-primary" onclick="lkSave()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Fiche utilisateur -->
 <div id="usercard-overlay" class="usercard-overlay" onclick="if(event.target===this)closeUserCard()">
   <aside class="usercard" id="usercard" role="dialog" aria-label="Fiche utilisateur"></aside>
@@ -1945,7 +1993,7 @@ function renderSiteTabs() {
   document.getElementById('sites-tabs').innerHTML = SITES.map(s => {
     const fresh = s.sections.filter(x => x.present && isRecent(x.discovered_at)).length;
     return `<button class="subtab ${s.slug === currentSite ? 'active' : ''}" onclick="selectSite('${esc(s.slug)}')">`
-      + `${s.builtin ? '🏠' : '🌐'} ${esc(s.name)}`
+      + `${svTabIcon(s)} ${esc(s.name)}`
       + (fresh ? ` <span class="badge-sub">${fresh} nouveau${fresh > 1 ? 'x' : ''}</span>` : '')
       + `</button>`;
   }).join('');
@@ -1956,6 +2004,67 @@ function flagToggle(label, desc, checked, onchange) {
       <div class="flag-info"><div class="flag-label">${label}</div><div class="flag-desc">${desc}</div></div>
       <label class="toggle"><input type="checkbox" ${checked ? 'checked' : ''} onchange="${onchange}"><span class="slider"></span></label>
     </div>`;
+}
+
+// ── Apparence d'un site (logo / emoji / couleur) ──────────────────────────
+let LK = null;
+const LK_EMOJIS = ['⚙️', '🌐', '🚂', '🏠', '⭐', '🎮', '📖', '🛒', '⚔️', '🔧', '💎', '🏰'];
+const LK_COLORS = ['#5c6ef7', '#8b5cf6', '#ec4899', '#ef5b5b', '#f5a623', '#3ecf8e', '#14b8a6', '#0ea5e9', '#64748b'];
+const svInitial = s => String(s.name || s.slug || '?').trim().charAt(0).toUpperCase();
+const svColor = s => s.color || ucColor(s.slug);
+function svLogoHtml(s) { return s.logo ? `<img src="${esc(s.logo)}" alt="">` : esc(s.emoji || (s.builtin ? '⚙️' : svInitial(s))); }
+function svTabIcon(s) {
+  if (s.logo) return `<img src="${esc(s.logo)}" alt="" style="width:18px;height:18px;border-radius:5px;object-fit:cover;vertical-align:-4px">`;
+  return esc(s.emoji || (s.builtin ? '⚙️' : '🌐'));
+}
+
+function openLookEditor(slug) {
+  const s = SITES.find(x => x.slug === slug); if (!s) return;
+  LK = { slug, name: s.name, builtin: s.builtin, color: s.color || null, emoji: s.emoji || null, logo: s.logo || null };
+  document.getElementById('lk-file').value = '';
+  lkRender();
+  document.getElementById('look-overlay').classList.add('open');
+}
+function closeLook() { document.getElementById('look-overlay').classList.remove('open'); LK = null; }
+
+function lkRender() {
+  if (!LK) return;
+  const pv = document.getElementById('lk-preview');
+  pv.style.setProperty('--c', LK.color || ucColor(LK.slug));
+  pv.innerHTML = svLogoHtml(LK);
+  document.getElementById('lk-emojis').innerHTML = LK_EMOJIS.map(e =>
+    `<button class="lk-chip ${!LK.logo && LK.emoji === e ? 'on' : ''}" onclick="LK.emoji='${e}';LK.logo=null;lkRender()">${e}</button>`).join('');
+  document.getElementById('lk-colors').innerHTML = LK_COLORS.map(c =>
+    `<button class="lk-sw ${LK.color === c ? 'on' : ''}" style="background:${c}" title="${c}" onclick="LK.color='${c}';lkRender()"></button>`).join('');
+  const ei = document.getElementById('lk-emoji'); if (document.activeElement !== ei && ei.value !== (LK.emoji || '')) ei.value = LK.emoji || '';
+  const ci = document.getElementById('lk-color'); const cv = LK.color || '#5c6ef7'; if (ci.value !== cv) ci.value = cv;
+  document.getElementById('lk-rmimg').style.display = LK.logo ? '' : 'none';
+}
+
+// Recadre en carré 128×128 puis compresse (le Worker refuse > 120 Ko)
+function lkPickImage(input) {
+  const f = input.files && input.files[0]; if (!f) return;
+  const img = new Image(), url = URL.createObjectURL(f);
+  img.onload = () => {
+    const S = 128, c = document.createElement('canvas'); c.width = c.height = S;
+    const m = Math.min(img.width, img.height);
+    c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, S, S);
+    URL.revokeObjectURL(url);
+    let data = c.toDataURL('image/webp', 0.88);
+    if (!data.startsWith('data:image/webp')) data = c.toDataURL('image/png');
+    if (data.length > 110000) data = c.toDataURL('image/jpeg', 0.8);
+    if (data.length > 118000) { toast('Image trop lourde, essaie-en une plus simple.', 'error'); return; }
+    LK.logo = data; lkRender();
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast('Image illisible.', 'error'); };
+  img.src = url;
+}
+
+async function lkSave() {
+  if (!LK) return;
+  const d = await apiFetch(`/admin/sites/${LK.slug}/settings`, 'PUT', { color: LK.color, emoji: LK.emoji, logo: LK.logo });
+  if (d.ok) { toast('Apparence enregistrée.', 'success'); closeLook(); loadSites(); }
+  else toast(errMsg(d), 'error');
 }
 
 // État ouvert/fermé des blocs repliables (conservé quand la page se réaffiche)
@@ -2004,10 +2113,10 @@ function renderSite() {
   const healthColor = healthOk ? 'var(--green)' : 'var(--red)';
   const manifestOk = s.builtin || !s.last_scan_status || s.last_scan_status !== 'error';
   const initial = String(s.name || s.slug || '?').trim().charAt(0).toUpperCase();
-  const infoCard = `<div class="card sv-hero" style="--c:${ucColor(s.slug)}">
+  const infoCard = `<div class="card sv-hero" style="--c:${svColor(s)}">
       <div class="sv-hero-in">
         <div class="sv-hero-top">
-          <div class="sv-logo">${esc(initial)}</div>
+          <div class="sv-logo-wrap"><div class="sv-logo">${svLogoHtml(s)}</div><button class="sv-logo-edit" title="Personnaliser l'apparence" onclick="openLookEditor('${slug}')">✏️</button></div>
           <div class="sv-hero-main">
             <h3>${esc(s.name)} <span class="sv-slug">${slug}</span> ${status}</h3>
             ${s.description ? `<p>${esc(s.description)}</p>` : ''}
