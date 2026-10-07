@@ -273,61 +273,77 @@
   #toast.success { border-color: var(--green); color: var(--green); }
   #toast.error   { border-color: var(--red); color: var(--red); }
 
-  /* ── Page Rôles (éditeur à deux colonnes) ── */
-  .re-tabs { display:flex; gap:8px; margin-bottom:16px; }
-  .re-layout { display:grid; grid-template-columns:270px minmax(0,1fr); gap:16px; align-items:start; }
+  /* ── Page Rôles (éditeur : un rôle à la fois) ── */
+  .re-layout { display:grid; grid-template-columns:280px minmax(0,1fr); gap:16px; align-items:start; }
   .re-side { padding:14px; position:sticky; top:12px; }
   .re-side-title { display:flex; justify-content:space-between; font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:0 4px 10px; }
-  .re-list { display:flex; flex-direction:column; gap:3px; }
-  .re-role { display:flex; align-items:center; gap:9px; width:100%; padding:9px 10px; border:1px solid transparent; border-radius:9px; background:transparent; color:var(--text); font-size:13px; font-weight:600; text-align:left; cursor:pointer; }
+  .re-list { display:flex; flex-direction:column; gap:4px; }
+  .re-role { display:flex; align-items:center; gap:11px; width:100%; padding:8px 10px; border:1px solid transparent; border-radius:11px; background:transparent; color:var(--text); font-size:13px; font-weight:600; text-align:left; cursor:pointer; transition:background .12s; }
   .re-role:hover { background:var(--accent-bg); }
-  .re-role.on { background:var(--accent-bg); border-color:var(--accent); }
-  .re-dot { width:11px; height:11px; border-radius:50%; background:var(--c); flex:0 0 11px; }
-  .re-role small { margin-left:auto; color:var(--muted); font-size:10px; font-weight:500; }
+  .re-role.on { background:color-mix(in srgb,var(--c) 16%,transparent); border-color:color-mix(in srgb,var(--c) 55%,transparent); }
+  .re-ico { width:32px; height:32px; flex:0 0 32px; display:flex; align-items:center; justify-content:center; border-radius:10px; font-size:16px; background:color-mix(in srgb,var(--c) 22%,transparent); border:1px solid color-mix(in srgb,var(--c) 40%,transparent); }
+  .re-role small { margin-left:auto; color:var(--muted); font-size:11px; font-weight:600; background:var(--surface); padding:2px 7px; border-radius:99px; }
   .re-new { display:flex; gap:6px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
   .re-new input { flex:1; min-width:0; padding:8px 10px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; outline:none; }
   .re-new input:focus { border-color:var(--accent); }
   .re-new button { width:34px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; font-size:17px; cursor:pointer; }
   .re-main { padding:0; overflow:hidden; }
-  .re-hero { padding:18px 20px; border-bottom:1px solid var(--border); border-top:3px solid var(--c); }
-  .re-hero-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  .re-hero h3 { font-size:18px; font-weight:700; margin:0; }
-  .re-tag { font-size:9px; font-weight:800; letter-spacing:.06em; padding:3px 7px; border-radius:5px; background:var(--accent-bg); color:var(--accent); }
-  .re-desc { margin:7px 0 0; font-size:12px; color:var(--muted); line-height:1.5; }
-  .re-stats { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted); }
-  .re-stats b { color:var(--text); }
+  .re-hero { padding:22px 22px 18px; background:linear-gradient(135deg,color-mix(in srgb,var(--c) 26%,var(--card)) 0%,var(--card) 72%); border-bottom:1px solid var(--border); position:relative; }
+  .re-hero::after { content:''; position:absolute; inset:0 0 auto 0; height:3px; background:var(--c); }
+  .re-hero-top { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .re-badge { width:58px; height:58px; flex:0 0 58px; display:flex; align-items:center; justify-content:center; border-radius:16px; font-size:28px; background:color-mix(in srgb,var(--c) 24%,var(--card)); border:1.5px solid var(--c); box-shadow:0 8px 26px color-mix(in srgb,var(--c) 28%,transparent); }
+  .re-hero h3 { font-size:22px; font-weight:800; margin:0 0 6px; letter-spacing:-.01em; }
+  .re-pills { display:flex; gap:6px; flex-wrap:wrap; }
+  .re-pill { font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px; background:rgba(255,255,255,.07); color:var(--muted); border:1px solid var(--border); }
+  .re-pill.ok { color:var(--green); border-color:var(--green); background:var(--green-bg); }
   .re-del { margin-left:auto; }
-  .re-members { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; align-items:center; }
-  .re-member { display:inline-flex; align-items:center; gap:6px; padding:3px 9px 3px 4px; border:1px solid var(--border); border-radius:99px; background:var(--surface); color:var(--text); font-size:12px; cursor:pointer; }
-  .re-member:hover { border-color:var(--accent); }
-  .re-member img, .re-member span.ph { width:20px; height:20px; border-radius:50%; object-fit:cover; background:var(--accent-bg); color:var(--accent); display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; }
-  .re-note { margin:14px 20px 0; padding:10px 12px; border-radius:9px; font-size:12px; line-height:1.5; background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber); }
-  .re-tools { display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:14px 20px; }
-  .re-tools input[type=search] { flex:1; min-width:200px; padding:9px 12px 9px 36px; background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Ctext y='12' font-size='12'%3E🔎%3C/text%3E%3C/svg%3E") no-repeat 12px center; border:1px solid var(--border); border-radius:9px; color:var(--text); font-size:13px; outline:none; }
+  .re-desc { margin:14px 0 0; font-size:13px; color:#b7bfd7; line-height:1.55; max-width:70ch; }
+  .re-statgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:16px; }
+  .re-stat { padding:12px 14px; border-radius:12px; background:rgba(0,0,0,.22); border:1px solid var(--border); display:flex; flex-direction:column; gap:7px; min-height:78px; }
+  .re-stat-l { font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .re-stat-v { font-size:13px; color:var(--muted); }
+  .re-stat-v b { font-size:20px; color:var(--text); font-weight:800; }
+  .re-bar, .re-gbar { display:block; height:6px; border-radius:99px; background:var(--border); overflow:hidden; }
+  .re-bar i, .re-gbar i { display:block; height:100%; border-radius:99px; background:var(--c,var(--accent)); transition:width .25s; }
+  .re-stack { display:flex; align-items:center; min-height:28px; flex-wrap:wrap; }
+  .re-av { width:28px; height:28px; border-radius:50%; margin-left:-8px; border:2px solid var(--card); background:var(--accent-bg); color:var(--accent); font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; transition:transform .12s; }
+  .re-av:first-child { margin-left:0; }
+  .re-av:hover { transform:translateY(-3px); z-index:2; }
+  .re-av img { width:100%; height:100%; object-fit:cover; }
+  .re-more { margin-left:8px; font-size:11px; color:var(--muted); }
+  .re-note { margin:16px 22px 0; padding:10px 12px; border-radius:10px; font-size:12px; line-height:1.5; background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber); }
+  .re-ptitle { padding:18px 22px 0; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .re-ptitle h4 { margin:0; font-size:15px; font-weight:700; }
+  .re-ptitle span { font-size:12px; color:var(--muted); }
+  .re-tools { display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:14px 22px; }
+  .re-tools input[type=search] { flex:1; min-width:200px; padding:9px 12px; background:var(--surface); border:1px solid var(--border); border-radius:9px; color:var(--text); font-size:13px; outline:none; }
   .re-tools input[type=search]:focus { border-color:var(--accent); }
   .re-only { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap; }
-  .re-group { border-top:1px solid var(--border); }
-  .re-ghead { display:flex; align-items:center; gap:10px; padding:11px 20px; background:var(--surface); }
-  .re-ghead button.re-gtoggle { display:flex; align-items:center; gap:8px; flex:1; background:none; border:none; color:var(--text); font-size:12px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; text-align:left; padding:0; }
+  .re-group { margin:0 22px 14px; border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--card); }
+  .re-ghead { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--surface); cursor:pointer; user-select:none; }
+  .re-ghead:hover { background:var(--accent-bg); }
   .re-chev { display:inline-block; transition:transform .15s; color:var(--muted); font-size:10px; }
   .re-group.closed .re-chev { transform:rotate(-90deg); }
   .re-group.closed .re-rows { display:none; }
-  .re-gcount { color:var(--muted); font-weight:600; font-size:11px; letter-spacing:0; text-transform:none; }
-  .re-gbtn { background:none; border:1px solid var(--border); color:var(--muted); font-size:10px; border-radius:6px; padding:3px 8px; cursor:pointer; }
+  .re-gicon { font-size:17px; }
+  .re-gname { font-size:13px; font-weight:700; flex:1; min-width:0; }
+  .re-gname small { display:block; font-size:11px; font-weight:500; color:var(--muted); margin-top:1px; }
+  .re-gbar { width:70px; flex:0 0 70px; }
+  .re-gbtn { background:none; border:1px solid var(--border); color:var(--muted); font-size:10px; border-radius:6px; padding:4px 9px; cursor:pointer; white-space:nowrap; }
   .re-gbtn:hover { color:var(--text); border-color:var(--accent); }
-  .re-perm { display:flex; align-items:center; gap:12px; padding:11px 20px; border-top:1px solid var(--border); }
-  .re-perm:hover { background:rgba(92,110,247,.04); }
-  .re-picon { width:28px; height:28px; flex:0 0 28px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:var(--accent-bg); font-size:13px; }
-  .re-pmain { flex:1; min-width:0; }
-  .re-pname { font-size:13px; font-weight:600; }
-  .re-pkey { font:10px ui-monospace,Menlo,monospace; color:var(--muted); }
-  .re-pdesc { font-size:11px; color:#aeb5cc; margin-top:2px; line-height:1.4; }
-  .re-danger { margin-left:6px; font-size:9px; font-weight:800; color:var(--red); }
-  .re-lock { font-size:11px; color:var(--muted); margin-right:6px; }
-  .re-empty { padding:30px 20px; text-align:center; color:var(--muted); font-size:13px; }
+  .re-rows .flags-grid { padding:14px; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); }
+  .re-rows .flag-item { gap:14px; transition:border-color .15s, background .15s; }
+  .re-rows .flag-item.on { border-color:color-mix(in srgb,var(--accent) 55%,var(--border)); background:color-mix(in srgb,var(--accent) 7%,var(--surface)); }
+  .re-rows .flag-item.locked { opacity:.7; }
+  .re-rows .flag-desc code { font-size:10px; }
+  .re-danger { margin-left:6px; font-size:9px; font-weight:800; color:var(--red); white-space:nowrap; }
+  .re-empty { padding:30px 22px; text-align:center; color:var(--muted); font-size:13px; }
   .re-found { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .re-member { display:inline-flex; align-items:center; gap:6px; padding:3px 9px 3px 4px; border:1px solid var(--border); border-radius:99px; background:var(--surface); color:var(--text); font-size:12px; cursor:pointer; }
+  .re-member:hover { border-color:var(--accent); }
+  .re-member img, .re-member span.ph { width:20px; height:20px; border-radius:50%; object-fit:cover; background:var(--accent-bg); color:var(--accent); display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; }
   .re-found .re-member { border-radius:10px; padding:7px 10px; }
-  @media (max-width:860px) { .re-layout { grid-template-columns:1fr; } .re-side { position:static; } }
+  @media (max-width:860px) { .re-layout { grid-template-columns:1fr; } .re-side { position:static; } .re-gbar { display:none; } }
 
   /* ── Fiche utilisateur (tiroir façon Discord) ── */
   .usercard-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:90; display:none; justify-content:flex-end; }
@@ -1014,11 +1030,6 @@
         <h2>Rôles</h2>
       </div>
 
-      <div class="re-tabs">
-        <button class="subtab active" id="re-tab-editor" onclick="reTab('editor')">🎭 Éditeur de rôles</button>
-        <button class="subtab" id="re-tab-matrix" onclick="reTab('matrix')">📊 Matrice (comparer)</button>
-      </div>
-
       <div id="re-pane-editor">
         <div class="re-layout">
           <aside class="card re-side">
@@ -1032,9 +1043,12 @@
 
           <section class="card re-main">
             <div id="re-head"></div>
+            <div class="re-ptitle" id="re-ptitle"></div>
             <div class="re-tools">
               <input type="search" id="re-search" placeholder="Rechercher une permission (wiki, emeraldian, users…)" autocomplete="off" oninput="RE.q=this.value;renderRoleGroups()">
               <label class="re-only"><input type="checkbox" id="re-only" onchange="RE.onlyOn=this.checked;renderRoleGroups()"> Activées seulement</label>
+              <button class="re-gbtn" onclick="reOpenAll(true)">Tout ouvrir</button>
+              <button class="re-gbtn" onclick="reOpenAll(false)">Tout fermer</button>
             </div>
             <div id="re-groups"></div>
           </section>
@@ -1045,28 +1059,6 @@
           <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Cherche par pseudo, Discord ID ou e-mail, puis clique pour ouvrir sa fiche et lui ajouter des rôles.</div>
           <input type="text" id="re-find" placeholder="Pseudo ou Discord ID…" autocomplete="off" oninput="reSearchMember(this.value)" style="width:100%;">
           <div class="re-found" id="re-found"></div>
-        </div>
-      </div>
-
-      <div id="re-pane-matrix" style="display:none;">
-        <div class="card">
-          <div class="card-title">Permissions par rôle</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
-            Vue d'ensemble pour comparer tous les rôles côte à côte. Une case cochée accorde la permission au rôle ; elle ne vaut ensuite que dans la portée où le rôle est attribué à l'utilisateur.
-          </div>
-          <div class="rbac-tools">
-            <div class="rbac-search">
-              <input type="search" id="rbac-permission-search" placeholder="Rechercher une permission : wiki, users.delete…" autocomplete="off" oninput="filterRbacPermissions(this.value)">
-            </div>
-            <span class="rbac-result-count" id="rbac-result-count">0 permission</span>
-            <span class="rbac-danger-legend">🔴 Permission dangereuse</span>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead id="rbac-head"></thead>
-              <tbody id="rbac-body"><tr><td class="empty-state"><span class="spinner"></span>Chargement…</td></tr></tbody>
-            </table>
-          </div>
         </div>
       </div>
     </div>
@@ -2191,54 +2183,6 @@ async function forgetSection(slug, key) {
 // ── Rôles × permissions (matrice) ─────────────────────────────────────────
 let RBAC = null;
 
-async function loadRbac() {
-  const bodyEl = document.getElementById('rbac-body');
-  const headEl = document.getElementById('rbac-head');
-  try {
-    const d = await apiFetch('/admin/rbac');
-    if (d.error) {
-      headEl.innerHTML = '<tr><th>Permissions par rôle</th></tr>';
-      bodyEl.innerHTML = `<tr><td class="empty-state"><strong>Impossible de charger les permissions.</strong><br><span style="font-size:11px;">${esc(errMsg(d))}</span></td></tr>`;
-      return;
-    }
-    RBAC = d;
-    const so = document.getElementById('scope-options'); if (so) so.innerHTML = (d.scopes || []).map(s => `<option value="${esc(s)}"></option>`).join('');
-
-    const roles = d.roles || [];
-    renderRoleCards(roles);
-    headEl.innerHTML = `<tr><th class="rbac-role-head">Permission</th>${roles.map(r =>
-      `<th class="rbac-role-head" style="text-align:center;">${esc(r.name)}${r.builtin ? '' : ` <button title="Supprimer ce rôle" onclick="deleteRole('${escJsAttr(r.name)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>`}</th>`).join('')}</tr>`;
-
-    const groups = new Map();
-    for (const p of d.permissions || []) {
-      const g = p.site || '';
-      if (!groups.has(g)) groups.set(g, []);
-      groups.get(g).push(p);
-    }
-    const order = ['', ...[...groups.keys()].filter(k => k !== '').sort()].filter(k => groups.has(k));
-    let html = '';
-    for (const g of order) {
-      html += `<tr class="rbac-group" data-group="${esc(g)}"><td colspan="${roles.length + 1}" style="background:var(--surface);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);">${g ? '🌐 ' + esc(g) : '⚙️ NOYAU'}</td></tr>`;
-      for (const p of groups.get(g)) {
-        const meta = permissionPresentation(p);
-        const searchText = `${p.key} ${p.description || ''} ${meta.description} ${g}`.toLowerCase();
-        html += `<tr class="rbac-permission-row" data-permission-search="${esc(searchText)}"${p.present ? '' : ' style="opacity:.55;"'}>`
-          + `<td class="rbac-perm-cell"><div class="rbac-perm-main"><span class="rbac-perm-icon">${meta.icon}</span><div><div class="rbac-perm-name">${esc(meta.label)}${meta.danger ? '<span class="rbac-danger"><span class="rbac-danger-dot">🔴</span> DANGEREUSE</span>' : ''}</div><code class="rbac-perm-key">${esc(p.key)}</code><div class="rbac-perm-desc">${esc(meta.description)}</div>${!p.present ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);margin-top:5px;">permission disparue du manifeste</span>' : ''}</div></div></td>`
-          + roles.map(r => {
-            const userBlocked = r.name === 'user' && USER_ROLE_BLOCKED.test(p.key);
-            const locked = (r.name === 'administrator' && p.key === 'admin.access') || userBlocked;
-            return `<td style="text-align:center;"><input class="rbac-check" type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? `disabled title="${userBlocked ? 'Permission d\'administration : interdite au rôle user (il s\'applique à tous les comptes)' : 'Indispensable à l\'accès au panel'}"` : ''} onchange="toggleRolePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"></td>`;
-          }).join('') + '</tr>';
-      }
-    }
-    bodyEl.innerHTML = html || '<tr><td class="empty-state">Aucune permission.</td></tr>';
-    filterRbacPermissions(document.getElementById('rbac-permission-search')?.value || '');
-  } catch (e) {
-    headEl.innerHTML = '<tr><th>Permissions par rôle</th></tr>';
-    bodyEl.innerHTML = `<tr><td class="empty-state"><strong>Impossible de charger les permissions.</strong><br><span style="font-size:11px;">${esc(e?.message || 'Erreur réseau.')}</span></td></tr>`;
-  }
-}
-
 // Même règle que le Worker : le rôle « user » vaut pour TOUS les comptes.
 const USER_ROLE_BLOCKED = /^(admin\.access|users\.(write|delete)|keys\.revoke|sites\.register|stats\.write|webhooks\..+|roles\..+|[a-z0-9_-]+\.(edit|admin|delete|manage))$/;
 const RBAC_DANGEROUS_PERMISSIONS = new Set([
@@ -2282,44 +2226,17 @@ function permissionPresentation(p) {
   return { icon:icons[action] || '🔹', label, description:p.description || `Permission permettant d’effectuer l’action « ${action} » sur ${resource}.`, danger };
 }
 
-function filterRbacPermissions(query) {
-  const q = String(query || '').trim().toLowerCase();
-  const body = document.getElementById('rbac-body');
-  if (!body) return;
-  const groups = new Map();
-  let currentGroup = null;
-  let visible = 0;
-  [...body.children].forEach(row => {
-    if (row.classList.contains('rbac-group')) {
-      currentGroup = row;
-      groups.set(row, { visible: 0, name: (row.dataset.group || '').toLowerCase() });
-      return;
-    }
-    if (!row.classList.contains('rbac-permission-row')) return;
-    const match = !q || (row.dataset.permissionSearch || '').includes(q);
-    row.classList.toggle('rbac-hidden', !match);
-    if (match) {
-      visible++;
-      if (currentGroup) groups.get(currentGroup).visible++;
-    }
-  });
-  groups.forEach((info, group) => {
-    const groupMatches = q && info.name.includes(q);
-    group.classList.toggle('rbac-group-hidden', !!q && info.visible === 0 && !groupMatches);
-  });
-  const count = document.getElementById('rbac-result-count');
-  if (count) count.textContent = `${visible} permission${visible > 1 ? 's' : ''}${q ? ' trouvée' + (visible > 1 ? 's' : '') : ''}`;
-}
-
-// ── Page Rôles : liste à gauche, éditeur du rôle à droite ─────────────────
-const RE = { selected: 'user', q: '', onlyOn: false, closed: new Set(), tab: 'editor', seq: 0 };
+// ── Page Rôles : on choisit UN rôle, on règle ses permissions ─────────────
+const RE = { selected: 'user', q: '', onlyOn: false, closed: new Set(), seq: 0 };
 const UC_CACHE = {};
+const RE_ICONS = { administrator: '🛡️', moderator: '🔨', editor: '✏️', developer: '🛠️', user: '👤' };
+const reIcon = n => RE_ICONS[n] || '🎭';
 const reRole = n => (RBAC?.roles || []).find(r => r.name === n);
 const RE_DESC = {
   user: 'S’applique automatiquement à TOUS les comptes, sur tous les sites : à utiliser pour les droits de base.',
   moderator: 'Équipe de modération : s’ajoute au rôle user.',
   editor: 'Édition de contenu (wiki, sites) : s’ajoute au rôle user.',
-  administrator: 'Accès complet. Reçoit automatiquement toutes les permissions, y compris celles des futurs sites.',
+  administrator: 'Accès complet au panel. Reçoit automatiquement toutes les permissions, y compris celles des futurs sites.',
   developer: 'Rôle technique : s’ajoute au rôle user.'
 };
 function reLocked(role, key) {
@@ -2327,10 +2244,10 @@ function reLocked(role, key) {
   if (role === 'user' && USER_ROLE_BLOCKED.test(key)) return 'Permission d’administration : interdite au rôle user (il s’applique à tous les comptes)';
   return '';
 }
-function reGroupLabel(g) {
-  if (!g) return '⚙️ Noyau ReLink';
+function reGroupName(g) {
+  if (!g) return 'Noyau ReLink';
   const s = (typeof SITES !== 'undefined' && SITES.find(x => x.slug === g));
-  return '🌐 ' + (s ? s.name : g);
+  return s ? s.name : g;
 }
 
 function renderRoleCards() { renderRolesList(); renderRoleEditor(); }
@@ -2340,28 +2257,33 @@ function renderRolesList() {
   const c = document.getElementById('re-count'); if (c) c.textContent = roles.length;
   document.getElementById('re-list').innerHTML = roles.length ? roles.map(r =>
     `<button class="re-role ${r.name === RE.selected ? 'on' : ''}" style="--c:${ucColor(r.name)}" onclick="reSelect('${escJsAttr(r.name)}')">
-      <span class="re-dot"></span>${esc(r.name)}${r.builtin ? ' <span style="color:var(--amber);font-size:10px" title="Rôle intégré">★</span>' : ''}<small>${r.permissions.length}</small></button>`).join('')
+      <span class="re-ico">${reIcon(r.name)}</span>${esc(r.name)}<small title="Permissions accordées">${r.permissions.length}</small></button>`).join('')
     : '<div class="empty-state">Aucun rôle.</div>';
 }
 
-function reSelect(name) { RE.selected = name; renderRolesList(); renderRoleEditor(); }
+function reSelect(name) { RE.selected = name; RE.q = ''; const s = document.getElementById('re-search'); if (s) s.value = ''; renderRolesList(); renderRoleEditor(); }
 
 function renderRoleEditor() {
   const roles = RBAC?.roles || [];
   if (!reRole(RE.selected)) RE.selected = roles[0]?.name;
   const r = reRole(RE.selected), head = document.getElementById('re-head');
   if (!r) { head.innerHTML = '<div class="re-empty">Aucun rôle à afficher.</div>'; document.getElementById('re-groups').innerHTML = ''; return; }
-  const total = (RBAC.permissions || []).length;
+  const total = (RBAC.permissions || []).length, pct = total ? Math.round(r.permissions.length / total * 100) : 0;
   const note = r.name === 'user'
     ? '<div class="re-note">⚠️ Ce rôle est donné à <b>tous les comptes</b>. N’active ici que ce que n’importe quel membre connecté peut faire. Les permissions d’administration sont verrouillées.</div>'
     : (r.name === 'administrator' ? '<div class="re-note" style="background:var(--accent-bg);color:var(--accent);border-color:var(--accent)">🛡️ Les nouvelles permissions détectées sont ajoutées automatiquement à ce rôle.</div>' : '');
   head.innerHTML = `<div class="re-hero" style="--c:${ucColor(r.name)}">
-      <div class="re-hero-top"><span class="re-dot" style="width:14px;height:14px"></span><h3>${esc(r.name)}</h3>
-        ${r.builtin ? '<span class="re-tag">INTÉGRÉ</span>' : '<span class="re-tag" style="background:rgba(62,207,142,.12);color:var(--green)">PERSONNALISÉ</span>'}
-        ${r.builtin ? '' : `<button class="btn-action btn-delete re-del" onclick="deleteRole('${escJsAttr(r.name)}')">Supprimer</button>`}</div>
-      <p class="re-desc">${esc(RE_DESC[r.name] || 'Rôle personnalisé : coche les permissions qu’il accorde, puis attribue-le depuis la fiche d’un membre.')}</p>
-      <div class="re-stats"><span><b>${r.permissions.length}</b> / ${total} permissions</span><span id="re-count-members"></span></div>
-      <div class="re-members" id="re-members"></div></div>${note}`;
+      <div class="re-hero-top"><div class="re-badge">${reIcon(r.name)}</div>
+        <div><h3>${esc(r.name)}</h3><div class="re-pills">
+          ${r.builtin ? '<span class="re-pill">🔒 Rôle système</span>' : '<span class="re-pill ok">✨ Personnalisé</span>'}
+          ${r.name === 'user' ? '<span class="re-pill">🌍 Appliqué à tous</span>' : ''}</div></div>
+        ${r.builtin ? '' : `<button class="btn-action btn-delete re-del" onclick="deleteRole('${escJsAttr(r.name)}')">🗑️ Supprimer</button>`}</div>
+      <p class="re-desc">${esc(RE_DESC[r.name] || 'Rôle personnalisé : active les permissions qu’il accorde, puis attribue-le depuis la fiche d’un membre.')}</p>
+      <div class="re-statgrid">
+        <div class="re-stat"><span class="re-stat-l">Permissions</span><span class="re-stat-v"><b>${r.permissions.length}</b> / ${total}</span><span class="re-bar"><i style="width:${pct}%"></i></span></div>
+        <div class="re-stat"><span class="re-stat-l">Membres</span><span class="re-stat-v" id="re-count-members">…</span><div class="re-stack" id="re-members"></div></div>
+      </div></div>${note}`;
+  document.getElementById('re-ptitle').innerHTML = `<h4>Permissions de « ${esc(r.name)} »</h4><span>Les changements ne concernent que ce rôle.</span>`;
   renderRoleGroups();
   reLoadMembers(r.name);
 }
@@ -2384,24 +2306,29 @@ function renderRoleGroups() {
   if (!order.length) { box.innerHTML = `<div class="re-empty">${q || RE.onlyOn ? 'Aucune permission ne correspond.' : 'Aucune permission détectée.'}</div>`; return; }
   box.innerHTML = order.map(g => {
     const items = groups.get(g).sort((a, b) => a.p.key.localeCompare(b.p.key));
-    const allOfGroup = (RBAC.permissions || []).filter(x => (x.site || '') === g);
-    const n = allOfGroup.filter(x => on.has(x.key)).length;
+    const all = (RBAC.permissions || []).filter(x => (x.site || '') === g);
+    const n = all.filter(x => on.has(x.key)).length, pct = all.length ? Math.round(n / all.length * 100) : 0;
     const gid = g || '__core', closed = RE.closed.has(gid) && !q;
     return `<div class="re-group ${closed ? 'closed' : ''}">
-      <div class="re-ghead"><button class="re-gtoggle" onclick="reToggleGroup('${escJsAttr(gid)}')"><span class="re-chev">▼</span>${esc(reGroupLabel(g))} <span class="re-gcount">${n}/${allOfGroup.length}</span></button>
+      <div class="re-ghead" onclick="reHeadClick(event,'${escJsAttr(gid)}')"><span class="re-chev">▼</span><span class="re-gicon">${g ? '🌐' : '⚙️'}</span>
+        <div class="re-gname">${esc(reGroupName(g))}<small>${n} / ${all.length} activée${n > 1 ? 's' : ''}</small></div>
+        <span class="re-gbar" style="--c:${ucColor(r.name)}"><i style="width:${pct}%"></i></span>
         <button class="re-gbtn" onclick="reGroupAll('${escJsAttr(g)}',true)">Tout activer</button><button class="re-gbtn" onclick="reGroupAll('${escJsAttr(g)}',false)">Tout désactiver</button></div>
-      <div class="re-rows">${items.map(({ p, meta }) => {
+      <div class="re-rows"><div class="flags-grid">${items.map(({ p, meta }) => {
         const lock = reLocked(r.name, p.key), checked = on.has(p.key);
-        return `<div class="re-perm"${p.present ? '' : ' style="opacity:.6"'}><span class="re-picon">${meta.icon}</span>
-          <div class="re-pmain"><div class="re-pname">${esc(meta.label)}${meta.danger ? '<span class="re-danger">🔴 SENSIBLE</span>' : ''}${p.present ? '' : '<span class="re-danger" style="color:var(--amber)">DISPARUE DU MANIFESTE</span>'}</div>
-            <div class="re-pkey">${esc(p.key)}</div><div class="re-pdesc">${esc(meta.description)}</div></div>
-          ${lock ? `<span class="re-lock" title="${esc(lock)}">🔒</span>` : ''}
-          <label class="toggle" title="${esc(lock)}"><input type="checkbox" ${checked ? 'checked' : ''} ${lock ? 'disabled' : ''} onchange="rePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"><span class="slider"></span></label></div>`;
-      }).join('')}</div></div>`;
+        return `<div class="flag-item ${checked ? 'on' : ''} ${lock ? 'locked' : ''}"${p.present ? '' : ' style="opacity:.6"'}>
+          <div class="flag-info"><div class="flag-label">${meta.icon} ${esc(meta.label)}${lock ? ' 🔒' : ''}${meta.danger ? '<span class="re-danger">🔴 SENSIBLE</span>' : ''}${p.present ? '' : '<span class="re-danger" style="color:var(--amber)">ABSENTE DU MANIFESTE</span>'}</div>
+            <div class="flag-desc"><code>${esc(p.key)}</code> — ${esc(meta.description)}</div></div>
+          <label class="toggle" title="${esc(lock || (checked ? 'Accordée' : 'Non accordée'))}"><input type="checkbox" ${checked ? 'checked' : ''} ${lock ? 'disabled' : ''} onchange="rePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"><span class="slider"></span></label></div>`;
+      }).join('')}</div></div></div>`;
   }).join('');
 }
 
-function reToggleGroup(gid) { RE.closed.has(gid) ? RE.closed.delete(gid) : RE.closed.add(gid); renderRoleGroups(); }
+function reHeadClick(e, gid) { if (e.target.closest('button')) return; RE.closed.has(gid) ? RE.closed.delete(gid) : RE.closed.add(gid); renderRoleGroups(); }
+function reOpenAll(open) {
+  if (open) RE.closed.clear(); else { RE.closed.add('__core'); (RBAC?.permissions || []).forEach(p => RE.closed.add(p.site || '__core')); }
+  renderRoleGroups();
+}
 
 async function reApplyPerm(role, key, granted) {
   const d = await apiFetch(`/admin/roles/${encodeURIComponent(role)}/permissions`, 'POST', { permission: key, granted });
@@ -2426,7 +2353,7 @@ async function reGroupAll(g, granted) {
   if (!targets.length) { toast('Rien à changer dans ce groupe.', 'success'); return; }
   const dangerous = granted ? targets.filter(p => permissionPresentation(p).danger) : [];
   const ok = await confirm(granted ? 'Tout activer' : 'Tout désactiver',
-    `${granted ? 'Activer' : 'Désactiver'} ${targets.length} permission(s) de « ${reGroupLabel(g).replace(/^\S+\s/, '')} » pour le rôle « ${r.name} » ?${dangerous.length ? ` (dont ${dangerous.length} sensible(s))` : ''}`,
+    `${granted ? 'Activer' : 'Désactiver'} ${targets.length} permission(s) de « ${reGroupName(g)} » pour le rôle « ${r.name} » ?${dangerous.length ? ` (dont ${dangerous.length} sensible(s))` : ''}`,
     granted && dangerous.length ? 'btn-confirm-warn' : 'btn-confirm-ok');
   if (!ok) return;
   let done = 0, fail = 0;
@@ -2438,18 +2365,19 @@ async function reGroupAll(g, granted) {
 async function reLoadMembers(name) {
   const box = document.getElementById('re-members'), cnt = document.getElementById('re-count-members');
   if (!box) return;
-  if (name === 'user') { box.innerHTML = ''; if (cnt) cnt.innerHTML = '👥 <b>Tous les comptes</b> (automatique)'; return; }
+  if (name === 'user') { box.innerHTML = ''; if (cnt) cnt.innerHTML = '<b>Tous</b> les comptes'; return; }
   const seq = ++RE.seq;
   box.innerHTML = '<span class="spinner"></span>';
-  const d = await apiFetch(`/admin/users?role=${encodeURIComponent(name)}&limit=12`);
+  const d = await apiFetch(`/admin/users?role=${encodeURIComponent(name)}&limit=8`);
   if (seq !== RE.seq) return;
   if (d.error) { box.innerHTML = `<span class="empty-state">${esc(errMsg(d))}</span>`; return; }
-  const users = d.users || [];
+  const users = d.users || [], total = d.total || 0;
   users.forEach(u => { UC_CACHE[String(u.discord_id)] = u; });
-  if (cnt) cnt.innerHTML = `👥 <b>${d.total || 0}</b> membre${(d.total || 0) > 1 ? 's' : ''}`;
+  if (cnt) cnt.innerHTML = `<b>${total}</b> membre${total > 1 ? 's' : ''}`;
   box.innerHTML = users.length
-    ? users.map(reMemberChip).join('') + ((d.total || 0) > users.length ? `<span class="empty-state">+${d.total - users.length} autre(s)</span>` : '')
-    : '<span class="empty-state">Personne n’a ce rôle pour l’instant.</span>';
+    ? users.map(u => { const ps = u.pseudo || u.discord_id; return `<span class="re-av" title="${esc(ps)}" onclick="openUserCard('${escJsAttr(u.discord_id)}')">${u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="">` : esc((ps[0] || '?').toUpperCase())}</span>`; }).join('')
+      + (total > users.length ? `<span class="re-more">+${total - users.length}</span>` : '')
+    : '<span class="re-more" style="margin:0">Personne pour l’instant</span>';
 }
 
 function reMemberChip(u) {
@@ -2471,18 +2399,11 @@ function reSearchMember(v) {
     users.forEach(u => { UC_CACHE[String(u.discord_id)] = u; });
     box.innerHTML = users.length ? users.map(u => {
       const roles = (u.roles || []).map(r => `<span class="uc-chip" style="--c:${ucColor(r.role)};padding:2px 7px;font-size:10px"><i></i>${esc(r.role)}</span>`).join('');
-      return `<div class="re-member" onclick="openUserCard('${escJsAttr(u.discord_id)}')" style="gap:10px">${reMemberChip(u).replace(/^<span class="re-member"[^>]*>/, '').replace(/<\/span>$/, '')}<span style="color:var(--muted);font-size:10px">${esc(u.discord_id)}</span><span style="margin-left:auto;display:flex;gap:4px">${roles}</span></div>`;
+      const pseudo = u.pseudo || u.discord_id;
+      const av = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="">` : `<span class="ph">${esc((pseudo[0] || '?').toUpperCase())}</span>`;
+      return `<div class="re-member" onclick="openUserCard('${escJsAttr(u.discord_id)}')" style="gap:10px">${av}${esc(pseudo)}<span style="color:var(--muted);font-size:10px">${esc(u.discord_id)}</span><span style="margin-left:auto;display:flex;gap:4px">${roles}</span></div>`;
     }).join('') : '<span class="empty-state">Aucun membre trouvé.</span>';
   }, 250);
-}
-
-function reTab(name) {
-  RE.tab = name;
-  document.getElementById('re-pane-editor').style.display = name === 'editor' ? '' : 'none';
-  document.getElementById('re-pane-matrix').style.display = name === 'matrix' ? '' : 'none';
-  document.getElementById('re-tab-editor').classList.toggle('active', name === 'editor');
-  document.getElementById('re-tab-matrix').classList.toggle('active', name === 'matrix');
-  if (name === 'matrix') loadRbac();
 }
 
 async function reCreate() {
@@ -2491,33 +2412,6 @@ async function reCreate() {
   if (!name) { toast('Entre un nom de rôle.', 'error'); return; }
   const d = await apiFetch('/admin/roles', 'POST', { name });
   if (d.ok) { toast(`Rôle « ${name} » créé.`, 'success'); el.value = ''; RE.selected = name; loadRolesPage(); }
-  else toast(errMsg(d), 'error');
-}
-
-function focusRolePermissions(roleName) {
-  const matrix = document.getElementById('rbac-body');
-  if (matrix) matrix.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.querySelectorAll('#rbac-head th').forEach((th, i) => {
-    if (i > 0 && th.textContent.trim().startsWith(roleName)) {
-      th.classList.add('role-highlight');
-      setTimeout(() => th.classList.remove('role-highlight'), 1800);
-    }
-  });
-}
-
-async function toggleRolePerm(role, permission, granted) {
-  const d = await apiFetch(`/admin/roles/${role}/permissions`, 'POST', { permission, granted });
-  if (d.ok) toast(`${role} — ${permission} ${granted ? 'accordée' : 'retirée'}`, 'success');
-  else toast(errMsg(d), 'error');
-  loadRbac();
-}
-
-async function createRole() {
-  const el = document.getElementById('rbac-new-role');
-  const name = el.value.trim().toLowerCase();
-  if (!name) { toast('Entrez un nom de rôle.', 'error'); return; }
-  const d = await apiFetch('/admin/roles', 'POST', { name });
-  if (d.ok) { toast(`Rôle « ${name} » créé.`, 'success'); el.value = ''; loadRolesPage(); }
   else toast(errMsg(d), 'error');
 }
 
@@ -3157,7 +3051,6 @@ async function loadRolesPage() {
   ALL_ROLES = (d.roles || []).map(r => ({ name: r.name }));
   if (!reRole(RE.selected)) RE.selected = d.roles?.[0]?.name;
   renderRolesList(); renderRoleEditor();
-  if (RE.tab === 'matrix') loadRbac();
 }
 
 
