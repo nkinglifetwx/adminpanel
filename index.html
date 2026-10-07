@@ -273,6 +273,51 @@
   #toast.success { border-color: var(--green); color: var(--green); }
   #toast.error   { border-color: var(--red); color: var(--red); }
 
+  /* ── Fiche utilisateur (tiroir façon Discord) ── */
+  .usercard-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:90; display:none; justify-content:flex-end; }
+  .usercard-overlay.open { display:flex; }
+  .usercard { width:460px; max-width:100vw; height:100%; overflow-y:auto; background:var(--card); border-left:1px solid var(--border); box-shadow:-24px 0 70px rgba(0,0,0,.45); animation:ucIn .18s ease-out; }
+  @keyframes ucIn { from { transform:translateX(28px); opacity:0; } to { transform:none; opacity:1; } }
+  .uc-banner { height:74px; background:linear-gradient(135deg,var(--accent),#8b5cf6); position:relative; }
+  .uc-close { position:absolute; top:12px; right:12px; width:30px; height:30px; border-radius:50%; border:none; background:rgba(0,0,0,.35); color:#fff; font-size:18px; line-height:1; cursor:pointer; }
+  .uc-close:hover { background:rgba(0,0,0,.6); }
+  .uc-head { padding:0 22px; margin-top:-34px; display:flex; align-items:flex-end; gap:14px; }
+  .uc-av { width:72px; height:72px; border-radius:50%; border:5px solid var(--card); object-fit:cover; background:var(--surface); flex:0 0 72px; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; color:var(--accent); }
+  .uc-name { font-size:19px; font-weight:700; line-height:1.2; word-break:break-word; }
+  .uc-id { display:flex; align-items:center; gap:6px; margin-top:3px; color:var(--muted); font:11px ui-monospace,Menlo,monospace; }
+  .uc-id button { background:none; border:1px solid var(--border); color:var(--muted); border-radius:5px; font-size:10px; padding:1px 6px; cursor:pointer; }
+  .uc-box { margin:16px 22px 0; padding:14px; border:1px solid var(--border); background:var(--surface); border-radius:12px; }
+  .uc-title { font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .uc-facts { display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; font-size:12px; }
+  .uc-facts b { display:block; font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px; }
+  .uc-facts span { word-break:break-all; }
+  .uc-chips { display:flex; flex-wrap:wrap; gap:7px; align-items:center; }
+  .uc-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 6px 4px 9px; border-radius:8px; font-size:12px; font-weight:600; color:var(--text); border:1px solid color-mix(in srgb,var(--c) 45%,transparent); background:color-mix(in srgb,var(--c) 14%,transparent); }
+  .uc-chip i, .uc-pick i { width:10px; height:10px; border-radius:50%; background:var(--c); flex:0 0 10px; }
+  .uc-chip em { font-style:normal; font-size:10px; color:var(--muted); font-weight:500; }
+  .uc-chip button { background:none; border:none; color:var(--muted); cursor:pointer; font-size:15px; line-height:1; padding:0 3px; border-radius:4px; }
+  .uc-chip button:hover { color:var(--red); }
+  .uc-chip.auto { opacity:.75; padding-right:9px; }
+  .uc-add { width:28px; height:28px; border-radius:8px; border:1px dashed var(--muted); background:transparent; color:var(--muted); font-size:17px; cursor:pointer; line-height:1; }
+  .uc-add:hover, .uc-add.on { border-color:var(--accent); color:var(--accent); border-style:solid; }
+  .uc-scope { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); margin-bottom:12px; flex-wrap:wrap; }
+  .uc-scope select { background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:7px; padding:5px 8px; font-size:12px; }
+  .uc-picker { margin-top:12px; border:1px solid var(--border); border-radius:10px; background:var(--card); padding:6px; max-height:260px; overflow-y:auto; }
+  .uc-pick { display:flex; align-items:center; gap:9px; width:100%; padding:8px 9px; border:none; border-radius:7px; background:transparent; color:var(--text); font-size:13px; text-align:left; cursor:pointer; }
+  .uc-pick:hover { background:var(--accent-bg); }
+  .uc-pick:disabled { opacity:.55; cursor:default; }
+  .uc-pick small { margin-left:auto; color:var(--muted); font-size:10px; }
+  .uc-check { width:17px; height:17px; border-radius:4px; border:1.5px solid var(--muted); display:inline-flex; align-items:center; justify-content:center; font-size:11px; color:#fff; flex:0 0 17px; }
+  .uc-pick.on .uc-check { background:var(--accent); border-color:var(--accent); }
+  .uc-perms { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+  .uc-perms code { font-size:10px; padding:3px 6px; border-radius:5px; background:var(--card); border:1px solid var(--border); color:#b7bfd7; }
+  .uc-perms code.danger { border-color:var(--red); color:var(--red); }
+  .uc-actions { display:flex; flex-wrap:wrap; gap:8px; }
+  .uc-pad { height:26px; }
+  tr.user-row { cursor:pointer; }
+  tr.user-row:hover td { background:rgba(92,110,247,.05); }
+  @media (max-width:520px) { .usercard { width:100vw; } }
+
   /* ── Confirm modal ── */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 100;
@@ -1190,6 +1235,11 @@
   </div>
 </div>
 
+<!-- Fiche utilisateur -->
+<div id="usercard-overlay" class="usercard-overlay" onclick="if(event.target===this)closeUserCard()">
+  <aside class="usercard" id="usercard" role="dialog" aria-label="Fiche utilisateur"></aside>
+</div>
+
 <!-- Offrir un article de boutique -->
 <div id="grantitem-overlay" class="modal-overlay">
   <div class="modal">
@@ -1582,13 +1632,13 @@ function userRow(u) {
     actions += `<button class="btn-action btn-suspend" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','suspend')">Suspendre</button><button class="btn-action btn-ban" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','ban')">Bannir</button>`;
   } else actions += `<button class="btn-action btn-unban" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','unban')">Débannir</button>`;
   actions += `<button class="btn-action btn-link" onclick="openForceLink('${u.discord_id}','${escJsAttr(u.pseudo)}','${escJsAttr(u.minecraft_uuid||'')}','${escJsAttr(u.minecraft_username||'')}')">${mcLinked ? 'Relier' : 'Lier'}</button>`;
-  actions += `<button class="btn-action btn-eclats" onclick="openGiveEclatsFor('${u.discord_id}','${escJsAttr(u.pseudo)}',${u.eclats||0})">💎 Éclats</button><button class="btn-action btn-unlock" onclick="openRolesFor('${u.discord_id}','${escJsAttr(u.pseudo)}')">🛡️ Rôles</button><button class="btn-action btn-delete" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','delete')">Supprimer</button>`;
+  actions += `<button class="btn-action btn-eclats" onclick="openGiveEclatsFor('${u.discord_id}','${escJsAttr(u.pseudo)}',${u.eclats||0})">💎 Éclats</button><button class="btn-action btn-unlock" onclick="openUserCard('${u.discord_id}')">👤 Fiche</button><button class="btn-action btn-delete" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','delete')">Supprimer</button>`;
   const eclatsCell = `<span class="eclats-badge">💎 ${u.eclats||0}</span>${u.is_partner ? `<br><span class="badge-partner">Partenaire ${u.partner_bonus_percent||0}%</span>` : ''}`;
   const candBits = []; if (u.submitted_partner) candBits.push('🤝 Partenaire'); if (u.submitted_team) candBits.push('⚔️ Équipe');
   const candCell = candBits.length ? `<span class="badge-sub">${candBits.join(' · ')}</span>` : `<span class="badge-nosub">—</span>`;
   const roleText = Array.isArray(u.roles) ? u.roles.map(r => typeof r === 'string' ? r : r.role).filter(Boolean).join(', ') : (u.role || '');
   const identifiers = [u.email ? `✉ ${u.email}` : '', u.minecraft_uuid ? `UUID ${u.minecraft_uuid}` : '', roleText ? `🛡️ ${roleText}` : ''].filter(Boolean).map(x => `<span class="identifier">${esc(x)}</span>`).join('');
-  return `<tr><td><input class="user-check user-row-check" type="checkbox" ${selectedUserIds.has(String(u.discord_id)) ? 'checked' : ''} onchange="toggleUserSelection('${escJsAttr(u.discord_id)}',this.checked)"></td>
+  return `<tr class="user-row" onclick="ucRowClick(event,'${escJsAttr(u.discord_id)}')"><td><input class="user-check user-row-check" type="checkbox" ${selectedUserIds.has(String(u.discord_id)) ? 'checked' : ''} onchange="toggleUserSelection('${escJsAttr(u.discord_id)}',this.checked)"></td>
     <td>${avatar}<strong>${esc(u.pseudo || u.discord_username || '—')}</strong><br><span style="color:var(--muted);font-size:11px">${esc(u.discord_id)}</span><div class="user-identifiers">${identifiers}</div></td>
     <td><span class="badge-status badge-${status}">${labelMap[status] || esc(status)}</span></td><td>${mcCell}</td><td>${eclatsCell}</td><td>${candCell}</td><td><div class="actions">${actions}</div></td></tr>`;
 }
@@ -2705,6 +2755,157 @@ async function saveStreakConfig() {
     errEl.style.display = 'block';
   }
 }
+
+
+// ── Fiche utilisateur (tiroir façon Discord) ──────────────────────────────
+// Clique sur un membre : profil, rôles sous forme de pastilles, ajout/retrait en un clic,
+// permissions effectives par site. Utilise les routes existantes du Worker.
+const UC_COLORS = { administrator:'#ef5b5b', moderator:'#3ecf8e', editor:'#5c9cf7', developer:'#a78bfa', user:'#8b93ad' };
+function ucColor(name) {
+  if (UC_COLORS[name]) return UC_COLORS[name];
+  let h = 0; for (const c of String(name)) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `hsl(${h} 65% 62%)`;
+}
+let UC = { id: null, user: null, roles: [], scope: 'global', picker: false, changed: false };
+function ucMyId() { try { return AUTH_MODE === 'bearer' ? (decodeJwt(ACCESS_TOKEN)?.discord_id || null) : null; } catch { return null; } }
+function ucScopeLabel(s) { return s === 'global' ? 'Tous les sites (global)' : (s === 'main' ? 'Site principal (main)' : s); }
+function ucRowClick(e, id) { if (e.target.closest('button,input,a,select,label')) return; openUserCard(id); }
+
+async function openUserCard(discordId) {
+  const id = String(discordId);
+  const u = (typeof lastLoadedUsers !== 'undefined' && lastLoadedUsers.find(x => String(x.discord_id) === id)) || { discord_id: id };
+  UC = { id, user: u, roles: Array.isArray(u.roles) ? u.roles.slice() : [], scope: 'global', picker: false, changed: false };
+  document.getElementById('usercard-overlay').classList.add('open');
+  renderUserCard(true);
+  const [rb, ur] = await Promise.all([apiFetch('/admin/rbac'), apiFetch(`/admin/users/${encodeURIComponent(id)}/roles`)]);
+  if (UC.id !== id) return;
+  if (!rb.error) RBAC = rb; else toast(errMsg(rb), 'error');
+  if (!ur.error) UC.roles = ur.roles || []; else toast(errMsg(ur), 'error');
+  renderUserCard(false);
+}
+
+function closeUserCard() {
+  document.getElementById('usercard-overlay').classList.remove('open');
+  const changed = UC.changed; UC.id = null; UC.changed = false;
+  if (changed && typeof loadUsers === 'function') loadUsers();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('usercard-overlay')?.classList.contains('open') && !document.getElementById('modal-overlay').classList.contains('open')) closeUserCard(); });
+
+function ucEffectivePerms(scope) {
+  const names = new Set(['user']);
+  for (const r of UC.roles) if (r.scope === 'global' || r.scope === scope) names.add(r.role);
+  const explicitUser = UC.roles.some(r => r.role === 'user');
+  const set = new Set();
+  for (const r of (RBAC?.roles || [])) {
+    if (!names.has(r.name)) continue;
+    for (const p of r.permissions) { if (r.name === 'user' && !explicitUser && p === 'admin.access') continue; set.add(p); }
+  }
+  return [...set].sort();
+}
+
+function renderUserCard(loading) {
+  const el = document.getElementById('usercard');
+  if (!UC.id) return;
+  const u = UC.user || {}, pseudo = u.pseudo || u.discord_username || UC.id;
+  const status = u.status || 'active', stLabel = { active: 'Actif', suspended: 'Suspendu', banned: 'Banni' }[status] || status;
+  const av = u.avatar_url ? `<img class="uc-av" src="${esc(u.avatar_url)}" alt="">` : `<span class="uc-av">${esc((pseudo[0] || '?').toUpperCase())}</span>`;
+  const cand = [u.submitted_partner ? '🤝 Partenaire' : '', u.submitted_team ? '⚔️ Équipe' : ''].filter(Boolean).join(' · ') || '—';
+  const me = ucMyId();
+
+  const chips = [`<span class="uc-chip auto" style="--c:${ucColor('user')}" title="Rôle appliqué automatiquement à tous les comptes, sur tous les sites"><i></i>user <em>automatique</em></span>`]
+    .concat(UC.roles.map(r => `<span class="uc-chip" style="--c:${ucColor(r.role)}"><i></i>${esc(r.role)}${r.scope !== 'global' ? ` <em>· ${esc(r.scope)}</em>` : ''}<button title="Retirer ce rôle" onclick="ucRemove('${escJsAttr(r.role)}','${escJsAttr(r.scope)}')">×</button></span>`));
+
+  const scopes = RBAC?.scopes || ['global'];
+  const scopeSel = `<div class="uc-scope">Portée :
+      <select onchange="UC.scope=this.value;renderUserCard(false)">${scopes.map(s => `<option value="${esc(s)}" ${s === UC.scope ? 'selected' : ''}>${esc(ucScopeLabel(s))}</option>`).join('')}</select>
+      <span>« global » = tous les sites. Un site précis = seulement lui.</span></div>`;
+
+  let picker = '';
+  if (UC.picker) {
+    const rolesList = RBAC?.roles || [];
+    picker = `<div class="uc-picker">${rolesList.length ? rolesList.map(r => {
+      if (r.name === 'user') return `<button class="uc-pick on" disabled><span class="uc-check">✓</span><span style="--c:${ucColor('user')};display:contents"><i></i></span>user<small>automatique</small></button>`;
+      const has = UC.roles.some(x => x.role === r.name && x.scope === (r.name === 'administrator' ? 'global' : UC.scope));
+      return `<button class="uc-pick ${has ? 'on' : ''}" onclick="ucToggleRole('${escJsAttr(r.name)}')"><span class="uc-check">${has ? '✓' : ''}</span><span style="--c:${ucColor(r.name)};display:contents"><i></i></span>${esc(r.name)}<small>${r.permissions.length} perm.</small></button>`;
+    }).join('') : '<div class="empty-state">Aucun rôle défini.</div>'}</div>`;
+  }
+
+  const perms = loading ? [] : ucEffectivePerms(UC.scope);
+  const permsHtml = loading ? '<span class="empty-state">Chargement…</span>'
+    : (perms.length ? perms.map(p => `<code class="${permissionPresentation({ key: p }).danger ? 'danger' : ''}">${esc(p)}</code>`).join('') : '<span class="empty-state">Aucune permission.</span>');
+
+  el.innerHTML = `
+    <div class="uc-banner"><button class="uc-close" onclick="closeUserCard()" title="Fermer (Échap)">×</button></div>
+    <div class="uc-head">${av}<div style="padding-bottom:4px;min-width:0;">
+      <div class="uc-name">${esc(pseudo)}</div>
+      <div class="uc-id">${esc(UC.id)} <button onclick="navigator.clipboard?.writeText('${escJsAttr(UC.id)}');toast('ID copié.')">copier</button>
+        <span class="badge-status badge-${esc(status)}">${esc(stLabel)}</span></div></div></div>
+
+    <div class="uc-box"><div class="uc-title">Profil</div><div class="uc-facts">
+      <div><b>Minecraft</b><span>${u.minecraft_username ? '✓ ' + esc(u.minecraft_username) : 'Non lié'}</span></div>
+      <div><b>Éclats</b><span>💎 ${esc(u.eclats || 0)}${u.is_partner ? ' · Partenaire ' + esc(u.partner_bonus_percent || 0) + '%' : ''}</span></div>
+      <div><b>E-mail</b><span>${esc(u.email || '—')}</span></div>
+      <div><b>Candidatures</b><span>${esc(cand)}</span></div></div></div>
+
+    <div class="uc-box"><div class="uc-title">Rôles</div>
+      <div class="uc-chips">${chips.join('')}<button class="uc-add ${UC.picker ? 'on' : ''}" title="Ajouter / retirer un rôle" onclick="UC.picker=!UC.picker;renderUserCard(false)">+</button></div>
+      ${UC.picker ? `<div style="margin-top:12px;">${scopeSel}</div>${picker}` : ''}
+    </div>
+
+    <div class="uc-box"><div class="uc-title"><span>Permissions effectives · ${esc(ucScopeLabel(UC.scope))}</span><span>${perms.length}</span></div>
+      ${UC.picker ? '' : scopeSel}
+      <div class="uc-perms">${permsHtml}</div></div>
+
+    <div class="uc-box"><div class="uc-title">Actions</div><div class="uc-actions">
+      ${status === 'active'
+        ? `<button class="btn-action btn-suspend" onclick="ucDo('suspend')">Suspendre</button><button class="btn-action btn-ban" onclick="ucDo('ban')">Bannir</button>`
+        : `<button class="btn-action btn-unban" onclick="ucDo('unban')">Débannir</button>`}
+      <button class="btn-action btn-eclats" onclick="ucGiveEclats()">💎 Éclats</button>
+      <button class="btn-action btn-link" onclick="ucForceLink()">${u.minecraft_uuid ? 'Relier Minecraft' : 'Lier Minecraft'}</button>
+      ${me && me === UC.id ? '<span class="empty-state" style="font-size:11px">C’est ton compte.</span>' : ''}
+    </div></div><div class="uc-pad"></div>`;
+}
+
+async function ucToggleRole(role) {
+  if (!UC.id) return;
+  const scope = role === 'administrator' ? 'global' : UC.scope;   // administrator n'a d'effet qu'en global
+  const has = UC.roles.some(r => r.role === role && r.scope === scope);
+  const pseudo = UC.user?.pseudo || UC.id;
+  if (role === 'administrator') {
+    if (!has) { if (!(await confirm('Donner le rôle administrateur', `${pseudo} aura un accès complet au panel d'administration. Continuer ?`, 'btn-confirm-warn'))) return; }
+    else if (!(await ucConfirmRemoveAdmin())) return;
+  }
+  const d = has
+    ? await apiFetch(`/admin/users/${encodeURIComponent(UC.id)}/roles/${encodeURIComponent(role)}?scope=${encodeURIComponent(scope)}`, 'DELETE')
+    : await apiFetch(`/admin/users/${encodeURIComponent(UC.id)}/roles`, 'POST', { role, scope });
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  UC.roles = has ? UC.roles.filter(r => !(r.role === role && r.scope === scope)) : UC.roles.concat([{ role, scope }]);
+  UC.user.roles = UC.roles; UC.changed = true;
+  toast(`${role} ${has ? 'retiré' : 'ajouté'}${scope !== 'global' ? ' (' + scope + ')' : ''}.`, 'success');
+  renderUserCard(false);
+}
+
+async function ucRemove(role, scope) {
+  if (role === 'administrator' && !(await ucConfirmRemoveAdmin())) return;
+  else if (role !== 'administrator' && !(await confirm('Retirer le rôle', `Retirer « ${role} »${scope !== 'global' ? ' (' + scope + ')' : ''} à ${UC.user?.pseudo || UC.id} ?`, 'btn-confirm-danger'))) return;
+  const d = await apiFetch(`/admin/users/${encodeURIComponent(UC.id)}/roles/${encodeURIComponent(role)}?scope=${encodeURIComponent(scope)}`, 'DELETE');
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  UC.roles = UC.roles.filter(r => !(r.role === role && r.scope === scope));
+  UC.user.roles = UC.roles; UC.changed = true;
+  toast(`Rôle « ${role} » retiré.`, 'success');
+  renderUserCard(false);
+}
+
+function ucConfirmRemoveAdmin() {
+  const self = ucMyId() === UC.id;
+  return confirm(self ? 'Retirer TON rôle administrateur ?' : 'Retirer le rôle administrateur',
+    self ? 'Tu vas perdre ton propre accès au panel. Continuer ?' : `${UC.user?.pseudo || UC.id} perdra l'accès au panel d'administration. Continuer ?`, 'btn-confirm-danger');
+}
+
+// Actions rapides : on ferme la fiche (les fenêtres d'action s'ouvrent par-dessus la liste)
+function ucDo(action) { const u = UC.user || {}, id = UC.id; closeUserCard(); doUserAction(id, u.pseudo || id, action); }
+function ucGiveEclats() { const u = UC.user || {}, id = UC.id; closeUserCard(); openGiveEclatsFor(id, u.pseudo || id, u.eclats || 0); }
+function ucForceLink() { const u = UC.user || {}, id = UC.id; closeUserCard(); openForceLink(id, u.pseudo || id, u.minecraft_uuid || '', u.minecraft_username || ''); }
 
 // ── Utils ─────────────────────────────────────────────────────────────────
 function esc(s) {
