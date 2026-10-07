@@ -1897,7 +1897,7 @@ function renderSite() {
       </div>`}
     </div>`;
 
-  const maintOn = !s.site_enabled;
+  const maintOn = !s.site_enabled || !!s.maintenance;
   const globalCard = `<div class="card" ${maintOn ? 'style="border-color:var(--amber);"' : ''}>
       <div class="card-title">🚧 Maintenance &amp; accès ${maintOn ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">MAINTENANCE ACTIVE</span>' : ''}</div>
       <div class="flags-grid">
@@ -2012,7 +2012,7 @@ async function toggleMaintenance(slug, on) {
        : 'Le site redevient accessible à tout le monde. Continuer ?',
     on ? 'btn-confirm-warn' : 'btn-confirm-ok');
   if (!ok) { loadSites(); return; }
-  const d = await apiFetch(`/admin/sites/${slug}/settings`, 'PUT', { site_enabled: !on });
+  const d = await apiFetch(`/admin/sites/${slug}/settings`, 'PUT', { site_enabled: !on, maintenance: on });
   toast(d.ok ? (on ? '🚧 Maintenance activée.' : '✅ Maintenance désactivée.') : errMsg(d), d.ok ? 'success' : 'error');
   loadSites();
 }
@@ -2133,8 +2133,9 @@ async function loadRbac() {
         html += `<tr class="rbac-permission-row" data-permission-search="${esc(searchText)}"${p.present ? '' : ' style="opacity:.55;"'}>`
           + `<td class="rbac-perm-cell"><div class="rbac-perm-main"><span class="rbac-perm-icon">${meta.icon}</span><div><div class="rbac-perm-name">${esc(meta.label)}${meta.danger ? '<span class="rbac-danger"><span class="rbac-danger-dot">🔴</span> DANGEREUSE</span>' : ''}</div><code class="rbac-perm-key">${esc(p.key)}</code><div class="rbac-perm-desc">${esc(meta.description)}</div>${!p.present ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);margin-top:5px;">permission disparue du manifeste</span>' : ''}</div></div></td>`
           + roles.map(r => {
-            const locked = r.name === 'administrator' && p.key === 'admin.access';
-            return `<td style="text-align:center;"><input class="rbac-check" type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? 'disabled title="Indispensable à l\'accès au panel"' : ''} onchange="toggleRolePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"></td>`;
+            const userBlocked = r.name === 'user' && USER_ROLE_BLOCKED.test(p.key);
+            const locked = (r.name === 'administrator' && p.key === 'admin.access') || userBlocked;
+            return `<td style="text-align:center;"><input class="rbac-check" type="checkbox" ${r.permissions.includes(p.key) ? 'checked' : ''} ${locked ? `disabled title="${userBlocked ? 'Permission d\'administration : interdite au rôle user (il s\'applique à tous les comptes)' : 'Indispensable à l\'accès au panel'}"` : ''} onchange="toggleRolePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',this.checked)"></td>`;
           }).join('') + '</tr>';
       }
     }
@@ -2146,6 +2147,8 @@ async function loadRbac() {
   }
 }
 
+// Même règle que le Worker : le rôle « user » vaut pour TOUS les comptes.
+const USER_ROLE_BLOCKED = /^(admin\.access|users\.(write|delete)|keys\.revoke|sites\.register|stats\.write|webhooks\..+|roles\..+|[a-z0-9_-]+\.(edit|admin|delete|manage))$/;
 const RBAC_DANGEROUS_PERMISSIONS = new Set([
   'admin.access', 'users.delete', 'keys.revoke', 'roles.delete', 'roles.manage',
   'services.delete', 'webhooks.delete', 'audit.export', 'admin.impersonate'
@@ -2774,13 +2777,14 @@ async function loadUserRoles(pseudoHint) {
   const current = data.roles || [];
 
   const currentEl = document.getElementById('roles-user-current');
-  currentEl.innerHTML = current.length
+  const implicitChip = `<span class="badge" style="display:inline-flex;align-items:center;gap:6px;opacity:.8;" title="Rôle appliqué automatiquement à tous les comptes, sur tous les sites">user <span style="color:var(--muted);font-size:10px;">· automatique</span></span>`;
+  currentEl.innerHTML = implicitChip + (current.length
     ? current.map(r => `
         <span class="badge" style="display:inline-flex;align-items:center;gap:6px;">
           ${esc(r.role)} <span style="color:var(--muted);font-size:10px;">· ${esc(r.scope)}</span>
           <button onclick="removeRoleFromUser('${escJsAttr(r.role)}','${escJsAttr(r.scope)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;line-height:1;padding:0;">×</button>
         </span>`).join('')
-    : '<span class="empty-state">Aucun rôle assigné.</span>';
+    : '');
 
   const addEl = document.getElementById('roles-user-add');
   const addButtonsEl = document.getElementById('roles-add-buttons');
