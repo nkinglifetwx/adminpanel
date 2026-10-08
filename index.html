@@ -160,14 +160,37 @@
   .diff-title { color:var(--muted); font-weight:700; margin-bottom:4px; }
   #auto-refresh-bar { display:none; position:sticky; top:0; z-index:30; padding:8px 32px; background:rgba(13,15,20,.94); border-bottom:1px solid var(--border); backdrop-filter:blur(8px); }
   #auto-refresh-bar.visible { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
-  #command-palette-overlay { position:fixed; inset:0; background:rgba(0,0,0,.62); z-index:1200; display:none; align-items:flex-start; justify-content:center; padding-top:12vh; }
+  #command-palette-overlay { position:fixed; inset:0; background:rgba(0,0,0,.62); backdrop-filter:blur(3px); z-index:1200; display:none; align-items:flex-start; justify-content:center; padding-top:11vh; }
   #command-palette-overlay.open { display:flex; }
-  .command-palette { width:min(680px,94vw); background:var(--card); border:1px solid var(--border-hi); border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,.5); overflow:hidden; }
-  .command-palette input { width:100%; border:0; border-bottom:1px solid var(--border); border-radius:0; min-height:52px; padding:14px 16px; font-size:15px; }
-  .command-results { max-height:420px; overflow:auto; padding:8px; }
-  .command-item { width:100%; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 12px; border:0; border-radius:8px; background:transparent; color:var(--text); text-align:left; cursor:pointer; }
-  .command-item:hover, .command-item.active { background:var(--accent-bg); color:var(--accent); }
-  .command-item small { color:var(--muted); }
+  .command-palette { width:min(720px,94vw); background:var(--card); border:1px solid var(--border-hi); border-radius:16px; box-shadow:0 30px 90px rgba(0,0,0,.6); overflow:hidden; animation:cpIn .14s ease-out; }
+  @keyframes cpIn { from { transform:translateY(-8px) scale(.985); opacity:0; } to { transform:none; opacity:1; } }
+  .cp-inputrow { display:flex; align-items:center; gap:12px; padding:0 16px; border-bottom:1px solid var(--border); }
+  .cp-inputrow .ico { font-size:16px; opacity:.7; }
+  .command-palette .cp-inputrow input { flex:1; min-width:0; width:auto; border:0; background:transparent; box-shadow:none; outline:none; min-height:56px; padding:0; font-size:16px; border-radius:0; }
+  .cp-kbd { font:600 10px ui-monospace,Menlo,monospace; padding:2px 6px; border:1px solid var(--border-hi); border-radius:5px; color:var(--muted); background:var(--surface); white-space:nowrap; }
+  .cp-chips { display:flex; gap:6px; padding:10px 14px; border-bottom:1px solid var(--border); overflow-x:auto; }
+  .cp-chip { flex:0 0 auto; padding:5px 11px; border-radius:99px; border:1px solid var(--border); background:var(--surface); color:var(--muted); font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; }
+  .cp-chip:hover { color:var(--text); border-color:var(--accent); }
+  .cp-chip.on { color:var(--accent); border-color:var(--accent); background:var(--accent-bg); }
+  .cp-chip b { font:700 10px ui-monospace,Menlo,monospace; opacity:.7; margin-right:5px; }
+  .command-results { max-height:min(52vh,470px); overflow:auto; padding:4px 8px 8px; }
+  .cp-group { padding:12px 10px 5px; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .cp-item { display:flex; align-items:center; gap:12px; padding:8px 10px; border-radius:11px; cursor:pointer; border:1px solid transparent; }
+  .cp-item.active { background:var(--accent-bg); border-color:color-mix(in srgb,var(--accent) 45%,transparent); }
+  .cp-ico { width:32px; height:32px; flex:0 0 32px; border-radius:10px; background:var(--surface); display:flex; align-items:center; justify-content:center; font-size:15px; overflow:hidden; font-weight:700; color:var(--accent); }
+  .cp-ico img { width:100%; height:100%; object-fit:cover; display:block; }
+  .cp-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:1px; }
+  .cp-label { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cp-label mark { background:none; color:var(--accent); font-weight:800; }
+  .cp-hint { font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cp-extra { display:flex; gap:4px; flex:0 0 auto; }
+  .cp-enter { display:none; }
+  .cp-item.active .cp-enter { display:inline-block; }
+  .cp-empty { padding:28px 16px; text-align:center; color:var(--muted); font-size:13px; line-height:1.7; }
+  .cp-foot { display:flex; gap:16px; align-items:center; padding:9px 14px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); flex-wrap:wrap; }
+  .nav-search { display:flex; align-items:center; gap:8px; width:calc(100% - 20px); margin:0 10px 12px; padding:9px 11px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--muted); font-size:12px; cursor:pointer; }
+  .nav-search:hover { border-color:var(--accent); color:var(--text); }
+  .nav-search .cp-kbd { margin-left:auto; }
   @media (max-width:680px) { .advanced-search-grid { grid-template-columns:1fr; } #auto-refresh-bar { padding:8px 14px; } .diff-box { grid-template-columns:1fr; } }
 
   /* ── Search bar ── */
@@ -746,6 +769,7 @@
       </div>
     </div>
     <div class="nav-items">
+      <button class="nav-search" onclick="openCommandPalette()">🔎 Rechercher… <span class="cp-kbd">Ctrl K</span></button>
       <div class="nav-section-label">Général</div>
       <button class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
         <span class="ico">📊</span> Tableau de bord
@@ -1346,9 +1370,13 @@
 
 <!-- Command palette -->
 <div id="command-palette-overlay" onclick="if(event.target===this)closeCommandPalette()">
-  <div class="command-palette">
-    <input id="command-palette-input" type="search" placeholder="Rechercher une fonctionnalité…" oninput="renderCommandPalette()" onkeydown="commandPaletteKeydown(event)" autocomplete="off">
+  <div class="command-palette" role="dialog" aria-label="Palette de commandes">
+    <div class="cp-inputrow"><span class="ico">🔎</span>
+      <input id="command-palette-input" type="text" placeholder="Que veux-tu faire ? Une page, une action, un site, un rôle ou un membre…" oninput="renderCommandPalette()" onkeydown="commandPaletteKeydown(event)" autocomplete="off" spellcheck="false">
+      <span class="cp-kbd">Échap</span></div>
+    <div class="cp-chips" id="cp-chips"></div>
     <div id="command-palette-results" class="command-results"></div>
+    <div class="cp-foot"><span><span class="cp-kbd">↑</span> <span class="cp-kbd">↓</span> naviguer</span><span><span class="cp-kbd">↵</span> ouvrir</span><span><span class="cp-kbd">Tab</span> changer de filtre</span><span id="cp-count" style="margin-left:auto"></span></div>
   </div>
 </div>
 
@@ -3250,7 +3278,7 @@ function closeUserCard() {
   if (changed && typeof loadUsers === 'function') loadUsers();
   if (changed && document.getElementById('page-roles')?.classList.contains('active')) { loadRolesPage(); }
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('usercard-overlay')?.classList.contains('open') && !document.getElementById('modal-overlay').classList.contains('open')) closeUserCard(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('command-palette-overlay')?.classList.contains('open') && document.getElementById('usercard-overlay')?.classList.contains('open') && !document.getElementById('modal-overlay').classList.contains('open')) closeUserCard(); });
 
 function ucEffectivePerms(scope) {
   const names = new Set(['user']);
@@ -3768,27 +3796,231 @@ function updateAutoRefreshBar() {
   bar.classList.toggle('visible', ['dashboard','commandes','webhooks','audit','submissions'].includes(currentPage));
 }
 
-// ── Command palette ──────────────────────────────────────────────────────
-const COMMANDS = [
-  {label:'Tableau de bord', hint:'Vue d’ensemble', run:()=>showPage('dashboard')},
-  {label:'Utilisateurs', hint:'Gestion et recherche', run:()=>showPage('users')},
-  {label:'Commandes', hint:'Suivi des commandes', run:()=>showPage('commandes')},
-  {label:'Créer un rôle', hint:'Rôles & permissions', run:()=>{showPage('roles');setTimeout(()=>document.getElementById('rbac-new-role')?.focus(),150)}},
-  {label:'Voir audit', hint:'Journal d’audit', run:()=>showPage('audit')},
-  {label:'Ajouter Éclats', hint:'Économie', run:()=>{showPage('eclats');setTimeout(()=>showEclatsTab('give'),100)}},
-  {label:'Sites & visibilité', hint:'Manifests et permissions', run:()=>showPage('sites')},
-  {label:'Webhooks', hint:'Livraisons et retries', run:()=>showPage('webhooks')},
-  {label:'Services & clés API', hint:'Accès machine', run:()=>showPage('services')},
-  {label:'Formulaires', hint:'Candidatures', run:()=>showPage('submissions')}
-];
-let commandIndex=0;
-function openCommandPalette() { if (document.getElementById('sidebar').style.display === 'none') return; const o=document.getElementById('command-palette-overlay'); o.classList.add('open'); document.getElementById('command-palette-input').value=''; commandIndex=0; renderCommandPalette(); setTimeout(()=>document.getElementById('command-palette-input').focus(),0); }
-function closeCommandPalette() { document.getElementById('command-palette-overlay').classList.remove('open'); }
-function filteredCommands() { const q=(document.getElementById('command-palette-input')?.value||'').toLowerCase().trim(); return COMMANDS.filter(c=>!q || (c.label+' '+c.hint).toLowerCase().includes(q)); }
-function renderCommandPalette() { const list=filteredCommands(); commandIndex=Math.min(commandIndex,Math.max(0,list.length-1)); document.getElementById('command-palette-results').innerHTML=list.map((c,i)=>`<button class="command-item ${i===commandIndex?'active':''}" onclick="runCommand(${COMMANDS.indexOf(c)})"><span>${esc(c.label)}</span><small>${esc(c.hint)}</small></button>`).join('') || '<div class="empty-state">Aucun résultat.</div>'; }
-function runCommand(i) { const c=COMMANDS[i]; if(!c)return; closeCommandPalette(); c.run(); }
-function commandPaletteKeydown(e) { const list=filteredCommands(); if(e.key==='ArrowDown'){e.preventDefault();commandIndex=Math.min(commandIndex+1,list.length-1);renderCommandPalette();} else if(e.key==='ArrowUp'){e.preventDefault();commandIndex=Math.max(commandIndex-1,0);renderCommandPalette();} else if(e.key==='Enter'){e.preventDefault();if(list[commandIndex])runCommand(COMMANDS.indexOf(list[commandIndex]));} else if(e.key==='Escape')closeCommandPalette(); }
-document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='k') { e.preventDefault(); openCommandPalette(); } else if(e.key==='Escape') closeCommandPalette(); });
+// ── Palette de commandes (Ctrl/⌘ + K) ─────────────────────────────────────
+// Pages, actions, sites, rôles et membres (recherche en direct). Recherche floue,
+// filtres par préfixe (/ > ! # @), récents mémorisés, navigation 100 % clavier.
+const CP_RECENT_KEY = 'relink_cmd_recent';
+const CP = { flat: [], idx: 0, users: [], usersFor: null, usersWanted: null, t: null, dataAt: 0 };
+const CP_MODE_GROUPS = { '/': ['Pages'], '>': ['Actions'], '!': ['Sites'], '#': ['Rôles'], '@': ['Membres'] };
+const CP_ALL_GROUPS = ['Pages', 'Actions', 'Sites', 'Rôles', 'Membres'];
+const CP_CHIPS = [['', 'Tout'], ['/', 'Pages'], ['>', 'Actions'], ['!', 'Sites'], ['#', 'Rôles'], ['@', 'Membres']];
+
+const cpNorm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const cpArr = s => Array.from(String(s || '')).map(c => { const n = cpNorm(c); return n ? Array.from(n)[0] : c; });
+function cpRecent() { try { return JSON.parse(localStorage.getItem(CP_RECENT_KEY) || '[]'); } catch { return []; } }
+function cpPushRecent(id) { try { localStorage.setItem(CP_RECENT_KEY, JSON.stringify([id, ...cpRecent().filter(x => x !== id)].slice(0, 6))); } catch { /* stockage indisponible */ } }
+
+function cpBuildItems() {
+  const it = [];
+  const add = (group, id, ico, label, hint, kw, run, extra) => it.push({ group, id, ico, label, hint, kw: kw || '', run, extra });
+  const page = (id, ico, label, hint, kw, run) => add('Pages', id, ico, label, hint, kw, run);
+  page('page:dashboard', '📊', 'Tableau de bord', 'Vue d’ensemble du panel', 'accueil home stats résumé', () => showPage('dashboard'));
+  page('page:users', '👥', 'Utilisateurs', 'Recherche, statuts, rôles', 'membres joueurs comptes ban suspendre', () => showPage('users'));
+  page('page:submissions', '📋', 'Formulaires', 'Candidatures équipes et partenaires', 'candidature team partner postulation', () => showPage('submissions'));
+  page('page:eclats', '💎', 'Éclats & Boutique', 'Économie du serveur', 'monnaie shop argent', () => showPage('eclats'));
+  page('tab:give', '💎', 'Éclats : donner / retirer', 'Modifier le solde d’un membre', 'crédit solde offrir', () => { showPage('eclats'); showEclatsTab('give'); });
+  page('tab:partner', '🤝', 'Éclats : bonus partenaire', 'Pourcentage de bonus', 'partenaires bonus', () => { showPage('eclats'); showEclatsTab('partner'); });
+  page('tab:shop', '🛒', 'Boutique', 'Articles, prix, visibilité', 'shop articles produits prix', () => { showPage('eclats'); showEclatsTab('shop'); });
+  page('tab:streak', '🔥', 'Calendrier streak', 'Récompenses quotidiennes', 'série connexion jours', () => { showPage('eclats'); showEclatsTab('streak'); });
+  page('page:commandes', '📦', 'Suivi des commandes', 'Achats à livrer', 'orders achats livraison', () => showPage('commandes'));
+  page('page:sites', '🌐', 'Sites & visibilité', 'Sections, maintenance, manifestes', 'site pages visibilité', () => showPage('sites'));
+  page('page:roles', '🛡️', 'Rôles', 'Rôles et permissions', 'permissions rbac droits', () => showPage('roles'));
+  page('page:services', '🔑', 'Services & clés API', 'Accès machine', 'api key token clé', () => showPage('services'));
+  page('page:audit', '📜', 'Journal d’audit', 'Historique des actions', 'logs historique traces', () => showPage('audit'));
+  page('page:webhooks', '🪝', 'Webhooks', 'Livraisons et relances', 'hook discord notifications', () => showPage('webhooks'));
+
+  const act = (id, ico, label, hint, kw, run) => add('Actions', id, ico, label, hint, kw, run);
+  act('act:newrole', '➕', 'Créer un rôle', 'Rôles & permissions', 'nouveau role', () => { showPage('roles'); setTimeout(() => document.getElementById('rbac-new-role')?.focus(), 200); });
+  act('act:give', '💎', 'Ajouter des éclats à un membre', 'Économie', 'donner crédit', () => { showPage('eclats'); showEclatsTab('give'); });
+  act('act:refresh', '↻', 'Actualiser la page courante', 'Recharge les données', 'reload rafraîchir', () => loadPage(currentPage));
+  act('act:autooff', '⏸️', 'Désactiver l’auto-refresh', 'Arrête les rechargements automatiques', 'pause', () => { const s = document.getElementById('auto-refresh-interval'); if (s) s.value = '0'; setAutoRefresh(0); toast('Auto-refresh désactivé.', 'success'); });
+  act('act:autoon', '▶️', 'Activer l’auto-refresh (30 s)', 'Recharge les listes toutes les 30 s', 'play', () => { const s = document.getElementById('auto-refresh-interval'); if (s) s.value = '30000'; setAutoRefresh(30000); toast('Auto-refresh : 30 s.', 'success'); });
+  act('act:copyurl', '📋', 'Copier l’URL du Worker', WORKER_URL, 'adresse lien api', () => { navigator.clipboard?.writeText(WORKER_URL); toast('URL copiée.', 'success'); });
+  act('act:logout', '🚪', 'Se déconnecter', 'Fermer la session du panel', 'logout quitter', () => logout());
+
+  for (const s of (typeof SITES !== 'undefined' ? SITES : [])) {
+    const pres = s.sections.filter(x => x.present), actv = pres.filter(x => x.enabled).length, off = !s.site_enabled || !!s.maintenance;
+    add('Sites', 'site:' + s.slug, svTabIcon(s), s.name, `${actv}/${pres.length} sections actives${off ? ' · 🚧 maintenance' : ''}`, s.slug, () => { currentSite = s.slug; showPage('sites'); });
+    act('maint:' + s.slug, '🚧', `${off ? 'Désactiver' : 'Activer'} la maintenance de ${s.name}`, off ? 'Rouvrir le site aux visiteurs' : 'Afficher la page de maintenance', 'maintenance fermer ouvrir ' + s.slug, () => { currentSite = s.slug; showPage('sites'); toggleMaintenance(s.slug, !off); });
+    if (!s.builtin && s.manifest_url) act('scan:' + s.slug, '🔍', `Détecter ${s.name} maintenant`, 'Relire le manifeste', 'scan rescan manifest ' + s.slug, () => { currentSite = s.slug; showPage('sites'); rescanSite(s.slug); });
+    act('look:' + s.slug, '🎨', `Personnaliser l’apparence de ${s.name}`, 'Logo, emoji, couleur', 'icône logo couleur ' + s.slug, () => { currentSite = s.slug; showPage('sites'); setTimeout(() => openLookEditor(s.slug), 250); });
+  }
+  for (const r of (RBAC?.roles || [])) {
+    add('Rôles', 'role:' + r.name, reIcon(r.name), r.name, `${r.permissions.length} permission${r.permissions.length > 1 ? 's' : ''}${r.builtin ? ' · rôle système' : ''}`, 'rôle role', () => { RE.selected = r.name; showPage('roles'); });
+  }
+  return it;
+}
+
+// Score d'un mot sur un libellé : début > début de mot > contient > flou (lettres dans l'ordre)
+function cpMatchTok(nArr, tArr) {
+  const n = nArr.length, m = tArr.length;
+  outer: for (let i = 0; i + m <= n; i++) {
+    for (let j = 0; j < m; j++) if (nArr[i + j] !== tArr[j]) continue outer;
+    const ws = i === 0 || /[\s\-_:·/.’']/.test(nArr[i - 1]);
+    return { s: i === 0 ? 100 : (ws ? 80 : 60), idx: tArr.map((_, j) => i + j) };
+  }
+  if (m >= 3) {
+    let k = 0, last = -2, gaps = 0; const idx = [];
+    for (let i = 0; i < n && k < m; i++) if (nArr[i] === tArr[k]) { if (last !== -2 && i !== last + 1) gaps++; idx.push(i); last = i; k++; }
+    if (k === m && gaps <= 2) return { s: Math.max(10, 40 - gaps * 6), idx };
+  }
+  return null;
+}
+function cpScore(item, tokens) {
+  const nl = cpArr(item.label), other = cpNorm((item.hint || '') + ' ' + item.kw);
+  let total = 0; const marks = new Set();
+  for (const tok of tokens) {
+    const r = cpMatchTok(nl, tok);
+    if (r) { total += r.s * 2; r.idx.forEach(i => marks.add(i)); }
+    else if (other.includes(tok.join(''))) total += 20;
+    else return null;
+  }
+  return { s: total, marks };
+}
+function cpHighlight(label, marks) {
+  return Array.from(label).map((c, i) => marks && marks.has(i) ? `<mark>${esc(c)}</mark>` : esc(c)).join('');
+}
+
+function cpWantUsers(q) {
+  if (CP.usersFor === q || CP.usersWanted === q) return;
+  CP.usersWanted = q; clearTimeout(CP.t);
+  CP.t = setTimeout(async () => {
+    const d = await apiFetch('/admin/users?limit=6&q=' + encodeURIComponent(q));
+    if (CP.usersWanted !== q) return;
+    CP.users = d.error ? [] : (d.users || []);
+    CP.users.forEach(u => { UC_CACHE[String(u.discord_id)] = u; });
+    CP.usersFor = q;
+    if (document.getElementById('command-palette-overlay').classList.contains('open')) renderCommandPalette();
+  }, 220);
+}
+
+async function cpEnsureData() {
+  const stale = Date.now() - CP.dataAt > 60000, jobs = [];
+  if (stale || !SITES.length) jobs.push(apiFetch('/admin/sites').then(d => { if (!d.error && d.sites) SITES = d.sites; }));
+  if (stale || !RBAC?.roles) jobs.push(apiFetch('/admin/rbac').then(d => { if (!d.error) RBAC = d; }));
+  CP.dataAt = Date.now();
+  await Promise.all(jobs);
+  if (document.getElementById('command-palette-overlay').classList.contains('open')) renderCommandPalette();
+}
+
+function openCommandPalette() {
+  if (document.getElementById('sidebar').style.display === 'none') return;
+  const o = document.getElementById('command-palette-overlay'); o.classList.add('open');
+  const inp = document.getElementById('command-palette-input'); inp.value = '';
+  CP.idx = 0; CP.users = []; CP.usersFor = null; CP.usersWanted = null;
+  renderCommandPalette();
+  setTimeout(() => inp.focus(), 0);
+  cpEnsureData();
+}
+function closeCommandPalette() { document.getElementById('command-palette-overlay').classList.remove('open'); clearTimeout(CP.t); }
+
+function cpSetMode(prefix) {
+  const inp = document.getElementById('command-palette-input'), cur = inp.value.trim();
+  const rest = CP_MODE_GROUPS[cur[0]] ? cur.slice(1).trim() : cur;
+  inp.value = prefix + (prefix && rest ? ' ' + rest : rest); CP.idx = 0; renderCommandPalette(); inp.focus();
+}
+
+function renderCommandPalette() {
+  const inp = document.getElementById('command-palette-input');
+  let raw = inp.value.trim(), mode = '';
+  if (raw && CP_MODE_GROUPS[raw[0]]) { mode = raw[0]; raw = raw.slice(1).trim(); }
+  const tokens = cpNorm(raw).split(/\s+/).filter(Boolean).map(t => Array.from(t));
+  const searching = tokens.length > 0;
+  const allowed = mode ? CP_MODE_GROUPS[mode] : CP_ALL_GROUPS;
+  const all = cpBuildItems();
+
+  // Chips de filtre
+  document.getElementById('cp-chips').innerHTML = CP_CHIPS.map(([p, l]) =>
+    `<button class="cp-chip ${p === mode ? 'on' : ''}" onclick="cpSetMode('${p}')">${p ? `<b>${p}</b>` : ''}${l}</button>`).join('');
+
+  // Résultats par groupe
+  const groups = [];
+  const limitPer = mode ? 30 : (searching ? 7 : 8);
+  if (!searching && !mode) {
+    const byId = new Map(all.map(i => [i.id, i]));
+    const rec = cpRecent().map(id => byId.get(id)).filter(Boolean);
+    if (rec.length) groups.push({ name: 'Récents', items: rec.map(i => ({ ...i, _m: null })), best: 1e9 });
+  }
+  for (const g of allowed) {
+    if (g === 'Membres') continue;
+    let items = all.filter(i => i.group === g).map(i => {
+      if (!searching) return { ...i, _s: 0, _m: null };
+      const r = cpScore(i, tokens); return r ? { ...i, _s: r.s, _m: r.marks } : null;
+    }).filter(Boolean);
+    if (searching) items.sort((a, b) => b._s - a._s);
+    if (!searching && !mode && g !== 'Pages') items = items.slice(0, 4);
+    if (!searching && !mode && g === 'Pages') items = items.slice(0, 10);
+    if (items.length) groups.push({ name: g, items: items.slice(0, limitPer), best: items[0]._s || 0, total: items.length });
+  }
+  if (searching) groups.sort((a, b) => b.best - a.best);
+
+  // Membres (recherche en direct)
+  let usersNote = '';
+  if (allowed.includes('Membres') && raw.length >= 2) {
+    cpWantUsers(raw);
+    if (CP.usersFor === raw) {
+      if (CP.users.length) groups.push({ name: 'Membres', items: CP.users.map(u => {
+        const ps = u.pseudo || u.discord_id;
+        return { id: 'user:' + u.discord_id, group: 'Membres', ico: u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="">` : esc((ps[0] || '?').toUpperCase()),
+          label: ps, hint: u.discord_id + (u.minecraft_username ? ' · ⛏ ' + u.minecraft_username : ''), _m: null, noRecent: true,
+          extra: (u.roles || []).slice(0, 3).map(r => `<span class="uc-chip" style="--c:${ucColor(r.role)};padding:2px 7px;font-size:10px"><i></i>${esc(r.role)}</span>`).join(''),
+          run: () => openUserCard(u.discord_id) }; }), best: -1 });
+    } else usersNote = '<div class="cp-group">Membres</div><div class="cp-empty" style="padding:8px 10px;text-align:left">Recherche en cours…</div>';
+  } else if (mode === '@') usersNote = '<div class="cp-empty">Tape au moins 2 caractères d’un pseudo, d’un Discord ID ou d’un e-mail.</div>';
+
+  // Rendu
+  CP.flat = []; let html = '';
+  for (const g of groups) {
+    html += `<div class="cp-group">${esc(g.name)}${g.total > g.items.length ? ` <span style="font-weight:500;text-transform:none;letter-spacing:0">· ${g.total - g.items.length} de plus avec ${g.name === 'Pages' ? '/' : g.name === 'Actions' ? '>' : g.name === 'Sites' ? '!' : '#'}</span>` : ''}</div>`;
+    for (const i of g.items) {
+      const k = CP.flat.length; CP.flat.push(i);
+      html += `<div class="cp-item ${k === CP.idx ? 'active' : ''}" data-i="${k}" onmousemove="cpHover(${k})" onclick="cpRun(${k})">
+        <span class="cp-ico">${i.ico}</span>
+        <div class="cp-main"><span class="cp-label">${cpHighlight(i.label, i._m)}</span><span class="cp-hint">${esc(i.hint || '')}</span></div>
+        ${i.extra ? `<span class="cp-extra">${i.extra}</span>` : ''}<span class="cp-kbd cp-enter">↵</span></div>`;
+    }
+  }
+  html += usersNote;
+  if (!CP.flat.length && !usersNote) html = `<div class="cp-empty">Aucun résultat pour « ${esc(raw)} ».<br><span style="font-size:12px">Essaie un autre mot, ou un préfixe : <b>/</b> pages · <b>&gt;</b> actions · <b>!</b> sites · <b>#</b> rôles · <b>@</b> membres</span></div>`;
+  CP.idx = Math.min(CP.idx, Math.max(0, CP.flat.length - 1));
+  document.getElementById('command-palette-results').innerHTML = html;
+  document.getElementById('cp-count').textContent = CP.flat.length ? `${CP.flat.length} résultat${CP.flat.length > 1 ? 's' : ''}` : '';
+  cpActive(false);
+}
+
+function cpActive(scroll = true) {
+  const box = document.getElementById('command-palette-results');
+  box.querySelectorAll('.cp-item').forEach(el => el.classList.toggle('active', +el.dataset.i === CP.idx));
+  if (scroll) box.querySelector('.cp-item.active')?.scrollIntoView({ block: 'nearest' });
+}
+function cpHover(i) { if (CP.idx !== i) { CP.idx = i; cpActive(false); } }
+function cpRun(i) {
+  const c = CP.flat[i]; if (!c) return;
+  if (!c.noRecent) cpPushRecent(c.id);
+  closeCommandPalette(); c.run();
+}
+
+function commandPaletteKeydown(e) {
+  const n = CP.flat.length;
+  if (e.key === 'ArrowDown') { e.preventDefault(); if (n) { CP.idx = (CP.idx + 1) % n; cpActive(); } }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); if (n) { CP.idx = (CP.idx - 1 + n) % n; cpActive(); } }
+  else if (e.key === 'PageDown') { e.preventDefault(); CP.idx = Math.min(n - 1, CP.idx + 5); cpActive(); }
+  else if (e.key === 'PageUp') { e.preventDefault(); CP.idx = Math.max(0, CP.idx - 5); cpActive(); }
+  else if (e.key === 'Enter') { e.preventDefault(); cpRun(CP.idx); }
+  else if (e.key === 'Tab') {
+    e.preventDefault();
+    const cur = (document.getElementById('command-palette-input').value.trim()[0] || ''), modes = CP_CHIPS.map(c => c[0]);
+    const at = Math.max(0, modes.indexOf(CP_MODE_GROUPS[cur] ? cur : ''));
+    cpSetMode(modes[(at + (e.shiftKey ? modes.length - 1 : 1)) % modes.length]);
+  }
+}
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    const open = document.getElementById('command-palette-overlay').classList.contains('open');
+    open ? closeCommandPalette() : openCommandPalette();
+  } else if (e.key === 'Escape') closeCommandPalette();
+});
 
 // showPage hook: conserve le comportement existant tout en actualisant le sélecteur auto-refresh.
 const __originalShowPage = showPage;
