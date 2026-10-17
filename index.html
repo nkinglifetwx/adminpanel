@@ -340,6 +340,23 @@
   .db-empty { color:var(--muted); font-size:12px; padding:10px 0; }
   @media (max-width:980px) { .db-cols { grid-template-columns:1fr; } }
 
+  /* ── Page Serveurs Minecraft ── */
+  #mc-tabs { gap:10px; margin-bottom:16px; }
+  #mc-tabs .subtab { padding:9px 16px; border-radius:12px; font-size:13px; }
+  .mc-perm { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; padding:11px 13px; border:1px solid var(--border); background:var(--surface); border-radius:var(--radius); }
+  .mc-perm.danger { border-color:var(--red); background:var(--red-bg); }
+  .mc-perm-info { flex:1 1 220px; min-width:0; }
+  .mc-perm-info code { font-size:12px; word-break:break-all; }
+  .mc-perm-info .permission-desc { font-size:11px; color:var(--muted); margin-top:2px; }
+  .mc-roles { display:flex; flex-wrap:wrap; gap:6px; }
+  .mc-chip { font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; }
+  .mc-chip.on { color:var(--text); border-color:var(--c); background:color-mix(in srgb, var(--c) 22%, transparent); }
+  .mc-chip:disabled { opacity:.4; cursor:not-allowed; }
+  .mc-newkey { border:1px solid var(--amber); background:var(--amber-bg); }
+  .mc-newkey code { display:block; margin:10px 0; padding:10px 12px; background:rgba(0,0,0,.3); border-radius:var(--radius); font-size:12px; word-break:break-all; user-select:all; }
+  .mc-member { display:flex; align-items:center; gap:10px; padding:9px 12px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); cursor:pointer; }
+  .mc-member img { width:28px; height:28px; border-radius:50%; object-fit:cover; }
+
   /* ── Page Sites & visibilité (présentation) ── */
   #sites-tabs { gap:10px; margin-bottom:16px; }
   #sites-tabs .subtab { padding:9px 16px; border-radius:12px; font-size:13px; }
@@ -791,6 +808,10 @@
       <button class="nav-item" data-page="sites" onclick="showPage('sites')">
         <span class="ico">🌐</span> Sites &amp; visibilité
       </button>
+      <div class="nav-section-label" style="margin-top:8px;">Serveurs Minecraft</div>
+      <button class="nav-item" data-page="mcservers" onclick="showPage('mcservers')">
+        <span class="ico">⛏️</span> Serveurs &amp; permissions
+      </button>
       <div class="nav-section-label" style="margin-top:8px;">Sécurité</div>
       <button class="nav-item" data-page="roles" onclick="showPage('roles')">
         <span class="ico">🛡️</span> Rôles
@@ -1158,6 +1179,34 @@
       </details>
 
       <div id="site-detail"><span class="empty-state"><span class="spinner"></span>Chargement…</span></div>
+    </div>
+
+    <!-- ── Page Serveurs Minecraft ── -->
+    <div id="page-mcservers" class="page">
+      <div class="page-header">
+        <h2>Serveurs Minecraft</h2>
+      </div>
+
+      <div class="subtabs" id="mc-tabs"></div>
+
+      <details class="card sv-fold sv-add" id="mc-add">
+        <summary><span class="sv-chev">▼</span><span class="sv-sum-title">➕ Connecter un serveur Minecraft</span></summary>
+        <div class="sv-body">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="text" id="mc-new-slug" placeholder="nom court (ex: survie)" style="width:170px;" autocomplete="off">
+            <input type="text" id="mc-new-name" placeholder="Nom affiché (optionnel)" style="width:200px;" autocomplete="off">
+            <input type="text" id="mc-new-host" placeholder="play.monserveur.fr (optionnel)" style="flex:1;min-width:200px;" autocomplete="off">
+            <input type="number" id="mc-new-port" placeholder="25565" style="width:100px;" min="1" max="65535">
+            <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addMcServer()">🔌 Connecter</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;">
+            Le panel crée le serveur et une clé API à coller dans le mod/plugin. Le mod déclare ses permissions
+            (ou tu les crées ici), puis tu les attribues aux rôles et aux membres.
+          </div>
+        </div>
+      </details>
+
+      <div id="mc-detail"><span class="empty-state"><span class="spinner"></span>Chargement…</span></div>
     </div>
 
     <!-- ── Page Rôles ── -->
@@ -1749,6 +1798,7 @@ function loadPage(name) {
   if (name === 'users')       loadUsers();
   if (name === 'submissions') loadSubmissions(currentSubFilter);
   if (name === 'sites')       loadSites();
+  if (name === 'mcservers')   loadMcServers();
   if (name === 'eclats')      { /* les sous-onglets chargent leurs propres données */ }
   if (name === 'commandes')   loadCommandes();
   if (name === 'roles')       loadRolesPage();
@@ -2588,11 +2638,274 @@ async function forgetSection(slug, key) {
   loadSites();
 }
 
+// ── Page Serveurs Minecraft ───────────────────────────────────────────────
+// Même logique que les sites : tout vient du Worker (GET /admin/mc-servers).
+// Les permissions d'un serveur s'appellent mc.<slug>.<nom> et s'attribuent ici
+// directement aux rôles ; les membres reçoivent un rôle avec la portée « mc:<slug> ».
+let MC_SERVERS = [];
+let currentMc = null;
+let MC_NEWKEY = null;                  // { slug, key } — affichée une seule fois
+const MC_LIVE_MS = 5 * 60 * 1000;      // « mod connecté » = signal reçu dans les 5 dernières minutes
+
+const mcLive = s => !!s.last_seen_at && (Date.now() - new Date(s.last_seen_at).getTime()) < MC_LIVE_MS;
+
+async function loadMcServers() {
+  const [d, rb] = await Promise.all([apiFetch('/admin/mc-servers'), apiFetch('/admin/rbac')]);
+  if (d.error) { toast(errMsg(d), 'error'); document.getElementById('mc-detail').innerHTML = ''; return; }
+  if (!rb.error) RBAC = rb;
+  MC_SERVERS = d.servers || [];
+  if (!MC_SERVERS.some(s => s.slug === currentMc)) currentMc = MC_SERVERS[0]?.slug || null;
+  renderMcTabs();
+  renderMc();
+}
+
+function selectMc(slug) { currentMc = slug; renderMcTabs(); renderMc(); }
+
+function renderMcTabs() {
+  document.getElementById('mc-tabs').innerHTML = MC_SERVERS.map(s =>
+    `<button class="subtab ${s.slug === currentMc ? 'active' : ''}" onclick="selectMc('${escJsAttr(s.slug)}')">${esc(s.emoji || '⛏️')} ${esc(s.name)}`
+    + `${mcLive(s) ? ' <span class="badge-sub" style="background:var(--green-bg);color:var(--green);">●</span>' : ''}</button>`).join('');
+}
+
+function mcRoleChips(p) {
+  const roles = RBAC?.roles || [];
+  if (!roles.length) return '<span style="font-size:11px;color:var(--muted)">Rôles indisponibles</span>';
+  return roles.map(r => {
+    const on = r.permissions.includes(p.key);
+    const lock = r.name === 'user' && USER_ROLE_BLOCKED.test(p.key);
+    return `<button class="mc-chip ${on ? 'on' : ''}" style="--c:${ucColor(r.name)}" ${lock ? 'disabled' : ''}
+      title="${esc(lock ? 'Permission sensible : interdite au rôle user (tous les comptes)' : (on ? 'Retirer à ' : 'Donner à ') + r.name)}"
+      onclick="mcTogglePerm('${escJsAttr(r.name)}','${escJsAttr(p.key)}',${!on})">${on ? '✓ ' : ''}${esc(r.name)}</button>`;
+  }).join('');
+}
+
+function renderMc() {
+  const el = document.getElementById('mc-detail');
+  const s = MC_SERVERS.find(x => x.slug === currentMc);
+  if (!s) {
+    el.innerHTML = `<div class="card"><div class="empty-state">Aucun serveur connecté pour l'instant.<br>
+      <span style="font-size:12px">Ouvre « ➕ Connecter un serveur Minecraft » ci-dessus : le panel génère la clé à coller dans ton mod/plugin.</span></div></div>`;
+    document.getElementById('mc-add').open = true;
+    return;
+  }
+  const slug = esc(s.slug), js = escJsAttr(s.slug);
+  const live = mcLive(s);
+  const stateTxt = s.online === true ? '🟢 En ligne' : s.online === false ? '🔴 Hors ligne' : '⚪ Inconnu';
+  const addr = s.host ? `${s.host}${s.port && s.port !== 25565 ? ':' + s.port : ''}` : null;
+
+  const keyBanner = MC_NEWKEY && MC_NEWKEY.slug === s.slug ? `<div class="card mc-newkey">
+      <h3 style="font-size:14px">🔑 Clé API du serveur — copie-la maintenant</h3>
+      <div style="font-size:12px;color:var(--muted)">Elle ne sera plus jamais affichée. À mettre dans la config du mod/plugin (en-tête <code>X-Service-Key</code>).</div>
+      <code>${esc(MC_NEWKEY.key)}</code>
+      <div style="display:flex;gap:8px;"><button class="btn-action btn-unlock" onclick="mcCopyKey()">📋 Copier</button>
+      <button class="btn-action btn-link" onclick="MC_NEWKEY=null;renderMc()">J'ai copié la clé</button></div>
+    </div>` : '';
+
+  const hero = `<div class="card sv-hero" style="--c:${svColor(s)}">
+      <div class="sv-hero-in">
+        <div class="sv-hero-top">
+          <div class="sv-logo-wrap"><div class="sv-logo">${esc(s.emoji || '⛏️')}</div></div>
+          <div class="sv-hero-main">
+            <h3>${esc(s.name)} <span class="sv-slug">${slug}</span>
+              ${live ? '<span class="badge-sub" style="background:var(--green-bg);color:var(--green);">mod connecté</span>' : '<span class="badge-nosub">mod non connecté</span>'}</h3>
+            ${s.description ? `<p>${esc(s.description)}</p>` : ''}
+            ${addr ? `<code>${esc(addr)}</code>` : '<em style="font-size:12px;color:var(--muted)">Aucune adresse renseignée</em>'}
+          </div>
+        </div>
+        <div class="sv-tiles">
+          <div class="sv-tile"><b>État</b><span>${stateTxt}</span></div>
+          <div class="sv-tile"><b>Joueurs</b><span>${s.players_online ?? '—'}${s.players_max != null ? ' / ' + s.players_max : ''}</span></div>
+          <div class="sv-tile"><b>Version</b><span>${esc(s.version || '—')}</span></div>
+          <div class="sv-tile"><b>Dernier signal du mod</b><span>${fmtDate(s.last_seen_at)}</span></div>
+          <div class="sv-tile"><b>Membres avec un rôle ici</b><span>${s.members}</span></div>
+        </div>
+        ${s.last_ping_error ? `<div class="sv-err">⚠️ Dernier ping échoué : ${esc(s.last_ping_error)}</div>` : ''}
+      </div>
+      <div class="sv-actions">
+        ${addr ? `<button class="btn-action btn-unlock" onclick="pingMc('${js}')">🔄 Actualiser l'état</button>` : ''}
+        <button class="btn-action btn-link" onclick="mcRotateKey('${js}')">🔑 ${s.key ? 'Régénérer' : 'Générer'} la clé API</button>
+        <button class="btn-action btn-delete" onclick="deleteMc('${js}')">🗑️ Supprimer le serveur</button>
+      </div>
+    </div>`;
+
+  const settings = `<details class="card sv-fold" ${svOpen('mcset:' + s.slug, false)} ontoggle="svFold('mcset:${js}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">⚙️ Réglages du serveur</span></summary>
+      <div class="sv-body"><div class="form-grid">
+        <div class="form-field"><label>Nom affiché</label><input type="text" id="mc-f-name" maxlength="80" value="${esc(s.name)}"></div>
+        <div class="form-field"><label>Adresse (host)</label><input type="text" id="mc-f-host" placeholder="play.monserveur.fr" value="${esc(s.host || '')}"></div>
+        <div class="form-field"><label>Port</label><input type="number" id="mc-f-port" min="1" max="65535" value="${esc(s.port || 25565)}"></div>
+        <div class="form-field"><label>Emoji</label><input type="text" id="mc-f-emoji" maxlength="8" value="${esc(s.emoji || '')}" placeholder="⛏️"></div>
+        <div class="form-field"><label>Couleur</label><input type="color" id="mc-f-color" value="${esc(s.color || '#3ecf8e')}"></div>
+        <div class="form-field" style="grid-column: span 2;"><label>Description</label><input type="text" id="mc-f-desc" maxlength="300" value="${esc(s.description || '')}"></div>
+        <div class="form-field"><button class="btn-primary" onclick="saveMc('${js}')">💾 Enregistrer</button></div>
+      </div></div></details>`;
+
+  const dangerous = k => /(^|\.)(admin|op|ban|delete|manage|edit|stop|write)(\.|$)/i.test(k);
+  const permRows = s.permissions.map(p => `<div class="mc-perm ${dangerous(p.key) ? 'danger' : ''}" data-q="${esc((p.key + ' ' + (p.description || '')).toLowerCase())}"${p.present ? '' : ' style="opacity:.65"'}>
+      <div class="mc-perm-info"><div>${dangerous(p.key) ? '<span class="danger-dot">🔴</span> ' : ''}<code>${esc(p.key)}</code>
+          <span class="badge-nosub" title="${p.source === 'manual' ? 'Créée dans le panel' : 'Déclarée par le mod'}">${p.source === 'manual' ? 'panel' : 'mod'}</span>
+          ${p.present ? '' : '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">plus déclarée par le mod</span>'}</div>
+        <div class="permission-desc">${esc(p.description || 'Aucune description.')} · côté jeu : <code>${esc(p.name)}</code></div></div>
+      <div class="mc-roles">${mcRoleChips(p)}</div>
+      <button class="btn-action btn-delete" title="Supprimer cette permission" onclick="deleteMcPerm('${js}','${escJsAttr(p.name)}')">🗑️</button>
+    </div>`).join('');
+
+  const perms = `<details class="card sv-fold" ${svOpen('mcperm:' + s.slug, true)} ontoggle="svFold('mcperm:${js}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">🔑 Permissions du serveur</span><span class="sv-count">${s.permissions.length} permission(s)</span></summary>
+      <div class="sv-body">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Clique un rôle pour lui donner ou retirer la permission. Le rôle <b>user</b> s'applique à tous les comptes (et aux joueurs non liés).</div>
+        <div class="permission-toolbar"><input type="search" id="mc-perm-search" placeholder="🔎 Rechercher une permission…" oninput="filterMcPerms()" style="flex:1;min-width:220px;"></div>
+        <div id="mc-perm-list" style="display:grid;gap:8px;">${permRows || '<span class="empty-state">Aucune permission. Le mod peut les déclarer, ou ajoute-en une ci-dessous.</span>'}</div>
+        <div class="form-grid" style="margin-top:16px;">
+          <div class="form-field"><label>Nouvelle permission (nom côté jeu)</label><input type="text" id="mc-p-name" placeholder="fly, kit.vip, home.set…" autocomplete="off" onkeydown="if(event.key==='Enter')addMcPerm('${js}')"></div>
+          <div class="form-field" style="grid-column: span 2;"><label>Description (optionnel)</label><input type="text" id="mc-p-desc" maxlength="200" placeholder="Voler en mode survie"></div>
+          <div class="form-field"><button class="btn-primary" onclick="addMcPerm('${js}')">➕ Ajouter</button></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;">Clé complète : <code>mc.${slug}.&lt;nom&gt;</code> — elle apparaît aussi dans la page « Rôles ».</div>
+      </div></details>`;
+
+  const members = `<details class="card sv-fold" ${svOpen('mcmem:' + s.slug, true)} ontoggle="svFold('mcmem:${js}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">👥 Membres avec un rôle sur ce serveur</span><span class="sv-count">${s.members}</span></summary>
+      <div class="sv-body"><div id="mc-members" style="display:grid;gap:8px;"><span class="empty-state"><span class="spinner"></span></span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;">Pour ajouter quelqu'un : ouvre sa fiche (page Utilisateurs), choisis la portée « ${esc(ucScopeLabel('mc:' + s.slug))} », puis le rôle. Un rôle donné en « global » s'applique aussi ici.</div>
+      </div></details>`;
+
+  const WK = esc(WORKER_URL);
+  const integ = `<div class="card"><details>
+      <summary style="cursor:pointer;font-size:13px;font-weight:600;">📘 Brancher le mod / plugin de ce serveur</summary>
+      <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">1. Au démarrage (puis toutes les 1 à 5 min comme « heartbeat »), le serveur se déclare — permissions et statut :</div>
+      <pre style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:11px;overflow:auto;">curl -X POST ${WK}/mc/servers/register \\
+  -H "X-Service-Key: $MC_KEY" -H "Content-Type: application/json" \\
+  -d '{"version":"1.21.1","status":{"online":true,"players_online":3,"players_max":50},
+       "permissions":[{"name":"fly","description":"Voler en survie"},
+                      {"name":"home.set","default_roles":["user"]}]}'</pre>
+      <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">2. Quand un joueur se connecte, le serveur demande ses permissions (compte lié via /link, sinon rôle « user » seul) :</div>
+      <pre style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:11px;overflow:auto;">curl "${WK}/mc/servers/${slug}/permissions?uuid=&lt;uuid-du-joueur&gt;" \\
+  -H "X-Service-Key: $MC_KEY"
+→ { "linked": true, "roles": ["user","moderator"], "permissions": ["fly","home.set"] }</pre>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">La clé ne donne accès qu'à ce serveur (<code>mc-${slug}</code>). Garde la réponse en cache quelques minutes côté serveur.</div>
+    </details></div>`;
+
+  el.innerHTML = keyBanner + hero + perms + members + settings + integ;
+  loadMcMembers(s.slug);
+}
+
+function filterMcPerms() {
+  const q = (document.getElementById('mc-perm-search')?.value || '').trim().toLowerCase();
+  document.querySelectorAll('#mc-perm-list .mc-perm').forEach(e => { e.style.display = !q || (e.dataset.q || '').includes(q) ? '' : 'none'; });
+}
+
+async function loadMcMembers(slug) {
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/members`);
+  const box = document.getElementById('mc-members');
+  if (!box || currentMc !== slug) return;
+  if (d.error) { box.innerHTML = `<span class="empty-state">${esc(errMsg(d))}</span>`; return; }
+  const list = d.members || [];
+  box.innerHTML = list.length ? list.map(m => `<div class="mc-member" onclick="openUserCard('${escJsAttr(m.discord_id)}')">
+      ${m.avatar_url ? `<img src="${esc(m.avatar_url)}" alt="">` : '<span class="uc-av">?</span>'}
+      <div style="flex:1;min-width:0;"><b>${esc(m.pseudo || m.discord_id)}</b>${m.minecraft_username ? ` <span style="font-size:11px;color:var(--muted)">· ⛏️ ${esc(m.minecraft_username)}</span>` : ''}</div>
+      <div class="mc-roles">${m.roles.map(r => `<span class="mc-chip on" style="--c:${ucColor(r)};cursor:default">${esc(r)}</span>`).join('')}</div>
+    </div>`).join('') : '<span class="empty-state">Personne n\'a de rôle propre à ce serveur.</span>';
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────
+async function mcTogglePerm(role, key, granted) {
+  if (granted && role === 'user' && !(await confirm('Donner à tous les comptes',
+      `« ${key} » sera accordée à TOUS les comptes (et aux joueurs non liés). Continuer ?`, 'btn-confirm-warn'))) return;
+  if (granted && role !== 'user' && permissionPresentation({ key }).danger && !(await confirm('Permission sensible',
+      `Donner « ${key} » au rôle « ${role} » ?`, 'btn-confirm-warn'))) return;
+  const err = await reApplyPerm(role, key, granted);
+  if (err) toast(err, 'error'); else toast(`${role} — ${key} ${granted ? 'accordée' : 'retirée'}`, 'success');
+  renderMc();
+}
+
+async function addMcServer() {
+  const slug = document.getElementById('mc-new-slug').value.trim().toLowerCase();
+  if (!slug) { toast('Donne un nom court au serveur (ex: survie).', 'error'); return; }
+  const body = { slug, name: document.getElementById('mc-new-name').value.trim(), host: document.getElementById('mc-new-host').value.trim() };
+  const port = document.getElementById('mc-new-port').value.trim();
+  if (port) body.port = port;
+  const d = await apiFetch('/admin/mc-servers', 'POST', body);
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  ['slug', 'name', 'host', 'port'].forEach(f => { document.getElementById('mc-new-' + f).value = ''; });
+  document.getElementById('mc-add').open = false;
+  currentMc = slug; MC_NEWKEY = { slug, key: d.api_key };
+  toast(`« ${slug} » connecté. Copie la clé API affichée.`, 'success');
+  loadMcServers();
+}
+
+async function saveMc(slug) {
+  const body = {
+    name: document.getElementById('mc-f-name').value.trim(),
+    host: document.getElementById('mc-f-host').value.trim(),
+    port: document.getElementById('mc-f-port').value.trim(),
+    emoji: document.getElementById('mc-f-emoji').value.trim(),
+    color: document.getElementById('mc-f-color').value,
+    description: document.getElementById('mc-f-desc').value.trim(),
+  };
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}`, 'PUT', body);
+  toast(d.ok ? 'Réglages enregistrés.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcServers();
+}
+
+async function pingMc(slug) {
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/ping`, 'POST');
+  if (d.error) { toast(errMsg(d), 'error'); return; }
+  toast(d.ok ? 'État actualisé.' : `Ping échoué : ${d.error || 'inconnu'}`, d.ok ? 'success' : 'error');
+  loadMcServers();
+}
+
+async function mcRotateKey(slug) {
+  const s = MC_SERVERS.find(x => x.slug === slug);
+  const ok = await confirm(s?.key ? 'Régénérer la clé API' : 'Générer une clé API',
+    s?.key ? 'L\'ancienne clé est révoquée immédiatement : le serveur ne pourra plus s\'authentifier tant que la nouvelle clé n\'est pas configurée.' : 'Générer une clé pour ce serveur ?',
+    'btn-confirm-warn');
+  if (!ok) return;
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/key`, 'POST');
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  MC_NEWKEY = { slug, key: d.api_key };
+  loadMcServers();
+}
+
+async function mcCopyKey() {
+  if (!MC_NEWKEY) return;
+  try { await navigator.clipboard.writeText(MC_NEWKEY.key); toast('Clé copiée.', 'success'); }
+  catch { prompt('Copie la clé :', MC_NEWKEY.key); }
+}
+
+async function deleteMc(slug) {
+  const ok = await confirm('Supprimer le serveur',
+    `Supprimer « ${slug} » : ses permissions (et leurs attributions aux rôles), les rôles donnés sur sa portée et sa clé API seront effacés. Irréversible.`, 'btn-confirm-danger');
+  if (!ok) return;
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}`, 'DELETE');
+  toast(d.ok ? 'Serveur supprimé.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) { currentMc = null; if (MC_NEWKEY?.slug === slug) MC_NEWKEY = null; }
+  loadMcServers();
+}
+
+async function addMcPerm(slug) {
+  const name = document.getElementById('mc-p-name').value.trim().toLowerCase();
+  if (!name) { toast('Donne un nom à la permission (ex: fly).', 'error'); return; }
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/permissions`, 'POST',
+    { name, description: document.getElementById('mc-p-desc').value.trim() });
+  toast(d.ok ? `Permission ${d.key} créée.` : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcServers();
+}
+
+async function deleteMcPerm(slug, name) {
+  const ok = await confirm('Supprimer la permission',
+    `Supprimer « mc.${slug}.${name} » et la retirer de tous les rôles ? (Si le mod la déclare toujours, elle réapparaîtra à son prochain signal.)`, 'btn-confirm-danger');
+  if (!ok) return;
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/permissions/${encodeURIComponent(name)}`, 'DELETE');
+  toast(d.ok ? 'Permission supprimée.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcServers();
+}
+
 // ── Rôles × permissions (matrice) ─────────────────────────────────────────
 let RBAC = null;
 
 // Même règle que le Worker : le rôle « user » vaut pour TOUS les comptes.
-const USER_ROLE_BLOCKED = /^(admin\.access|users\.(write|delete)|keys\.revoke|sites\.register|stats\.write|webhooks\..+|roles\..+|[a-z0-9_-]+\.(edit|admin|delete|manage))$/;
+const USER_ROLE_BLOCKED = /^(admin\.access|users\.(write|delete)|keys\.revoke|sites\.register|stats\.write|webhooks\..+|roles\..+|[a-z0-9_-]+\.(edit|admin|delete|manage)|mc\.[a-z0-9-]+\.(.+\.)?(admin|op|ban|delete|manage|edit|stop))$/;
 const RBAC_DANGEROUS_PERMISSIONS = new Set([
   'admin.access', 'users.delete', 'keys.revoke', 'roles.delete', 'roles.manage',
   'services.delete', 'webhooks.delete', 'audit.export', 'admin.impersonate'
@@ -2654,6 +2967,7 @@ function reLocked(role, key) {
 }
 function reGroupName(g) {
   if (!g) return 'Noyau ReLink';
+  if (String(g).startsWith('mc:')) { const m = (typeof MC_SERVERS !== 'undefined') && MC_SERVERS.find(x => x.slug === g.slice(3)); return '⛏️ ' + (m ? m.name : g.slice(3)); }
   const s = (typeof SITES !== 'undefined' && SITES.find(x => x.slug === g));
   return s ? s.name : g;
 }
@@ -2718,7 +3032,7 @@ function renderRoleGroups() {
     const n = all.filter(x => on.has(x.key)).length, pct = all.length ? Math.round(n / all.length * 100) : 0;
     const gid = g || '__core', closed = RE.closed.has(gid) && !q;
     return `<div class="re-group ${closed ? 'closed' : ''}">
-      <div class="re-ghead" onclick="reHeadClick(event,'${escJsAttr(gid)}')"><span class="re-chev">▼</span><span class="re-gicon">${g ? '🌐' : '⚙️'}</span>
+      <div class="re-ghead" onclick="reHeadClick(event,'${escJsAttr(gid)}')"><span class="re-chev">▼</span><span class="re-gicon">${g ? (String(g).startsWith('mc:') ? '⛏️' : '🌐') : '⚙️'}</span>
         <div class="re-gname">${esc(reGroupName(g))}<small>${n} / ${all.length} activée${n > 1 ? 's' : ''}</small></div>
         <span class="re-gbar" style="--c:${ucColor(r.name)}"><i style="width:${pct}%"></i></span>
         <button class="re-gbtn" onclick="reGroupAll('${escJsAttr(g)}',true)">Tout activer</button><button class="re-gbtn" onclick="reGroupAll('${escJsAttr(g)}',false)">Tout désactiver</button></div>
@@ -3268,7 +3582,12 @@ function ucColor(name) {
 }
 let UC = { id: null, user: null, roles: [], scope: 'global', picker: false, changed: false };
 function ucMyId() { try { return AUTH_MODE === 'bearer' ? (decodeJwt(ACCESS_TOKEN)?.discord_id || null) : null; } catch { return null; } }
-function ucScopeLabel(s) { return s === 'global' ? 'Tous les sites (global)' : (s === 'main' ? 'Site principal (main)' : s); }
+function ucScopeLabel(s) {
+  if (s === 'global') return 'Tous les sites (global)';
+  if (s === 'main') return 'Site principal (main)';
+  if (String(s).startsWith('mc:')) { const m = (typeof MC_SERVERS !== 'undefined') && MC_SERVERS.find(x => x.slug === s.slice(3)); return '⛏️ Serveur MC : ' + (m ? m.name : s.slice(3)); }
+  return s;
+}
 function ucRowClick(e, id) { if (e.target.closest('button,input,a,select,label')) return; openUserCard(id); }
 
 async function openUserCard(discordId) {
@@ -3836,6 +4155,7 @@ function cpBuildItems() {
   page('tab:streak', '🔥', 'Calendrier streak', 'Récompenses quotidiennes', 'série connexion jours', () => { showPage('eclats'); showEclatsTab('streak'); });
   page('page:commandes', '📦', 'Suivi des commandes', 'Achats à livrer', 'orders achats livraison', () => showPage('commandes'));
   page('page:sites', '🌐', 'Sites & visibilité', 'Sections, maintenance, manifestes', 'site pages visibilité', () => showPage('sites'));
+  page('page:mcservers', '⛏️', 'Serveurs Minecraft', 'Connexion, permissions, membres', 'minecraft serveur mc plugin mod perms luckperms', () => showPage('mcservers'));
   page('page:roles', '🛡️', 'Rôles', 'Rôles et permissions', 'permissions rbac droits', () => showPage('roles'));
   page('page:services', '🔑', 'Services & clés API', 'Accès machine', 'api key token clé', () => showPage('services'));
   page('page:audit', '📜', 'Journal d’audit', 'Historique des actions', 'logs historique traces', () => showPage('audit'));
