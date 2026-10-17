@@ -2296,6 +2296,15 @@ async function lkSave() {
   else toast(errMsg(d), 'error');
 }
 
+ const MAIN_SITE_URL = 'https://emerarudo-senso.fr'; // adresse du site principal
+function openSite(slug) {
+  const s = SITES.find(x => x.slug === slug); if (!s) return;
+  let u = s.url || (s.builtin ? MAIN_SITE_URL : '');
+  if (!u && s.manifest_url) { try { u = new URL(s.manifest_url).origin; } catch {} }
+  if (!/^https?:\/\/[^\s"'<>]+$/.test(u)) { toast("Adresse du site inconnue.", 'error'); return; }
+  window.open(u, '_blank', 'noopener');
+}
+
 // État ouvert/fermé des blocs repliables (conservé quand la page se réaffiche)
 const SV_FOLD = {};
 const svOpen = (k, def) => ((k in SV_FOLD) ? SV_FOLD[k] : def) ? 'open' : '';
@@ -2363,7 +2372,10 @@ function renderSite() {
         </div>
         ${s.last_scan_error ? `<div class="sv-err">⚠️ ${esc(s.last_scan_error)}</div>` : ''}
       </div>
-      ${s.builtin ? '' : `<div class="sv-actions">
+            <div class="sv-actions">
+        <button class="btn-action btn-unlock" onclick="openSite('${slug}')">🌐 Ouvrir le site</button>
+      </div>
+      ${s.builtin ? '' : `<div class="sv-actions" style="border-top:0;padding-top:0;">
         ${s.manifest_url ? `<button class="btn-action btn-unlock" onclick="rescanSite('${slug}')">🔍 Détecter maintenant</button>` : ''}
         <button class="btn-action btn-link" onclick="editManifestUrl('${slug}')">✏️ ${s.manifest_url ? 'Changer' : 'Définir'} l'URL du manifeste</button>
         <button class="btn-action btn-delete" onclick="deleteSite('${slug}')">🗑️ Supprimer le site</button>
