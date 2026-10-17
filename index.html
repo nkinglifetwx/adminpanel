@@ -1197,10 +1197,10 @@
             <input type="text" id="mc-new-name" placeholder="Nom affiché (optionnel)" style="width:200px;" autocomplete="off">
             <input type="text" id="mc-new-host" placeholder="play.monserveur.fr (optionnel)" style="flex:1;min-width:200px;" autocomplete="off">
             <input type="number" id="mc-new-port" placeholder="25565" style="width:100px;" min="1" max="65535">
-            <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addMcServer()">🔌 Connecter</button>
+            <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addMcServer()">🔌 Créer &amp; connecter</button>
           </div>
           <div style="font-size:11px;color:var(--muted);margin-top:8px;">
-            Le panel crée le serveur et une clé API à coller dans le mod/plugin. Le mod déclare ses permissions
+            Le panel crée le serveur et affiche un code : tape <code>/relink connect &lt;code&gt;</code> sur le serveur, c'est tout. Le mod déclare ses permissions
             (ou tu les crées ici), puis tu les attribues aux rôles et aux membres.
           </div>
         </div>
@@ -2644,7 +2644,38 @@ async function forgetSection(slug, key) {
 // directement aux rôles ; les membres reçoivent un rôle avec la portée « mc:<slug> ».
 let MC_SERVERS = [];
 let currentMc = null;
-let MC_NEWKEY = null;                  // { slug, key } — affichée une seule fois
+let MC_NEWKEY = null;                  // { slug, key } — clé manuelle, affichée une seule fois
+let MC_PAIR = null, MC_PAIR_TIMER = null;   // { slug, code, expiresAt, prevKeyId } — code d'appairage en cours
+
+// Surveille l'appairage : dès que le mod a échangé le code, la page passe en « appairé ».
+function mcStartPairWatch() {
+  clearInterval(MC_PAIR_TIMER);
+  if (!MC_PAIR) return;
+  MC_PAIR_TIMER = setInterval(async () => {
+    if (!MC_PAIR) { clearInterval(MC_PAIR_TIMER); return; }
+    if (Date.now() > MC_PAIR.expiresAt) { MC_PAIR = null; clearInterval(MC_PAIR_TIMER); renderMc(); return; }
+    if (currentPage !== 'mcservers') return;
+    const d = await apiFetch('/admin/mc-servers'); if (d.error) return;
+    MC_SERVERS = d.servers || [];
+    const s = MC_SERVERS.find(x => x.slug === MC_PAIR.slug);
+    if (s && s.key && s.key.id !== MC_PAIR.prevKeyId) {
+      MC_PAIR = null; clearInterval(MC_PAIR_TIMER);
+      toast('✅ Serveur appairé !', 'success'); renderMcTabs(); renderMc();
+    }
+  }, 4000);
+}
+async function mcNewPair(slug) {
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/pair`, 'POST');
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  const s = MC_SERVERS.find(x => x.slug === slug);
+  MC_PAIR = { slug, code: d.code, expiresAt: Date.now() + d.expires_in * 1000, prevKeyId: s?.key?.id || null };
+  mcStartPairWatch(); renderMc();
+}
+async function mcCopyPair() {
+  if (!MC_PAIR) return;
+  try { await navigator.clipboard.writeText('/relink connect ' + MC_PAIR.code); toast('Commande copiée.', 'success'); }
+  catch { prompt('Copie la commande :', '/relink connect ' + MC_PAIR.code); }
+}
 const MC_LIVE_MS = 5 * 60 * 1000;      // « mod connecté » = signal reçu dans les 5 dernières minutes
 
 const mcLive = s => !!s.last_seen_at && (Date.now() - new Date(s.last_seen_at).getTime()) < MC_LIVE_MS;
@@ -2693,6 +2724,14 @@ function renderMc() {
   const stateTxt = s.online === true ? '🟢 En ligne' : s.online === false ? '🔴 Hors ligne' : '⚪ Inconnu';
   const addr = s.host ? `${s.host}${s.port && s.port !== 25565 ? ':' + s.port : ''}` : null;
 
+  const pairBanner = MC_PAIR && MC_PAIR.slug === s.slug ? `<div class="card mc-newkey">
+      <h3 style="font-size:14px">🔗 Connecter le serveur en 1 commande</h3>
+      <div style="font-size:12px;color:var(--muted)">Sur le serveur Minecraft (console ou en étant opérateur), tape :</div>
+      <code>/relink connect ${esc(MC_PAIR.code)}</code>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Code à usage unique, valable jusqu'à ${new Date(MC_PAIR.expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}. Cette page se met à jour dès que le serveur est connecté.</div>
+      <div style="display:flex;gap:8px;"><button class="btn-action btn-unlock" onclick="mcCopyPair()">📋 Copier la commande</button>
+      <button class="btn-action btn-link" onclick="MC_PAIR=null;clearInterval(MC_PAIR_TIMER);renderMc()">Fermer</button></div>
+    </div>` : '';
   const keyBanner = MC_NEWKEY && MC_NEWKEY.slug === s.slug ? `<div class="card mc-newkey">
       <h3 style="font-size:14px">🔑 Clé API du serveur — copie-la maintenant</h3>
       <div style="font-size:12px;color:var(--muted)">Elle ne sera plus jamais affichée. À mettre dans la config du mod/plugin (en-tête <code>X-Service-Key</code>).</div>
@@ -2716,6 +2755,7 @@ function renderMc() {
           <div class="sv-tile"><b>État</b><span>${stateTxt}</span></div>
           <div class="sv-tile"><b>Joueurs</b><span>${s.players_online ?? '—'}${s.players_max != null ? ' / ' + s.players_max : ''}</span></div>
           <div class="sv-tile"><b>Version</b><span>${esc(s.version || '—')}</span></div>
+          <div class="sv-tile"><b>Appairage</b><span>${s.key ? '✅ Appairé · ' + fmtDate(s.key.created_at) : '⏳ En attente'}</span></div>
           <div class="sv-tile"><b>Dernier signal du mod</b><span>${fmtDate(s.last_seen_at)}</span></div>
           <div class="sv-tile"><b>Membres avec un rôle ici</b><span>${s.members}</span></div>
         </div>
@@ -2723,7 +2763,8 @@ function renderMc() {
       </div>
       <div class="sv-actions">
         ${addr ? `<button class="btn-action btn-unlock" onclick="pingMc('${js}')">🔄 Actualiser l'état</button>` : ''}
-        <button class="btn-action btn-link" onclick="mcRotateKey('${js}')">🔑 ${s.key ? 'Régénérer' : 'Générer'} la clé API</button>
+        <button class="btn-action btn-unlock" onclick="mcNewPair('${js}')">🔗 ${s.key ? 'Ré-appairer' : 'Code de connexion'}</button>
+        <button class="btn-action btn-link" title="Avancé : clé à copier à la main dans la config du mod" onclick="mcRotateKey('${js}')">🔑 Clé manuelle</button>
         <button class="btn-action btn-delete" onclick="deleteMc('${js}')">🗑️ Supprimer le serveur</button>
       </div>
     </div>`;
@@ -2773,6 +2814,7 @@ function renderMc() {
   const WK = esc(WORKER_URL);
   const integ = `<div class="card"><details>
       <summary style="cursor:pointer;font-size:13px;font-weight:600;">📘 Brancher le mod / plugin de ce serveur</summary>
+      <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">0. Appairage : « 🔗 Code de connexion » ci-dessus, puis <code>/relink connect &lt;code&gt;</code> sur le serveur — le mod récupère sa clé tout seul. Ensuite :</div>
       <div style="font-size:12px;color:var(--muted);margin:12px 0 6px;">1. Au démarrage (puis toutes les 1 à 5 min comme « heartbeat »), le serveur se déclare — permissions et statut :</div>
       <pre style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:11px;overflow:auto;">curl -X POST ${WK}/mc/servers/register \\
   -H "X-Service-Key: $MC_KEY" -H "Content-Type: application/json" \\
@@ -2786,7 +2828,7 @@ function renderMc() {
       <div style="font-size:11px;color:var(--muted);margin-top:8px;">La clé ne donne accès qu'à ce serveur (<code>mc-${slug}</code>). Garde la réponse en cache quelques minutes côté serveur.</div>
     </details></div>`;
 
-  el.innerHTML = keyBanner + hero + perms + members + settings + integ;
+  el.innerHTML = pairBanner + keyBanner + hero + perms + members + settings + integ;
   loadMcMembers(s.slug);
 }
 
@@ -2829,8 +2871,10 @@ async function addMcServer() {
   if (!d.ok) { toast(errMsg(d), 'error'); return; }
   ['slug', 'name', 'host', 'port'].forEach(f => { document.getElementById('mc-new-' + f).value = ''; });
   document.getElementById('mc-add').open = false;
-  currentMc = slug; MC_NEWKEY = { slug, key: d.api_key };
-  toast(`« ${slug} » connecté. Copie la clé API affichée.`, 'success');
+  currentMc = slug;
+  MC_PAIR = { slug, code: d.pairing_code, expiresAt: Date.now() + d.pairing_expires_in * 1000, prevKeyId: null };
+  mcStartPairWatch();
+  toast(`« ${slug} » créé. Tape la commande affichée sur le serveur.`, 'success');
   loadMcServers();
 }
 
