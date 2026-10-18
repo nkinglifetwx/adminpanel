@@ -351,6 +351,7 @@
   .mc-roles { display:flex; flex-wrap:wrap; gap:6px; }
   .mc-chip { font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; }
   .mc-chip.on { color:var(--text); border-color:var(--c); background:color-mix(in srgb, var(--c) 22%, transparent); }
+  .mc-chip.part { border-style:dashed; color:var(--text); }
   .mc-chip:disabled { opacity:.4; cursor:not-allowed; }
   .mc-newkey { border:1px solid var(--amber); background:var(--amber-bg); }
   .mc-newkey code { display:block; margin:10px 0; padding:10px 12px; background:rgba(0,0,0,.3); border-radius:var(--radius); font-size:12px; word-break:break-all; user-select:all; }
@@ -812,6 +813,9 @@
       <button class="nav-item" data-page="mcservers" onclick="showPage('mcservers')">
         <span class="ico">⛏️</span> Serveurs &amp; permissions
       </button>
+      <button class="nav-item" data-page="mcmods" onclick="showPage('mcmods')">
+        <span class="ico">🧩</span> Mods &amp; Plugins
+      </button>
       <div class="nav-section-label" style="margin-top:8px;">Sécurité</div>
       <button class="nav-item" data-page="roles" onclick="showPage('roles')">
         <span class="ico">🛡️</span> Rôles
@@ -1207,6 +1211,25 @@
       </details>
 
       <div id="mc-detail"><span class="empty-state"><span class="spinner"></span>Chargement…</span></div>
+    </div>
+
+    <!-- ── Page Mods & Plugins ── -->
+    <div id="page-mcmods" class="page">
+      <div class="page-header"><h2>Mods &amp; Plugins</h2></div>
+      <details class="card sv-fold sv-add" id="mm-add">
+        <summary><span class="sv-chev">▼</span><span class="sv-sum-title">➕ Ajouter un mod / plugin au catalogue</span></summary>
+        <div class="sv-body"><div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="mm-new-id" placeholder="identifiant (ex: essentials)" style="width:190px;" autocomplete="off">
+          <input type="text" id="mm-new-name" placeholder="Nom affiché" style="width:180px;" autocomplete="off">
+          <select id="mm-new-kind"><option value="mod">Mod</option><option value="plugin">Plugin</option></select>
+          <input type="text" id="mm-new-url" placeholder="Lien https (optionnel)" style="flex:1;min-width:200px;">
+          <input type="text" id="mm-new-desc" placeholder="Description (optionnel)" style="flex:1;min-width:200px;" maxlength="300">
+          <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addMcMod()">➕ Ajouter</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;">Les mods installés sur un serveur connecté sont ajoutés automatiquement. Ses permissions apparaissent alors sur chaque serveur qui l'a.</div></div>
+      </details>
+      <div class="permission-toolbar"><input type="search" id="mm-search" placeholder="🔎 Rechercher un mod, un plugin…" oninput="renderMcMods()" style="flex:1;min-width:220px;"></div>
+      <div id="mm-list" style="display:grid;gap:12px;"><span class="empty-state"><span class="spinner"></span>Chargement…</span></div>
     </div>
 
     <!-- ── Page Rôles ── -->
@@ -1799,6 +1822,7 @@ function loadPage(name) {
   if (name === 'submissions') loadSubmissions(currentSubFilter);
   if (name === 'sites')       loadSites();
   if (name === 'mcservers')   loadMcServers();
+  if (name === 'mcmods')      loadMcMods();
   if (name === 'eclats')      { /* les sous-onglets chargent leurs propres données */ }
   if (name === 'commandes')   loadCommandes();
   if (name === 'roles')       loadRolesPage();
@@ -2681,7 +2705,8 @@ const MC_LIVE_MS = 5 * 60 * 1000;      // « mod connecté » = signal reçu dan
 const mcLive = s => !!s.last_seen_at && (Date.now() - new Date(s.last_seen_at).getTime()) < MC_LIVE_MS;
 
 async function loadMcServers() {
-  const [d, rb] = await Promise.all([apiFetch('/admin/mc-servers'), apiFetch('/admin/rbac')]);
+  const [d, rb, mm] = await Promise.all([apiFetch('/admin/mc-servers'), apiFetch('/admin/rbac'), apiFetch('/admin/mc-mods')]);
+  if (!mm.error) MC_MODS = mm.mods || [];
   if (d.error) { toast(errMsg(d), 'error'); document.getElementById('mc-detail').innerHTML = ''; return; }
   if (!rb.error) RBAC = rb;
   MC_SERVERS = d.servers || [];
@@ -2784,7 +2809,7 @@ function renderMc() {
   const dangerous = k => /(^|\.)(admin|op|ban|delete|manage|edit|stop|write)(\.|$)/i.test(k);
   const permRows = s.permissions.map(p => `<div class="mc-perm ${dangerous(p.key) ? 'danger' : ''}" data-q="${esc((p.key + ' ' + (p.description || '')).toLowerCase())}"${p.present ? '' : ' style="opacity:.65"'}>
       <div class="mc-perm-info"><div>${dangerous(p.key) ? '<span class="danger-dot">🔴</span> ' : ''}<code>${esc(p.key)}</code>
-          <span class="badge-nosub" title="${p.source === 'manual' ? 'Créée dans le panel' : 'Déclarée par le mod'}">${p.source === 'manual' ? 'panel' : 'mod'}</span>
+          <span class="badge-nosub" title="${p.source === 'manual' ? 'Créée dans le panel' : p.source === 'catalog' ? 'Vient du catalogue Mods & Plugins' : 'Déclarée par le serveur'}">${p.source === 'manual' ? 'panel' : p.source === 'catalog' ? 'catalogue' : 'serveur'}</span>
           ${p.present ? '' : '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">plus déclarée par le mod</span>'}</div>
         <div class="permission-desc">${esc(p.description || 'Aucune description.')} · côté jeu : <code>${esc(p.name)}</code></div></div>
       <div class="mc-roles">${mcRoleChips(p)}</div>
@@ -2828,7 +2853,7 @@ function renderMc() {
       <div style="font-size:11px;color:var(--muted);margin-top:8px;">La clé ne donne accès qu'à ce serveur (<code>mc-${slug}</code>). Garde la réponse en cache quelques minutes côté serveur.</div>
     </details></div>`;
 
-  el.innerHTML = pairBanner + keyBanner + hero + perms + members + settings + integ;
+  el.innerHTML = pairBanner + keyBanner + hero + mcModsCard(s, js) + perms + members + settings + integ;
   loadMcMembers(s.slug);
 }
 
@@ -2944,6 +2969,180 @@ async function deleteMcPerm(slug, name) {
   toast(d.ok ? 'Permission supprimée.' : errMsg(d), d.ok ? 'success' : 'error');
   if (d.ok) loadMcServers();
 }
+
+// ── Page Mods & Plugins (catalogue) ───────────────────────────────────────
+// Une fiche par mod/plugin ; ses permissions sont matérialisées sur chaque serveur qui l'a
+// (mc.<serveur>.<mod>.<permission>). Les rôles se règlent ici pour TOUS les serveurs qui l'ont,
+// ou serveur par serveur sur la page « Serveurs & permissions ».
+let MC_MODS = [];
+
+async function loadMcMods() {
+  const [d, rb, sv] = await Promise.all([apiFetch('/admin/mc-mods'), apiFetch('/admin/rbac'), apiFetch('/admin/mc-servers')]);
+  if (d.error) { toast(errMsg(d), 'error'); document.getElementById('mm-list').innerHTML = ''; return; }
+  MC_MODS = d.mods || [];
+  if (!rb.error) RBAC = rb;
+  if (!sv.error) MC_SERVERS = sv.servers || [];
+  renderMcMods();
+}
+
+const mcServerName = slug => (MC_SERVERS.find(s => s.slug === slug) || {}).name || slug;
+
+// État d'un rôle pour une permission de mod : tous les serveurs qui ont le mod, certains, ou aucun.
+function mmRoleState(m, p, role) {
+  const live = m.servers.filter(l => l.present);
+  if (!live.length) return 'none';
+  const n = live.filter(l => role.permissions.includes(`mc.${l.server}.${m.id}.${p.name}`)).length;
+  return n === live.length ? 'on' : n ? 'part' : 'off';
+}
+
+function mmChips(m, p) {
+  const roles = RBAC?.roles || [];
+  const live = m.servers.filter(l => l.present);
+  if (!live.length) return '<span style="font-size:11px;color:var(--muted)">Aucun serveur</span>';
+  return roles.map(r => {
+    const st = mmRoleState(m, p, r);
+    const lock = r.name === 'user' && live.some(l => USER_ROLE_BLOCKED.test(`mc.${l.server}.${m.id}.${p.name}`));
+    const tip = lock ? 'Permission sensible : interdite au rôle user' : (st === 'on' ? 'Retirer à ' : 'Donner à ') + r.name + ` sur ${live.length} serveur(s)`;
+    return `<button class="mc-chip ${st === 'on' ? 'on' : st === 'part' ? 'part' : ''}" style="--c:${ucColor(r.name)}" ${lock ? 'disabled' : ''} title="${esc(tip)}"
+      onclick="mmToggleRole('${escJsAttr(m.id)}','${escJsAttr(r.name)}','${escJsAttr(p.name)}',${st !== 'on'})">${st === 'on' ? '✓ ' : st === 'part' ? '◐ ' : ''}${esc(r.name)}</button>`;
+  }).join('');
+}
+
+function renderMcMods() {
+  const q = (document.getElementById('mm-search')?.value || '').trim().toLowerCase();
+  const list = MC_MODS.filter(m => !q || (m.id + ' ' + m.name + ' ' + (m.description || '')).toLowerCase().includes(q));
+  const box = document.getElementById('mm-list');
+  if (!MC_MODS.length) { box.innerHTML = '<div class="card"><div class="empty-state">Aucun mod ou plugin dans le catalogue.<br><span style="font-size:12px">Ajoute-en un ci-dessus, ou laisse les serveurs connectés les détecter automatiquement.</span></div></div>'; return; }
+  if (!list.length) { box.innerHTML = '<div class="card"><div class="empty-state">Aucun résultat.</div></div>'; return; }
+
+  box.innerHTML = list.map(m => {
+    const js = escJsAttr(m.id);
+    const live = m.servers.filter(l => l.present);
+    const serverChips = m.servers.length ? m.servers.map(l => `<span class="badge-sub" style="${l.present ? '' : 'opacity:.5;'}" title="${l.present ? '' : 'Plus détecté sur ce serveur'}">${esc(mcServerName(l.server))}${l.version ? ' · ' + esc(l.version) : ''}${l.source === 'manual' ? ' ✋' : ''}</span>`).join(' ')
+      : '<span style="font-size:12px;color:var(--muted)">Installé sur aucun serveur</span>';
+    const permRows = m.permissions.map(p => `<div class="mc-perm" data-q="${esc((m.id + '.' + p.name + ' ' + (p.description || '')).toLowerCase())}">
+        <div class="mc-perm-info"><code>${esc(m.id)}.${esc(p.name)}</code><div class="permission-desc">${esc(p.description || 'Aucune description.')}</div></div>
+        <div class="mc-roles">${mmChips(m, p)}</div>
+        <button class="btn-action btn-delete" title="Supprimer cette permission" onclick="deleteMcModPerm('${js}','${escJsAttr(p.name)}')">🗑️</button>
+      </div>`).join('');
+    return `<details class="card sv-fold" ${svOpen('mm:' + m.id, false)} ontoggle="svFold('mm:${js}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">${m.kind === 'plugin' ? '🔌' : '🧩'} ${esc(m.name)} <span class="sv-slug">${esc(m.id)}</span>
+        ${m.source === 'detected' ? '<span class="badge-nosub" title="Ajouté automatiquement par un serveur">auto-détecté</span>' : ''}</span>
+        <span class="sv-count">${live.length} serveur(s) · ${m.permissions.length} perm.</span></summary>
+      <div class="sv-body">
+        ${m.description ? `<p style="font-size:13px;margin:0 0 8px;">${esc(m.description)}</p>` : ''}
+        ${m.url ? `<p style="font-size:12px;margin:0 0 8px;"><a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">🔗 ${esc(m.url)}</a></p>` : ''}
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">${serverChips}</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Clique un rôle : ◐ = accordé sur une partie des serveurs. L'action s'applique à tous les serveurs qui ont ce mod.</div>
+        <div style="display:grid;gap:8px;">${permRows || '<span class="empty-state">Aucune permission connue pour ce mod.</span>'}</div>
+        <div class="form-grid" style="margin-top:14px;">
+          <div class="form-field"><label>Nouvelle permission</label><input type="text" id="mm-p-name-${esc(m.id)}" placeholder="fly, kit.vip…" autocomplete="off"></div>
+          <div class="form-field" style="grid-column: span 2;"><label>Description</label><input type="text" id="mm-p-desc-${esc(m.id)}" maxlength="200"></div>
+          <div class="form-field"><button class="btn-primary" onclick="addMcModPerm('${js}')">➕ Ajouter</button></div>
+        </div>
+        <details style="margin-top:16px;"><summary style="cursor:pointer;font-size:12px;font-weight:600;">✏️ Modifier la fiche</summary>
+          <div class="form-grid" style="margin-top:10px;">
+            <div class="form-field"><label>Nom</label><input type="text" id="mm-f-name-${esc(m.id)}" maxlength="80" value="${esc(m.name)}"></div>
+            <div class="form-field"><label>Type</label><select id="mm-f-kind-${esc(m.id)}"><option value="mod" ${m.kind === 'mod' ? 'selected' : ''}>Mod</option><option value="plugin" ${m.kind === 'plugin' ? 'selected' : ''}>Plugin</option></select></div>
+            <div class="form-field"><label>Lien (https)</label><input type="text" id="mm-f-url-${esc(m.id)}" value="${esc(m.url || '')}"></div>
+            <div class="form-field" style="grid-column: span 2;"><label>Description</label><input type="text" id="mm-f-desc-${esc(m.id)}" maxlength="300" value="${esc(m.description || '')}"></div>
+            <div class="form-field"><button class="btn-primary" onclick="saveMcMod('${js}')">💾 Enregistrer</button></div>
+          </div>
+          <button class="btn-action btn-delete" style="margin-top:10px;" onclick="deleteMcMod('${js}')">🗑️ Supprimer du catalogue</button>
+        </details>
+      </div></details>`;
+  }).join('');
+}
+
+async function mmToggleRole(id, role, perm, granted) {
+  if (granted && role === 'user' && !(await confirm('Donner à tous les comptes',
+      `« ${id}.${perm} » sera accordée à TOUS les comptes sur chaque serveur ayant ce mod. Continuer ?`, 'btn-confirm-warn'))) return;
+  const d = await apiFetch(`/admin/mc-mods/${encodeURIComponent(id)}/roles`, 'POST', { role, permission: perm, granted });
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  toast(`${role} · ${id}.${perm} ${granted ? 'accordée' : 'retirée'} (${d.servers} serveur(s))${d.skipped ? ` — ${d.skipped} ignorée(s) car sensibles` : ''}`, 'success');
+  loadMcMods();
+}
+
+async function addMcMod() {
+  const body = {
+    id: document.getElementById('mm-new-id').value.trim().toLowerCase(),
+    name: document.getElementById('mm-new-name').value.trim(),
+    kind: document.getElementById('mm-new-kind').value,
+    url: document.getElementById('mm-new-url').value.trim(),
+    description: document.getElementById('mm-new-desc').value.trim(),
+  };
+  if (!body.id) { toast('Donne un identifiant au mod (ex: essentials).', 'error'); return; }
+  const d = await apiFetch('/admin/mc-mods', 'POST', body);
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  ['id', 'name', 'url', 'desc'].forEach(f => { document.getElementById('mm-new-' + f).value = ''; });
+  document.getElementById('mm-add').open = false;
+  toast('Ajouté au catalogue.', 'success'); loadMcMods();
+}
+
+async function saveMcMod(id) {
+  const g = f => document.getElementById(`mm-f-${f}-${id}`).value.trim();
+  const d = await apiFetch(`/admin/mc-mods/${encodeURIComponent(id)}`, 'PUT', { name: g('name'), kind: g('kind'), url: g('url'), description: g('desc') });
+  toast(d.ok ? 'Fiche enregistrée.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcMods();
+}
+
+async function deleteMcMod(id) {
+  if (!(await confirm('Supprimer du catalogue', `Supprimer « ${id} », ses permissions et leurs attributions sur tous les serveurs ? (S'il est toujours détecté, il reviendra au prochain signal.)`, 'btn-confirm-danger'))) return;
+  const d = await apiFetch(`/admin/mc-mods/${encodeURIComponent(id)}`, 'DELETE');
+  toast(d.ok ? 'Supprimé.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcMods();
+}
+
+async function addMcModPerm(id) {
+  const name = document.getElementById('mm-p-name-' + id).value.trim().toLowerCase();
+  if (!name) { toast('Donne un nom à la permission.', 'error'); return; }
+  const d = await apiFetch(`/admin/mc-mods/${encodeURIComponent(id)}/permissions`, 'POST', { name, description: document.getElementById('mm-p-desc-' + id).value.trim() });
+  toast(d.ok ? `Permission ajoutée sur ${d.servers_updated} serveur(s).` : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcMods();
+}
+
+async function deleteMcModPerm(id, name) {
+  if (!(await confirm('Supprimer la permission', `Supprimer « ${id}.${name} » de tous les serveurs et de tous les rôles ?`, 'btn-confirm-danger'))) return;
+  const d = await apiFetch(`/admin/mc-mods/${encodeURIComponent(id)}/permissions/${encodeURIComponent(name)}`, 'DELETE');
+  toast(d.ok ? 'Permission supprimée.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcMods();
+}
+
+// ── Mods d'un serveur (page « Serveurs & permissions ») ──────────────────
+function mcModsCard(s, js) {
+  const have = new Set(s.mods.map(m => m.id));
+  const options = MC_MODS.filter(m => !have.has(m.id)).map(m => `<option value="${esc(m.id)}">${esc(m.name)} (${esc(m.id)})</option>`).join('');
+  const rows = s.mods.map(m => `<div class="mc-perm"${m.present ? '' : ' style="opacity:.6"'}>
+      <div class="mc-perm-info"><b>${m.kind === 'plugin' ? '🔌' : '🧩'} ${esc(m.name)}</b> <code>${esc(m.id)}</code>${m.version ? ` <span style="font-size:11px;color:var(--muted)">v${esc(m.version)}</span>` : ''}
+        <span class="badge-nosub">${m.source === 'manual' ? 'manuel' : 'détecté'}</span>${m.present ? '' : ' <span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">plus détecté</span>'}
+        <div class="permission-desc">${m.permissions} permission(s) dans le catalogue</div></div>
+      <button class="btn-action btn-delete" title="Retirer de ce serveur" onclick="detachMcMod('${js}','${escJsAttr(m.id)}')">🗑️</button>
+    </div>`).join('');
+  return `<details class="card sv-fold" ${svOpen('mcmods:' + s.slug, true)} ontoggle="svFold('mcmods:${js}',this.open)">
+      <summary><span class="sv-chev">▼</span><span class="sv-sum-title">🧩 Mods &amp; plugins de ce serveur</span><span class="sv-count">${s.mods.filter(m => m.present).length} actif(s)</span></summary>
+      <div class="sv-body">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Détectés automatiquement à chaque signal du serveur. Leurs permissions du catalogue apparaissent ci-dessous sous <code>mc.${esc(s.slug)}.&lt;mod&gt;.&lt;permission&gt;</code>.</div>
+        <div style="display:grid;gap:8px;">${rows || '<span class="empty-state">Aucun mod détecté pour l\'instant (le mod du serveur doit envoyer sa liste de mods).</span>'}</div>
+        ${options ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+          <select id="mc-attach-id" style="min-width:220px;">${options}</select>
+          <input type="text" id="mc-attach-ver" placeholder="Version (optionnel)" style="width:160px;">
+          <button class="btn-action btn-unlock" onclick="attachMcMod('${js}')">➕ Ajouter à la main</button></div>` : ''}
+      </div></details>`;
+}
+
+async function attachMcMod(slug) {
+  const id = document.getElementById('mc-attach-id').value;
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/mods`, 'POST', { id, version: document.getElementById('mc-attach-ver').value.trim() });
+  toast(d.ok ? 'Mod rattaché au serveur.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcServers();
+}
+async function detachMcMod(slug, id) {
+  if (!(await confirm('Retirer le mod', `Retirer « ${id} » de ce serveur ? Ses permissions seront masquées ici. (S'il est détecté, il reviendra au prochain signal.)`, 'btn-confirm-warn'))) return;
+  const d = await apiFetch(`/admin/mc-servers/${encodeURIComponent(slug)}/mods/${encodeURIComponent(id)}`, 'DELETE');
+  toast(d.ok ? 'Mod retiré.' : errMsg(d), d.ok ? 'success' : 'error');
+  if (d.ok) loadMcServers();
+}
+
 
 // ── Rôles × permissions (matrice) ─────────────────────────────────────────
 let RBAC = null;
@@ -4199,6 +4398,7 @@ function cpBuildItems() {
   page('tab:streak', '🔥', 'Calendrier streak', 'Récompenses quotidiennes', 'série connexion jours', () => { showPage('eclats'); showEclatsTab('streak'); });
   page('page:commandes', '📦', 'Suivi des commandes', 'Achats à livrer', 'orders achats livraison', () => showPage('commandes'));
   page('page:sites', '🌐', 'Sites & visibilité', 'Sections, maintenance, manifestes', 'site pages visibilité', () => showPage('sites'));
+  page('page:mcmods', '🧩', 'Mods & Plugins', 'Catalogue, permissions par mod', 'mods plugins catalogue minecraft permissions', () => showPage('mcmods'));
   page('page:mcservers', '⛏️', 'Serveurs Minecraft', 'Connexion, permissions, membres', 'minecraft serveur mc plugin mod perms luckperms', () => showPage('mcservers'));
   page('page:roles', '🛡️', 'Rôles', 'Rôles et permissions', 'permissions rbac droits', () => showPage('roles'));
   page('page:services', '🔑', 'Services & clés API', 'Accès machine', 'api key token clé', () => showPage('services'));
