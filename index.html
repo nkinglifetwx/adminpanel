@@ -5168,6 +5168,7 @@ var ROUTES={
   configRestore:['POST','/admin/config/:version/restore','Restaurer une ancienne configuration'],
   maintenance:['PUT','/admin/maintenance','Bandeau d\'information et mode maintenance'],
   cardCreate:['POST','/admin/home/cards','Créer un encart d\'accueil'],
+  cardImageUpload:['POST','/admin/home/cards/assets','Téléverser une image de bannière (6 Mio maximum)'],
   cardSave:['PUT','/admin/home/cards/:id','Modifier un encart d\'accueil'],
   cardOrder:['PUT','/admin/home/cards/order','Réordonner les encarts'],
   cardArchive:['DELETE','/admin/home/cards/:id','Archiver un encart'],
@@ -5541,7 +5542,7 @@ SEC.updates=function(){
     return '<tr><td><b class="mono" style="font-size:13px">'+esc(r.v)+'</b></td><td>'+CH_LABEL[r.ch]+'</td><td class="num">'+esc(r.date)+'</td><td>'+(r.sig?st('ok','Ed25519'):st('bad','Absente'))+'</td><td class="num">'+esc(r.size)+'</td><td><span class="hash" title="'+r.sha+'">'+r.sha.slice(0,12)+'…</span></td><td class="num">'+String(r.crash).replace('.',',')+' %</td><td>'+st(s[0],s[1])+'</td>'+
       '<td><div class="acts"><button class="btn sm ghost" data-act="openNotes" data-v="'+esc(r.v)+'">Notes</button>'+(r.status!=='retired'?'<button class="btn sm ghost" data-act="retire" data-v="'+esc(r.v)+'">Retirer</button>':'')+'</div></td></tr>'}).join('');
   var storage=DB.storage,storageRows=storage&&storage.artifacts?storage.artifacts.map(function(a){
-    return '<tr><td>'+esc(a.title)+'</td><td>'+(a.type==='release'?'Release':a.type==='modpack'?'Manifest de modpack':'Fichier orphelin')+'</td><td class="num">'+formatStorageBytes(a.bytes)+'</td><td>'+(a.active?st('warn','Utilisé'):st('off','Inactif'))+'</td><td class="num">'+(a.active?'<span class="faint">Actif</span>':'<button class="btn sm danger" data-act="storageDelete" data-type="'+esc(a.type)+'" data-id="'+esc(a.id)+'" data-title="'+esc(a.title)+'">Supprimer</button>')+'</td></tr>';
+    return '<tr><td>'+esc(a.title)+'</td><td>'+(a.type==='release'?'Release':a.type==='modpack'?'Manifest de modpack':a.type==='banner'?'Image de bannière':'Fichier orphelin')+'</td><td class="num">'+formatStorageBytes(a.bytes)+'</td><td>'+(a.active?st('warn','Utilisé'):st('off','Inactif'))+'</td><td class="num">'+(a.active?'<span class="faint">Actif</span>':'<button class="btn sm danger" data-act="storageDelete" data-type="'+esc(a.type)+'" data-id="'+esc(a.id)+'" data-title="'+esc(a.title)+'">Supprimer</button>')+'</td></tr>';
   }).join(''):'';
   var storagePanel='<section class="panel" style="padding:0;gap:0"><header style="padding:14px 16px"><div><h2>Stockage R2 ReLaunch</h2><p>Quota strict de 10 Go sur tout le bucket dédié relaunchr2.</p></div><button class="btn sm" data-act="storageRefresh"'+(CFG.simulate?' disabled':'')+'>Actualiser</button></header>'+
     (CFG.simulate?'<div class="simnote">Désactive le mode simulation pour consulter le stockage réel et supprimer des fichiers.</div>':storage?
@@ -5583,8 +5584,10 @@ SEC.config=function(){
 
 /* ---------- Accueil & encarts ---------- */
 var CSTAT={published:['ok','Publié'],scheduled:['info','Programmé'],draft:['off','Brouillon']};
+function cardImageSrc(img){return typeof img==='string'&&img.indexOf('/launcher/banners/')===0?(WORKER_URL||'')+img:img}
 function cardPreview(c){var t=CARDTYPES[c.type]||CARDTYPES.event;
-  return '<div class="ncard" style="--c1:'+esc(c.c1)+';--c2:'+esc(c.c2)+';--tc:'+t[1]+'"><div class="cv'+(c.img?' img':'')+'"'+(c.img?' style="background-image:url('+c.img+')"':'')+'></div><span class="ty">'+t[0]+(c.tags?' · '+esc(c.tags):'')+'</span><div class="bd"><span class="tt">'+esc(c.title||'Titre de l\'encart')+'</span><span class="ss">'+esc(c.sub||'Sous-titre')+'</span></div></div>'}
+  var image=cardImageSrc(c.img);
+  return '<div class="ncard" style="--c1:'+esc(c.c1)+';--c2:'+esc(c.c2)+';--tc:'+t[1]+'"><div class="cv'+(image?' img':'')+'"'+(image?' style="background-image:url('+image+')"':'')+'></div><span class="ty">'+t[0]+(c.tags?' · '+esc(c.tags):'')+'</span><div class="bd"><span class="tt">'+esc(c.title||'Titre de l\'encart')+'</span><span class="ss">'+esc(c.sub||'Sous-titre')+'</span></div></div>'}
 SEC.home=function(){
   var cr=DB.carousel;
   var cards=DB.cards.map(function(c,i){var s=CSTAT[c.status];
@@ -5739,7 +5742,7 @@ DR.card=function(d){var x=d.draft;
     body:errBox(x)+'<div id="cardPrev">'+cardPreview(x)+'</div><div class="form">'+
       '<div class="two">'+F('Type',SEL('type',x.type,Object.keys(CARDTYPES).map(function(k){return [k,CARDTYPES[k][0]]})))+F('Étiquette',I('tags',x.tags,'maxlength="20" placeholder="Survie RP"'))+'</div>'+
       F('Titre',I('title',x.title,'maxlength="48"'))+F('Sous-titre',I('sub',x.sub,'maxlength="60"'))+
-      '<div class="two"><div class="field"><span>Couleurs du fond</span><div class="row"><input type="color" data-k="c1" value="'+esc(x.c1)+'" aria-label="Couleur 1"><input type="color" data-k="c2" value="'+esc(x.c2)+'" aria-label="Couleur 2"></div></div>'+F('Image',fileBox('cardImg','Image de fond','image/*',x.img?'Image choisie':''))+'</div>'+
+      '<div class="two"><div class="field"><span>Couleurs du fond</span><div class="row"><input type="color" data-k="c1" value="'+esc(x.c1)+'" aria-label="Couleur 1"><input type="color" data-k="c2" value="'+esc(x.c2)+'" aria-label="Couleur 2"></div></div>'+F('Image',fileBox('cardImg','Image de fond','.jpg,.jpeg,.png,.webp,.gif',x.img?'Image choisie':''),'JPEG, PNG, WebP ou GIF · 6 Mo maximum. L’image est stockée dans R2.')+'</div>'+
       '<div class="two">'+F('Le bouton ouvre',SEL('dest',x.dest,Object.keys(DEST).map(function(k){return [k,DEST[k]]}),true))+F('Texte du bouton',I('cta',x.cta,'maxlength="24"'))+'</div>'+
       (x.dest==='url'?F('Lien',I('url',x.url||'','class="mono" placeholder="https://"')):'')+
       '<div class="two">'+F('Début',I('from',x.from,'type="date"'))+F('Fin',I('to',x.to,'type="date"'),'Vide : pas de fin')+'</div>'+
@@ -6054,7 +6057,27 @@ FILE.relFile=function(f){hashInto(f,S.drawer.draft)};
 FILE.packFile=function(f){hashInto(f,S.drawer.draft)};
 FILE.relSig=function(f){S.drawer.draft.sig=f.name;S.drawer.draft.signatureFile=f;renderDrawer()};
 FILE.packSig=function(f){S.drawer.draft.sig=f.name;S.drawer.draft.signatureFile=f;renderDrawer()};
-FILE.cardImg=function(f){if(f.size>3*1048576){toast('Image trop lourde','3 Mo maximum.','err');return}var r=new FileReader();r.onload=function(){S.drawer.draft.img=r.result;renderDrawer()};r.readAsDataURL(f)};
+FILE.cardImg=function(f){
+  if(f.size>6*1048576){toast('Image trop lourde','6 Mo maximum.','err');return}
+  if(!['image/jpeg','image/png','image/webp','image/gif'].includes(f.type)){
+    toast('Format d’image non pris en charge','Choisis un fichier JPEG, PNG, WebP ou GIF.','err');
+    return;
+  }
+  var drawer=S.drawer;
+  if(CFG.simulate){
+    var reader=new FileReader();
+    reader.onload=function(){if(S.drawer===drawer){drawer.draft.img=reader.result;renderDrawer()}};
+    reader.onerror=function(){toast('Lecture de l’image impossible','Réessaie avec un autre fichier.','err')};
+    reader.readAsDataURL(f);
+    return;
+  }
+  var form=new FormData();
+  form.append('file',f,f.name);
+  toast('Envoi de la bannière','Téléversement vers le stockage R2 en cours.');
+  run(null,'cardImageUpload',{},form,{ok:'Bannière envoyée',after:function(res){
+    if(S.drawer===drawer&&res.imageUrl){drawer.draft.img=res.imageUrl;renderDrawer()}
+  }});
+};
 
 /* =====================================================================
    Rendu, navigation, événements
