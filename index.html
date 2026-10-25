@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReLink — Admin</title>
@@ -756,12 +756,206 @@
     .role-create-actions input { width:auto; flex:1; min-width:0; }
     .roles-grid { grid-template-columns:1fr; }
   }
+
+/* ═══ ReLaunch (intégré, aux couleurs de ReLink) ═══ */
+.rl{--panel:var(--card);--panel-2:var(--surface);--panel-3:#262a3d;--line:var(--border);--line-2:var(--border-hi);--ink:var(--text);--ink-2:#aeb5cc;--ink-3:var(--muted);--acc:var(--accent);--acc-2:#8c99fa;--acc-ink:#fff;--ok:var(--green);--warn:var(--amber);--bad:var(--red);--info:#60a5fa;--prod:var(--red);--sim:var(--amber);--f-display:var(--font);--f-body:var(--font);--f-mono:ui-monospace,SFMono-Regular,Menlo,monospace;--r:12px}
+.rl [hidden]{display:none!important}
+.rl-hdr{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rl-group-head{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;border:none;background:none;width:100%;text-align:left;margin-top:8px;font-family:inherit}
+.rl-group-head:hover{color:var(--text);background:var(--card)}
+.rl-group-head .ico{font-size:16px;width:18px;text-align:center}
+.rl-chev{margin-left:auto;font-size:11px;transition:transform .15s}
+.rl-group.collapsed .rl-chev{transform:rotate(-90deg)}
+.rl-sub{margin:2px 0 0 18px;padding-left:6px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.rl-sublabel{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px 2px}
+.rl-group.collapsed .rl-sub{display:none}
+@media (max-width:680px){.rl-group,.rl-sub{display:contents}.rl-sublabel{display:none}.rl-group-head{width:auto;min-width:max-content;margin-top:0}.rl-group.collapsed .rl-sub{display:none}}
+.nav-item .rl-cnt{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--border);color:var(--muted)}
+.nav-item .rl-cnt.hot{background:var(--accent);color:#fff}
+.rl *{box-sizing:border-box}
+.rl button,.rl input,.rl select,.rl textarea{font:inherit;color:inherit}
+.rl h1,.rl h2,.rl h3,.rl h4{margin:0;text-wrap:balance}
+.rl p{margin:0}
+.rl a{color:var(--acc-2)}
+.rl :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.rl .mono{font-family:var(--f-mono);font-size:12px}
+.rl .num{font-variant-numeric:tabular-nums}
+.rl .faint{color:var(--ink-3)}
+.rl .soft{color:var(--ink-2)}
+.rl .envsw{display:inline-flex;padding:3px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+.rl .envsw button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:7px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rl .envsw button i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.rl .simbadge{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:9px;font:600 11.5px/1 var(--f-mono);letter-spacing:.04em;color:#1c1500;background:var(--sim)}
+.rl .simbadge.live{background:rgba(74,222,128,.16);color:var(--ok)}
+.rl .simnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:10px;border:1px dashed rgba(250,204,21,.45);background:rgba(250,204,21,.06);font-size:13px;color:#fde68a}
+.rl .simnote b{color:var(--sim)}
+.rl .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rl .row.end{justify-content:flex-end}
+.rl .spread{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rl .grid{display:grid;gap:14px}
+.rl .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rl .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rl .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.rl .g21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.rl .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.rl .panel>header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.rl .panel>header h2{font-size:15px;font-weight:700}
+.rl .panel>header p{font-size:12.5px;color:var(--ink-3)}
+.rl .sub{font-size:12.5px;color:var(--ink-3)}
+.rl .lbl{font:500 10.5px/1.2 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.rl .kpi{gap:6px}
+.rl .kpi .v{font:700 26px/1.1 var(--f-body);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rl .kpi .d{font-size:12px;color:var(--ink-3)}
+.rl .kpi .d b{color:var(--ok);font-weight:700}
+.rl .kpi .d b.down{color:var(--bad)}
+.rl .spark{width:100%;height:42px;display:block}
+.rl .danger-zone{border-color:rgba(244,63,94,.35);background:linear-gradient(180deg,rgba(244,63,94,.06),transparent 60%),var(--panel)}
+.rl .st{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;background:rgba(255,255,255,.06);color:var(--ink-2)}
+.rl .st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.rl .st.ok{background:rgba(74,222,128,.12);color:var(--ok)}
+.rl .st.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+.rl .st.bad{background:rgba(248,113,113,.12);color:var(--bad)}
+.rl .st.info{background:rgba(96,165,250,.12);color:var(--info)}
+.rl .st.acc{background:rgba(92,110,247,.14);color:var(--acc-2)}
+.rl .st.off{color:var(--ink-3)}
+.rl .tag{display:inline-block;font:500 11px/1.4 var(--f-mono);padding:1px 7px;border-radius:5px;background:rgba(255,255,255,.07);color:var(--ink-2);white-space:nowrap}
+.rl .chips{display:flex;flex-wrap:wrap;gap:5px}
+.rl .btn{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 13px;border-radius:9px;font-weight:700;font-size:13px;background:rgba(255,255,255,.07);border:1px solid var(--line-2);color:var(--ink);white-space:nowrap}
+.rl .btn svg{width:15px;height:15px;flex:none}
+.rl .btn:hover{background:rgba(255,255,255,.12)}
+.rl .btn.pri{background:linear-gradient(180deg,var(--acc-2),var(--acc));color:var(--acc-ink);border-color:transparent}
+.rl .btn.pri:hover{filter:brightness(1.08)}
+.rl .btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.rl .btn.ghost:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+.rl .btn.danger{color:#fecaca;border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
+.rl .btn.danger:hover{background:rgba(248,113,113,.16)}
+.rl .btn.sm{padding:5px 9px;font-size:12px;border-radius:7px}
+.rl .btn[disabled],.rl .btn.busy{opacity:.55;pointer-events:none}
+.rl .btn.busy::after{content:"";width:12px;height:12px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rl .iconbtn{all:unset;cursor:pointer;width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;color:var(--ink-2)}
+.rl .iconbtn:hover{background:rgba(255,255,255,.07);color:var(--ink)}
+.rl .iconbtn svg{width:16px;height:16px}
+.rl .tog{all:unset;cursor:pointer;flex:none;width:38px;height:22px;border-radius:999px;background:rgba(255,255,255,.14);position:relative;transition:background .2s}
+.rl .tog::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.rl .tog[aria-checked="true"]{background:var(--ok)}
+.rl .tog[aria-checked="true"]::after{transform:translateX(16px)}
+.rl .tog.danger[aria-checked="true"]{background:var(--prod)}
+.rl .seg{display:inline-flex;padding:3px;border-radius:9px;background:var(--panel-2);border:1px solid var(--line);flex-wrap:wrap}
+.rl .seg button{all:unset;cursor:pointer;padding:5px 10px;border-radius:6px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rl .seg button[aria-pressed="true"]{background:var(--panel-3);color:var(--ink);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.rl .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.rl .field>span{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rl .field small{font-size:11.5px;color:var(--ink-3)}
+.rl input[type="text"],.rl input[type="number"],.rl input[type="url"],.rl input[type="password"],.rl input[type="datetime-local"],.rl input[type="date"],.rl input[type="search"],.rl select,.rl textarea{width:100%;padding:9px 11px;border-radius:9px;background:var(--panel-2);border:1px solid var(--line-2);outline:none;min-width:0}
+.rl input:focus,.rl select:focus,.rl textarea:focus{border-color:rgba(92,110,247,.6)}
+.rl textarea{resize:vertical;min-height:90px;line-height:1.5}
+.rl textarea.code{font:12.5px/1.55 var(--f-mono);min-height:260px;tab-size:2}
+.rl input[type="color"]{width:42px;height:36px;padding:2px;border-radius:8px;background:var(--panel-2);border:1px solid var(--line-2)}
+.rl input[type="range"]{width:100%;accent-color:var(--acc)}
+.rl input[type="checkbox"]{accent-color:var(--acc);width:16px;height:16px}
+.rl .check{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.rl .form{display:grid;gap:14px}
+.rl .form .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rl .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:16px;border:1.5px dashed var(--line-2);border-radius:10px;text-align:center;color:var(--ink-2);font-size:12.5px;cursor:pointer}
+.rl .drop:hover{border-color:rgba(92,110,247,.6)}
+.rl .drop b{color:var(--ink)}
+.rl .tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.rl table{width:100%;border-collapse:collapse;font-size:13px}
+.rl th{text-align:left;font:500 10.5px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:rgba(255,255,255,.015)}
+.rl td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.rl tr:last-child td{border-bottom:0}
+.rl tbody tr:hover td{background:rgba(255,255,255,.02)}
+.rl tr.click{cursor:pointer}
+.rl td .acts{display:flex;justify-content:flex-end;gap:4px;flex-wrap:nowrap}
+.rl .who2{display:flex;align-items:center;gap:9px;min-width:0}
+.rl .head{width:28px;height:28px;border-radius:6px;flex:none;display:grid;place-items:center;font:700 11px var(--f-mono);color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.rl .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rl .toolbar input[type="search"]{max-width:280px}
+.rl .toolbar select{width:auto}
+.rl .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+.rl .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--acc),var(--acc-2))}
+.rl .bar.ok i{background:var(--ok)}
+.rl .bar.paused i{background:repeating-linear-gradient(45deg,var(--warn) 0 6px,rgba(251,191,36,.5) 6px 12px)}
+.rl .chan{gap:10px}
+.rl .chan .ver{font:700 22px/1.1 var(--f-mono);letter-spacing:-.02em}
+.rl .chan dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:12.5px}
+.rl .chan dt{color:var(--ink-3)}
+.rl .chan dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.rl .ncard{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line-2);background:#0e1016;display:flex;flex-direction:column;min-height:180px}
+.rl .ncard .cv{flex:1;min-height:110px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 12px,transparent 12px 24px),repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 12px,transparent 12px 24px),linear-gradient(160deg,var(--c1),var(--c2));background-size:cover;background-position:center}
+.rl .ncard .cv.img{background-size:cover}
+.rl .ncard .bd{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.6))}
+.rl .ncard .tt{font:800 14px/1.2 var(--f-display);text-transform:uppercase;letter-spacing:-.01em}
+.rl .ncard .ss{font-size:12px;color:var(--ink-2)}
+.rl .ncard .ty{position:absolute;left:10px;top:10px;font-size:11px;font-weight:800;padding:2px 7px;border-radius:5px;color:#fff;background:var(--tc)}
+.rl .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.rl .ecard{display:flex;flex-direction:column;gap:8px;min-width:0}
+.rl .ecard .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0}
+.rl .ecard .meta .sub{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rl .matrix th:not(:first-child),.rl .matrix td:not(:first-child){text-align:center}
+.rl .matrix td.grp{font:500 10.5px/1.2 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-2);background:rgba(92,110,247,.04)}
+.rl .scrim{position:fixed;inset:0;z-index:40;background:rgba(4,5,8,.6);backdrop-filter:blur(2px)}
+.rl .drawer{position:fixed;z-index:41;top:0;right:0;bottom:0;width:min(560px,100%);display:flex;flex-direction:column;background:var(--panel);border-left:1px solid var(--line-2);box-shadow:-30px 0 60px rgba(0,0,0,.5);padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px);animation:dIn .22s ease}
+@keyframes dIn{from{transform:translateX(30px);opacity:0}}
+.rl .drawer>header{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.rl .drawer>header h3{font-size:16px;font-weight:800;margin-right:auto}
+.rl .drawer .dbody{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:16px}
+.rl .drawer>footer{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.rl .modal{position:fixed;z-index:51;left:50%;top:50%;transform:translate(-50%,-50%);width:min(460px,calc(100% - 32px));background:var(--panel);border:1px solid var(--line-2);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.rl .modal.prod{border-color:rgba(244,63,94,.55)}
+.rl .modal h3{font-size:17px}
+.rl .modal .warnbox{padding:10px 12px;border-radius:10px;background:rgba(244,63,94,.1);color:#fecdd3;font-size:13px}
+.rl .scrim.top{z-index:50}
+.rl .toasts{position:fixed;z-index:60;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none}
+.rl .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;max-width:min(380px,calc(100vw - 32px));padding:11px 14px;border-radius:11px;background:#1d2030;border:1px solid var(--line-2);box-shadow:0 14px 30px rgba(0,0,0,.5);font-size:13px;animation:tIn .2s ease}
+.rl .toast i{flex:none;width:8px;height:8px;border-radius:50%;margin-top:6px;background:var(--ok)}
+.rl .toast.err i{background:var(--bad)}
+.rl .toast small{display:block;color:var(--ink-3);font:500 11px/1.4 var(--f-mono);margin-top:2px}
+@keyframes tIn{from{transform:translateY(8px);opacity:0}}
+.rl .list{display:flex;flex-direction:column}
+.rl .li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rl .li:last-child{border-bottom:0}
+.rl .li .when{margin-left:auto;font:500 11.5px var(--f-mono);color:var(--ink-3);white-space:nowrap}
+.rl .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--ok)}
+.rl .dot.warn{background:var(--warn)}
+.rl .dot.bad{background:var(--bad)}
+.rl .dot.off{background:var(--ink-3)}
+.rl .md{font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.rl .md h1,.rl .md h2,.rl .md h3{color:var(--ink);font-size:15px;margin:10px 0 4px}
+.rl .md ul{margin:4px 0;padding-left:18px}
+.rl .md code{font-family:var(--f-mono);font-size:12px;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px}
+.rl .md strong{color:var(--ink)}
+.rl .preview-box{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel-2);max-height:260px;overflow:auto}
+.rl .hash{font:500 11.5px var(--f-mono);color:var(--ink-2);word-break:break-all}
+.rl .empty{padding:28px;text-align:center;color:var(--ink-3);font-size:13px}
+.rl .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-3)}
+.rl .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.rl svg.chart text{fill:var(--ink-3);font:500 10px var(--f-mono)}
+.rl .calendar{display:flex;flex-direction:column;gap:10px}
+.rl .ev{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}
+.rl .ev .dt{text-align:center;border-right:1px solid var(--line);padding-right:12px}
+.rl .ev .dt b{display:block;font:800 22px/1 var(--f-display)}
+.rl .ev .dt small{font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-2)}
+.rl .ev h3{font-size:14.5px}
+@media (max-width:1180px){.rl .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rl .g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:980px){.rl .g21,.rl .g2{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){.rl .g4,.rl .g3{grid-template-columns:minmax(0,1fr)}
+.rl .form .two{grid-template-columns:minmax(0,1fr)}
+.rl .ev{grid-template-columns:52px minmax(0,1fr)}
+.rl .ev>.row{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){.rl *{animation:none!important;transition:none!important}
+}
 </style>
 </head>
 <body>
 
 <div id="app">
-  <div id="auth-screen">
+  <div id="auth-screen" style="visibility: hidden;">
     <div class="auth-card">
       <div class="gem-big">⚙️</div>
       <h2>ReLink Admin</h2>
@@ -778,7 +972,7 @@
     </div>
   </div>
 
-  <nav id="sidebar" style="display:none;">
+  <nav id="sidebar" style="display: none;">
     <div class="nav-logo">
       <div class="gem">⚙️</div>
       <div>
@@ -805,6 +999,15 @@
       <button class="nav-item" data-page="commandes" onclick="showPage('commandes')">
         <span class="ico">📦</span> Suivi des commandes
       </button>
+      <button class="nav-item" data-page="rl-reports" onclick="showPage('rl-reports')">
+        <span class="ico">🚩</span> Signalements
+      </button>
+      <button class="nav-item" data-page="rpnames" onclick="showPage('rpnames')">
+        <span class="ico">🎭</span> Noms RP
+      </button>
+      <button class="nav-item" data-page="gamedata" onclick="showPage('gamedata')">
+        <span class="ico">🏆</span> Serveur &amp; classements
+      </button>
       <div class="nav-section-label" style="margin-top:8px;">Sites</div>
       <button class="nav-item" data-page="sites" onclick="showPage('sites')">
         <span class="ico">🌐</span> Sites &amp; visibilité
@@ -816,6 +1019,51 @@
       <button class="nav-item" data-page="mcmods" onclick="showPage('mcmods')">
         <span class="ico">🧩</span> Mods &amp; Plugins
       </button>
+      <div class="rl-group" id="rl-group">
+        <button class="rl-group-head" onclick="rlToggleGroup()" aria-expanded="true"><span class="ico">🚀</span> ReLaunch <span class="rl-chev">▾</span></button>
+        <div class="rl-sub">
+        <div class="rl-sublabel">Pilotage</div>
+        <button class="nav-item" data-page="rl-overview" onclick="showPage('rl-overview')">
+          <span class="ico">📊</span> Vue d’ensemble
+        </button>
+        <button class="nav-item" data-page="rl-updates" onclick="showPage('rl-updates')">
+          <span class="ico">⬆️</span> Mises à jour
+        </button>
+        <button class="nav-item" data-page="rl-config" onclick="showPage('rl-config')">
+          <span class="ico">🎛️</span> Configuration à distance
+        </button>
+        <div class="rl-sublabel">Contenu</div>
+        <button class="nav-item" data-page="rl-home" onclick="showPage('rl-home')">
+          <span class="ico">🏠</span> Accueil &amp; encarts
+        </button>
+        <button class="nav-item" data-page="rl-news" onclick="showPage('rl-news')">
+          <span class="ico">📰</span> Info &amp; News
+        </button>
+        <button class="nav-item" data-page="rl-notifs" onclick="showPage('rl-notifs')">
+          <span class="ico">🔔</span> Notifications
+        </button>
+        <button class="nav-item" data-page="rl-lskins" onclick="showPage('rl-lskins')">
+          <span class="ico">🎨</span> Skins du launcher
+        </button>
+        <div class="rl-sublabel">Jeu</div>
+        <button class="nav-item" data-page="rl-modpacks" onclick="showPage('rl-modpacks')">
+          <span class="ico">🧱</span> Modpacks
+        </button>
+        <button class="nav-item" data-page="rl-servers" onclick="showPage('rl-servers')">
+          <span class="ico">🖥️</span> Serveurs du launcher
+        </button>
+        <button class="nav-item" data-page="rl-events" onclick="showPage('rl-events')">
+          <span class="ico">📅</span> Events
+        </button>
+        <button class="nav-item" data-page="rl-partners" onclick="showPage('rl-partners')">
+          <span class="ico">📡</span> WeLive &amp; partenaires
+        </button>
+        <div class="rl-sublabel">Système</div>
+        <button class="nav-item" data-page="rl-integration" onclick="showPage('rl-integration')">
+          <span class="ico">🔌</span> Intégration &amp; routes
+        </button>
+        </div>
+      </div>
       <div class="nav-section-label" style="margin-top:8px;">Sécurité</div>
       <button class="nav-item" data-page="roles" onclick="showPage('roles')">
         <span class="ico">🛡️</span> Rôles
@@ -829,25 +1077,68 @@
       <button class="nav-item" data-page="webhooks" onclick="showPage('webhooks')">
         <span class="ico">🪝</span> Webhooks
       </button>
+      <button class="nav-item" data-page="identities" onclick="showPage('identities')">
+        <span class="ico">🧬</span> Cohérence des identités
+      </button>
     </div>
     <div class="nav-footer">
-      <div id="worker-url-display" style="word-break:break-all;font-size:11px;margin-bottom:8px;"></div>
+      <div id="worker-url-display" style="word-break:break-all;font-size:11px;margin-bottom:8px;">https://relink-auth.refugeemeraudien-direction.workers.dev</div>
       <button onclick="logout()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0;">→ Déconnexion</button>
     </div>
   </nav>
 
-  <main id="main-content" style="display:none;">
-    <div id="auto-refresh-bar">
+  <main id="main-content" style="display: none; flex-direction: column;">
+    <div id="auto-refresh-bar" class="visible">
       <span style="font-size:12px;color:var(--muted);">Auto-refresh :</span>
       <select id="auto-refresh-interval" onchange="setAutoRefresh(this.value)" style="min-height:32px;padding:5px 30px 5px 9px;">
-        <option value="0">Désactivé</option><option value="15000">15s</option><option value="30000" selected>30s</option><option value="60000">60s</option>
+        <option value="0">Désactivé</option><option value="15000">15s</option><option value="30000" selected="selected">30s</option><option value="60000">60s</option>
       </select>
     </div>
 
     <!-- ── Page Utilisateurs ── -->
     <!-- ── Page Tableau de bord ── -->
     <div id="page-dashboard" class="page active">
-      <div id="db-root"><div class="empty-state"><span class="spinner"></span>Chargement du tableau de bord…</div></div>
+      <div id="rl-dash-card" style="order:2"></div>
+      <div id="db-root">
+      <div class="db-top"><h2>Tableau de bord</h2>
+        <span class="db-pill">État du Worker en attente</span>
+        <span class="db-sub">Aucune donnée chargée</span>
+        <button class="btn-action btn-link" style="margin-left:auto" onclick="loadDashboard()">↻ Actualiser</button></div>
+      <div class="db-grid-kpi"><button class="db-kpi " style="--c:#5c6ef7" onclick="dbGo('users')"><div class="ico">👥</div><div class="val">19</div><div class="lbl">Utilisateurs</div><div class="sub"><b>3</b> admin · <b>0</b> suspendus · <b>0</b> bannis</div></button><button class="db-kpi " style="--c:#f5a623" onclick="dbGo('commandes')"><div class="ico">📦</div><div class="val">0</div><div class="lbl">Commandes en attente</div><div class="sub"><b>0</b> livrées au total</div></button><button class="db-kpi " style="--c:#ec4899" onclick="dbGo('submissions')"><div class="ico">📋</div><div class="val">3</div><div class="lbl">Formulaires</div><div class="sub"><b>3</b> équipes · <b>0</b> partenaires</div></button><button class="db-kpi " style="--c:#14b8a6" onclick="dbGo('sites')"><div class="ico">🌐</div><div class="val">3</div><div class="lbl">Sites</div><div class="sub">Tous accessibles</div></button><button class="db-kpi " style="--c:#8b5cf6" onclick="dbGo('webhooks')"><div class="ico">🪝</div><div class="val">0</div><div class="lbl">Webhooks</div><div class="sub">0 actif(s)</div></button><button class="db-kpi " style="--c:#3ecf8e" onclick="dbGo('services')"><div class="ico">🔑</div><div class="val">2</div><div class="lbl">Clés API actives</div><div class="sub"><b>3</b> service(s)</div></button></div>
+      <div class="db-cols">
+        <div class="db-card"><h3>🔔 À traiter</h3><div class="db-todo "><span class="t-ico">🆕</span><div class="t-txt">1 nouvelle section détectée<small>Pense à vérifier leur visibilité.</small></div><button class="btn-action btn-unlock" onclick="dbGo('sites')">Voir</button></div><div class="db-todo warn"><span class="t-ico">🧩</span><div class="t-txt">21 incohérences d’identités<small>Comptes Discord / Minecraft à vérifier.</small></div><button class="btn-action btn-unlock" onclick="dbGo('users')">Utilisateurs</button></div></div>
+        <div class="db-card"><h3>🌐 Sites <a onclick="dbGo('sites')">Tout gérer →</a></h3><div class="db-site" style="--c:#64748b" onclick="dbGo('sites','main')"><div class="sv-logo" style="--c:#64748b">⚙️</div>
+        <div class="nm">Site principal<small>13/13 sections actives</small></div><span class="badge-sub" style="background:var(--green-bg);color:var(--green);">en ligne</span></div><div class="db-site" style="--c:#1a2e1d" onclick="dbGo('sites','emeraldian')"><div class="sv-logo" style="--c:#1a2e1d"><img src="data:image/webp;base64,UklGRhoZAABXRUJQVlA4WAoAAAAwAAAAfwAAfwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBIrgQAAAGgh2374cb6Jm1Tt4vaXdu2bdu2bdu2bdu2bTPF7iZNm/m9B+mvk5nf/HnOFRETQP8FmSq6cL+JpaNT65VTwe0yACTtyG3QJUPJe0j2ek5dCngDzrvuumNwK3EN3L7OLn7uzgb98JhgRQrvAoB1QaRu5P8OhY+n14vislKY7aYXTLFvaXSiNRRPSmv0C3YRn2Gxcugw9PLr3uIzbnbAv+XSQnOutPXiNYuDsEFgvgcZ1JhGVJkaXJcB+fuNCzsXvHZM0ULBIsrY5S6A39smN/ch8jnkGFj3FncSjbHJxQTgw+CaAUREaYZ/dhDwKFQ0Z+IA66AgI9ktYobjNwrFrfAfIOYAcdaECm+IJGDCTyRerSAll7rRlxRY4hTZIBDPzVawgTko+Yh5SOmvDaNv/WYpsRURyBWG2PLOlHzIioQU4W2xTIWKFZ8pc40wiuMx8LIAcabewqCgnImIJOMQCwDGAMtQiUQZcBDyxSLEGX4EChcnuxG18lP9O8DGQEkQfhtlXCxGnDmPQOlPFezYzXsW2OIriIU2PMtFvHOSFMOuNByU5TawQwytEvCzAHHvZsodDOaRSr8D2ygCvyTE1yFOyT/oCJQ/XyjQKTmiNnGIq6c9/wswDzfweH5ncKg1Mw+NT8CZcM11i8PVcOL1kuHg3Fx+t2AZ6KKxnFeBnMQHNVFO4EVOjTVk2E3qys9H84EmkqaC3uObk8oGpSDoC357aKox0Fvicy3jsMXefMbhDL009RLvchN36y0PHPZtVwMuKv4SMVrKBow18i1mUOEEict1AVBOQ+dg7kL8y6HGhR5cNNSCo9px/YBLGTWwyJMv0wPcctdMpRi2hfhDD6nifGY+Oo335TWzMClhPF/4yV+qSLwZxbeEWcdqZhu+ZuLKa2ZQqWUoVz4b5mvFuAfvidfwC+r9WoqHkrDIoJGcN/CcK/KPiszDuMw4EKaRxt9whquzVUW2xVxv8LqsRjr9wSqudbKKsI7rAEw1NdJHRvtkJJ+c+21QM7uTL5VLMmOR2FgjfWXUteNdpP5zqD9mZFl/OyUgN9NIfyA9EXn2WfKOQZPxG0cVscOaa8M4FsiYb9r+02ZoV358ZGOz6mBtJLVFfjCZTDFW4PcfG7TOEsyAJcZkMpm8VFQaYl6rnrCngmIV1BK4C6J+XFYddW7KwpLfNDQ4SHL18jsCsb/J4e1hcEDwajPEb71T0AG1vkIPWV1JMb/tTBdw20epnJ9s0ElTf2UGJUE/bQv/l0SnNzb9+DZOEQpf/Von4rdVI4Xd2r/XBetEV1Lccz3Tg9WpyYGS0dXV1bXvIxsTEJM/zM7n6urq6kxq9Bp8RzTs7YIwUnf6WUwsJyuR6qURQjmUiTTonquQ/Yka2lXIfsG0pGlDxz8asWzyJUEaesVpwjTan8TZ+osGElu6kUgLblbdvUISidUwMlFVbK4PibfCuT+qsZ1vQ2IedNiqCvnEVDcSdUTD2yp42ie9ROKWAjLslB3CHqYPciHRuw578fmXrACzfH41I4h00qvN6p2HHv20MjvM9vv96V2bBvmQvnoXa96z/zgrMKd/3441QyTSZ+NQdsSHdN04OA/9r0NWUDggdhIAABBGAJ0BKoAAgAA+PRqKQ6IhoRZMfaQgA8SgDUiXFf33F7N0NfPPhHju3Rf3/3fqL8wDxrv2A9x37aeobzgvyO90n909Qn+m/7frJP3U9gD9mfTa/b74O/7T/wf3D9q7/25xF/FPol8df7R+MH7Terv4l8h/WvyY/sf/j9yj928KfKv+q8jP1u+4/2z9qv7h+0/wF/kPAv3u/yXqBfjn8k/uP9I/cP81fbL/eO1tzT+2/73+tewF6ofK/8n/fP3H/wvn0/t/5h+5n0o/wHuAfyX+Z/3z8uv7v///oX+8f7nxi/rn+Q/znuBfxf+jf5n/A/uL/nP/////xG/ff+L/kf8d/1v857NfzH+1f8P/H/kn9gn8f/n/+j/uf+T/+H+R/////+671+/tD7G36v/8hsYsLFzlo4q/yWMUuE0ZNhh//+0WP0lIXboeJsmz6OvgM2TjHNNUov9DuWyvaVsF1yeIzagfcEABJFHgK090DIUcpWXvb//dAr1deVqimyry4Oay2Ugen+5xWpUf8VbPy23x+KR0WqNvWX4h7ce8JMqPAc0+6gLRFWhAtuPQzQWJ3S3I6IFqQc0MDa5ZQ75XmY/0NCCP8EAkx5aHPrvAH8UOQkZqosYx+aG/Ko1dJwZlyO0IoLSN7ykCPWY6DUWAg8OkjL/l7b4rOv/wYXEsMxzoCxO6psOALqrgVxlqm8Dz27ZKPg5+gy1yqoarYcrPAByUnSadhVLMQW6fPghYNTvWqkTmhU9l3rwAAP7/YBgWP7q40cQ/qGEiFbn1KmbapFPp7J3syKDNLLih5XMqVvJIcI+6DAUm2pQRXN3FVQtB1Narbr28a1p/+9lfhAYAAXHgv+J+Ka/IJ2HWgjQepPQUTMrie6moobPD2Z3zDCwBtMPAWVz7fPYH6+ONIzQNKBkucmV3S94sCycySmzvWUkgYu4kTdI7dH5Ttw62loACRI6tfT+WqpoUiqHUwUBehzkc1te3p/3p5rggRV453ypH3dtBew8CD7MwjbjM992JrPfiVpQx7gA/DKoNW5VaURr/cduDZ3GaCl7Qi8tKHLmj79YBo8WRKf6cCn77sXPUaWUdevWotEaULAnf8qggNisPUNXQOhXqw4sehYxluKuUOmLDlrylNg9RZFLdQbyaZ/1B/D+t1n7USe8WjcA6ngkyGFhcW6yKEpq5zLjmw7RO7ZThGEDL1YoAzPPMFlz44mt8YMD4et/eWqLZhm/jp82hpMZ0u9EGsLsxCQfyI3lmxPcXZtyq7VxCqNpHeEzegrzWvxDdLIr1euuMJ1TmZNWJcKs9vrBB5FpGoi/KFAG1AYp97gnKJ7PYS/JB2PcGJD4IifAgGqYnZNFDDpO4HeoVLhF76UgmRNZYAIjbqxpba76SXmrN21JaxVPGcNBgnBl8R8CS5UOCa4bePCncKzx53k0bujOW8rr3WlsouRoRxsqE31QkshAjwMruO+xid3EVSJpe9uCeF8r3l7JjNOhVEnDIYjW8xc7Un5AR02owvaqTE8M/JlhWjoPcA6RS/WipqstaGch2LK0ymsx0n72i9oXS4Mmhm5lYa0uld+9CqhxaDcN7osiMW76NaiMMl5i602d+CmZZLRg0uWNje3xEbQ+xn66/PJX2+vQZyw64EyjmUeCLFJqTOkjkWB2sqwZAblXlAxLEIZwosq3LOFyDflXZI9UcHB0oZ1hlZUCfoo5lBknTXHsqz7Sz3rrP5E1A7mUlk/EIRsmtcyM9vVW9P0d4sTCGqPcPsyiixjE5AL4f2BMcnJK3rVocnOl/8VVr+p6xhCKcLPp0A9oIdcsAh0ETD7SMcbE7FssOzpr0/Hj/W5Ap78OEeUSihN4hx+UeX2k5qitlKrBSJqaj2ssQdvCQ9fwvRez9p5Fn0S4wEqpNm4/s4CKJaPxLsK3Jmrjtk6Sbedq2czMciMY4MlkpLL6UlSH/yK/iCTA9MEJnzijB6H9tX30E9OS+kURAHzmxnIcn2xfMR24+XG7MboVUEnP1+XfQ07z+XbnUNY4Qxz6LQsDam3DpvNCzABaceH3OvEFeVoGCF8elkyGMvaPVgdpmHe2+M2rvIyu1v0uwwpV5LcqvqTErzw+Z6GLclvo+pIXT+ADRhvYdnmqybGAnoFsJioUK4bLMGbfm5EvdJqNgiTgwTM5iyXB1rs69PXFnffNoZ6IPIV9KII22VUebB5FMzE3S2RTCydXIYYDEgZj+qOK543RFm73Rg+UwlLklh+ZtxteykGbh2QbPWlrSEbS0zNDw8n4HMAwCnINVGpNmvAw5FHngs7v/BcD40hANtx/UaYd+TEjySpuEKlIIisxH3smoOV8I++BGAieQkVkD240NzE0g0a6zdHmgH8hJ8KYURk74OBwaKXBNs3aGWoxO0ZGyAHgvmDIkL4/q8VRstMLJc+uKk86dlwzONg1xk/Abyn6ri5YFJjG3ZVw4rMOd6JvR6Tblx7ShXM+wB9Av9/0M55+GtdTl5lEiTh/AWJuS9BjwJwoGKFPpHZuMKpLTND1mEl5+nBEQx9VNHy/ftLqj9MHunlWkoUif8lhJcEHKDzSx/egWKkQ94QhbCZXfqJ0T9mbB40oFldb7mLpx3ryQ6wjy5xPFtgCnTZo3bvK8W2S4bnUqUOpob1URVzs5D5kish1bUR6bhbqvIIM9kBcYcw5wzcYly/oWMrxbPk/OwjpFvZwFv6aMQP9BSTU843CjPpn3HohNc+TKkRdMfybr29Lnij80ZpSuc9FLlVo2KCVcVdNByGTNRAPdp8CaOYR/vlCnrygIGje4UA1RmxNWDo2Z7/jGwUDxHhxFtWTzYaT/FzW6zltInD7E/4RNsfhE/C4uQ93ku/afOzKsTIf31krXv/WnMygW57e/kQlk0Vk9E2YEBElJVQlCCnVT4R9Un+A0QrBiN/cpkaoyhE/H1QCPh4Ld6vXQprxqT2YzDzRjntMybsXi9flWdNiQIjG5OhbEIWjmVGuoMkePlgs2URn2C+j+Pz/xbznjxQEc0AS7HIHTZXlpsSbKsJa+YwJ0FrxQh8i4AmL6EHpk6V9W74G2LJ0gS6mU/6rpRUS7o6WCsPry0VJHjvSlHhM+ei8ePwiLDTx7LteOmpEwrGjZQuzIb6JkQMY1SwVfMpqTVz7XcVpOxsvCEacfDqmZwkWokQgQ5wfDMyKeHgI9zRkyek84AbVk9rvaqLJctR+RQbSw9UNErHDz3VqgejTxWKWPGjvIn8HMxYe9/BnSDgTQeHw2eyetb4dnaLA9UvV9ORk+QxFdOnrOJKuf4z+fKFo+zBuCe3xbMwOFv2sKnrEqGNyFAUKbnbUSKj72wmSZXWg6MsTqNn/YdWCb/oOBJWUHZi9FA8YrWZr5OKldHRb7V79XiFYZz594MYSKgmfrUIz0+NLPqKweZqQgjxYZYNrnaEAD44w7PKWorBOCGlDu7IcAN6Olh5d9KucHXErk0u6bIKISG2w1AQjkBpddrMrHzRQe3Sn2fLZ9DrVKjZK//aUZo5Qn8QkKhoDzDYZA1+xZ+GO5xfpcz+KZjh2z0v+P9+3kHRVndZi0c7G0Fjk1xd4nyy4Nb8q46iJ/TAOtkn1STpboD4aAcSxg7L4BF5h2z7j1bhd5Ly+EyP8AMsYk7MW6CEtB/Wk8kc95VrzuXc35QasyjjhcVAXTI5ZX6QQKpGCOgMt0IZGjAASHIPa5S3tb41eYuj0o0ZVyypGCygyOi/Ha8H+yFDDE6B7w0TrYafhaS/Xew2dbiqL+B5k/82rktRQC+BE1OhoH+YuF8LG4K5KxZNSswj+lTgU7kY0gjYGvnZmlV1j06JLaX0Tj0DCDbS0AVuLsNmEFjfESst10sDV2f6l+AGO/B5SsIwBswsQ02h4/QQvqMSm0g/7P4Ql8TgMybtwX1a7a2cqZ0ZCXao6C+phMnSnPUf5zThl0V1V5YAdrCSCa+8cSXdNiB/5m9RT8cNsniCUeFNnQBmd7NwAvC/s8/rnWjn1hKOS6577B+d4BejYcpNi5mtcx+qxh2OiqLyJxEc0R8W2yxs3PIV3UoMCGgbs30DtVMXch1CnlOl8txG4HP4vFOBdIdbwRHc2Mb6LAANHE7p5U+EU71D7GJpX/GT1sWYZio5RRHpC2zh+qm92qiTTLZbvhG9hGrBhCdA8wIJIWy+ktiblhByiZFnvWdIOyd6t5KadRkjpNC1dUZiXlXA6pAy73W0oMf3NRtMQMZfim/NpmJI4+36RZmDW00Z2tTEGW8MfOqNf3Q3bYDB8jpc75gMeqWam/pof6ACsTxvIL6xQj6+RwLX1WT2rXQ5fYjLg8eC27UvwGvFEMeF2TPSdqM54SxBPzBjwi6FXBS2qc+501EGzrMZCUvMBGtsIXrWxu+srltVOV7HoyEOpGQwuajTJ2LfnXNKV0qpohkIX4NuHUxRQKPqffEYBaBvkHWOtUwNVDze7FWBADPVs/CiP9mJWeJhiOsBEKHdxVToltWXrdd/MLHR5ZBcNesg97URZMuYT9ii9WjEfz++2WNDx8XZJKYjDvDOh/6yTONwYltFMPilGya7zqFQApeS8248GzeQuUTR5fiLZkg3ul0dCZg3gO1jA1CQuDhaROUK1tryOIzkxGYU27TMZ+Nb+GX3VU0J+RbM0AAlt6jqvayjI+Y5r3522eh87sM/fSRAUVnHuVMn3NCTyeAzqQZTOiIyLWoZKlmdW/yGm/P/6y49KFk2h8OQH2ePSAdlP0ZNoo7ph8HezVREBTRlyeE9S8FuR0xLZtgu7lpkta/TlHp2mwUvZjKh/t6AlO0t1gm5VXCAonZ/0o2R0Mtk+qpoVzhCDWOQ5Z3ojYwXUVRefqXc0ALyYxuPH5K8kFqbKLdJvN23W/uJB5Jgie35mSzOCxWMRfaqajNZ1WuNRlB3EICNq25MiW3kc2c03ipRFYY4L9vu0hwcPuqvrLpv+odtUpWhEFNoImJ4MHZG5meggt8mES77DFwiclkZwAQxY9dOevsWPrBodwmCZGCCMHyu97A1rAH0PQOgBbMsz+EBrbS95KneUrw1duOYyhLacvoW+0iV+yl1xKaaVGAEow/OO9r0+1OykKcQpxNw/LoELKG8T8Z1YdWmGP9Q8VkL8AAc8Q8E3kbaiWyj7Lld0VRBgcWKSmTDMM0nZT90EUePaQ/9bC17vVQ0hbpai5Q+8064/cS1ApQbkfrymQieCGHcXRME0jtv0XdmkrlaCNKNjKkXrTNOmVWeUuB/qbftVf2851lQmSDNaTp0EIhlv08rS6bR1sSZTdzrqvrnnH2TiQTa9f9zs0VLX6gvpBjhG2x1K04BbOjlIdstKUcO/VP54YL8GaYZiPXEC3yQmjDXMzE7H4f7czhyk8FwIy0E18NoTwGywMLgZL+mD+2c5XqrfEKFd1jml41TYnpCw064xVGry0A1UH7QucOs8M+zIFqoDob3GzOMnbm+KRXYzLsiNYBrlKH/heK4VX4LM5vTdVDj4nz0KRE7qkubZ1H8LpkraSLkWcubcZBZUDU3Ln68mDQiaYuuUyb/OJKkWsPv9U0GHIxxaOgCkcHPHt6uf58D7uNH8iRzIzl6umzDgRjlNBEbYVEFuaUjOYy3MScPtJYubk148m/m1Pc6nTtOFYaRPGBU3eXhUbJnpjjm6RvDmTE8cWCNHbTz3KCRJQxmIo/tdem+k7ip5sf3O3sYFUQjFDAri88urKYo5xbHV0kczRy2TBBNM+vrJZNCMJgH8b0JdqZuhLHiGv/N/61b7lJGdWk9nwFLEfuatLtSoDJSFfoH6nsfSC2WuJrP1hcTLMjsTnD2kf24Zbf0e8wppRYKLe4Kmxw3xn7/m/hyhZInDITnAFqoa+5A2cR4wOvZjBH+vCCRlJHXsFwZPgXqRtny+ijVcJrYFnWpAUB+cbKZiRBzW8fwUFEVt3owPtgdAGiAIQGTxTxBk07rIXs3ODcJsKI5+jh7iOxFofUrWK6Zqlpb3tcex8wj7arBrAcfwZcZulugN2yufpNLbf35HUsKqeBfxYm71CDNMqSzaDIlhQd91eCi5JPw2B/jP2qVD02Q+QnzmIOtyNRT5qVaVy7RC7nXpUktdeErydspCwkEmEdMa5QG5bMKY4mHupLUZG6KOcAO9m7LtBCpaIzmpShmXqa6R426Lbiqea84k5W6Y/i4was0iWJl5UiET4QLK300OPvxDf75oJQVdqExRYrWYsS//WYQfUkj+/67f/oef/8WD//6Agu/lmv77ZLHvFfKxisKMfQeGf/lAgY4CBBR6q+anfiCykI9//aZoAAAAAAAAAAAA=" alt=""></div>
+        <div class="nm">Emeraldian Express<small>18/18 sections actives</small></div><span class="badge-sub" style="background:var(--green-bg);color:var(--green);">en ligne</span></div><div class="db-site" style="--c:hsl(259 65% 62%)" onclick="dbGo('sites','mainweb')"><div class="sv-logo" style="--c:hsl(259 65% 62%)">M</div>
+        <div class="nm">mainweb<small>0/0 sections actives</small></div><span class="badge-sub" style="background:var(--green-bg);color:var(--green);">en ligne</span></div>
+          <h3 style="margin-top:18px">🔎 Trouver un membre</h3>
+          <div class="db-find"><input type="text" id="db-find" placeholder="Pseudo, Discord ID, e-mail…" autocomplete="off" oninput="dbFind(this.value)"></div>
+          <div class="re-found" id="db-found"></div></div>
+      </div>
+      <div class="db-cols" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div class="db-card"><h3>📋 Dernières candidatures <a onclick="dbGo('submissions')">Voir →</a></h3><div class="db-feed"><span class="re-av" onclick="openUserCard('721483597793591296')"><img src="ReLink%20%E2%80%94%20Admin_files/1178ea9c27d86bc808fcff729d6f5e91_wpk7.png" alt=""></span>
+        <div class="who"><b>Rexi_de_la_mort</b><small>⚔️ Équipe</small></div><span class="when">il y a 13 j</span></div><div class="db-feed"><span class="re-av" onclick="openUserCard('672880112718446622')"><img src="ReLink%20%E2%80%94%20Admin_files/f266e6fbd8bb61832b52d03e02da990f_wpk7.png" alt=""></span>
+        <div class="who"><b>Nocturno_</b><small>⚔️ Équipe</small></div><span class="when">il y a 13 j</span></div><div class="db-feed"><span class="re-av" onclick="openUserCard('994523972135829504')"><img src="ReLink%20%E2%80%94%20Admin_files/808e7cf8e330f028ccd053a7505538f5_wpk7.png" alt=""></span>
+        <div class="who"><b>Elit722</b><small>⚔️ Équipe</small></div><span class="when">il y a 15 j</span></div></div>
+        <div class="db-card"><h3>📦 Commandes en attente <a onclick="dbGo('commandes')">Voir →</a></h3><div class="db-empty">Aucune commande en attente. 🎉</div></div>
+        <div class="db-card"><h3>📜 Activité récente <a onclick="dbGo('audit')">Journal →</a></h3><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>site.delete</b><small>user · 994523972135829504 → site relaunch</small></div>
+        <span class="when">il y a 1 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>site.create</b><small>user · 994523972135829504 → site relaunch</small></div>
+        <span class="when">il y a 1 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>site.delete</b><small>user · 994523972135829504 → site relaunchtestsite</small></div>
+        <span class="when">il y a 1 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>site.create</b><small>user · 994523972135829504 → site relaunchtestsite</small></div>
+        <span class="when">il y a 1 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>flag.update</b><small>user · 994523972135829504 → site_flag emeraldian</small></div>
+        <span class="when">il y a 1 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>login</b><small>user · 721483597793591296 → session 458fe3cc-7bbb-4015-b948-2f95a39b072c</small></div>
+        <span class="when">il y a 5 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>login</b><small>user · 994523972135829504 → session 20e469d1-01dd-4ba0-a92b-48fb52dd03c8</small></div>
+        <span class="when">il y a 6 j</span></div><div class="db-feed"><span style="font-size:15px">•</span>
+        <div class="who"><b>logout</b><small>user · 994523972135829504 → session 90f84d6c-209d-4a39-8cb1-951d0572d18b</small></div>
+        <span class="when">il y a 6 j</span></div></div>
+      </div></div>
     </div>
 
     <!-- ── Page Utilisateurs ── -->
@@ -862,7 +1153,7 @@
       <div class="card">
         <div class="advanced-search-grid">
           <select id="user-search-field" onchange="debouncedSearch()" aria-label="Champ de recherche">
-            <option value="all">Tous les champs</option>
+            <option value="all" selected="selected">Tous les champs</option>
             <option value="discord_username">Pseudo Discord</option>
             <option value="discord_id">Discord ID</option>
             <option value="minecraft_username">Pseudo Minecraft</option>
@@ -970,7 +1261,7 @@
           <div class="form-field">
             <label>Raison</label>
             <select id="give-reason">
-              <option value="">Auto (don/retrait admin)</option>
+              <option value="" selected="selected">Auto (don/retrait admin)</option>
               <option value="staff_bonus">staff_bonus</option>
               <option value="referral_parrain">referral_parrain</option>
               <option value="referral_filleul">referral_filleul</option>
@@ -1027,7 +1318,7 @@
             <div class="form-field">
               <label>Catégorie</label>
               <select id="new-item-category">
-                <option value="lootbox">lootbox</option>
+                <option value="lootbox" selected="selected">lootbox</option>
                 <option value="money_ig">money_ig</option>
                 <option value="gift_card">gift_card</option>
                 <option value="event_item">event_item</option>
@@ -1221,7 +1512,7 @@
         <div class="sv-body"><div style="display:flex;gap:8px;flex-wrap:wrap;">
           <input type="text" id="mm-new-id" placeholder="identifiant (ex: essentials)" style="width:190px;" autocomplete="off">
           <input type="text" id="mm-new-name" placeholder="Nom affiché" style="width:180px;" autocomplete="off">
-          <select id="mm-new-kind"><option value="mod">Mod</option><option value="plugin">Plugin</option></select>
+          <select id="mm-new-kind"><option value="mod" selected="selected">Mod</option><option value="plugin">Plugin</option></select>
           <input type="text" id="mm-new-url" placeholder="Lien https (optionnel)" style="flex:1;min-width:200px;">
           <input type="text" id="mm-new-desc" placeholder="Description (optionnel)" style="flex:1;min-width:200px;" maxlength="300">
           <button class="btn-action btn-unlock" style="font-size:13px;padding:8px 16px;" onclick="addMcMod()">➕ Ajouter</button>
@@ -1318,7 +1609,7 @@
           <input type="text" id="audit-filter-resource" placeholder="Ressource…">
           <input type="text" id="audit-filter-target" placeholder="Utilisateur ciblé…">
           <input type="text" id="audit-filter-ip" placeholder="IP…">
-          <select id="audit-filter-result"><option value="">Succès / échec</option><option value="success">Succès</option><option value="failure">Échec</option></select>
+          <select id="audit-filter-result"><option value="" selected="selected">Succès / échec</option><option value="success">Succès</option><option value="failure">Échec</option></select>
           <input type="text" id="audit-filter-service" placeholder="Service…">
         </div>
         <div class="actions" style="margin-top:10px;">
@@ -1352,6 +1643,79 @@
         </div>
         <div class="pagination" style="margin-top:14px;" id="audit-pagination"></div>
       </div>
+    </div>
+
+    <!-- ── Page Noms RP (GET /admin/rp-names) ── -->
+    <div id="page-rpnames" class="page">
+      <div class="page-header">
+        <h2>Historique des noms RP</h2>
+        <span class="badge" id="rp-count">…</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Recherche</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;">
+          <input type="text" id="rp-q" placeholder="Nom RP (accents et casse ignorés)…" oninput="rpDebounced()" autocomplete="off">
+          <input type="text" id="rp-uuid" placeholder="UUID Minecraft…" oninput="rpDebounced()" autocomplete="off">
+          <select id="rp-kind" onchange="loadRpNames(true)">
+            <option value="">Noms et pseudonymes</option>
+            <option value="name">Noms RP uniquement</option>
+            <option value="alias">Pseudonymes présentés</option>
+          </select>
+        </div>
+        <div class="actions" style="margin-top:10px;">
+          <button class="btn-action btn-unlock" onclick="loadRpNames(true)">🔎 Rechercher</button>
+          <button class="btn-action btn-link" onclick="rpReset()">Réinitialiser</button>
+          <button class="btn-action btn-link" onclick="rpExport()">⬇ CSV (page affichée)</button>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted);">Alimenté par le mod Wathe RP : chaque nom RP défini et chaque pseudonyme présenté à un autre joueur. Clique sur un UUID pour isoler l’historique d’un joueur.</p>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Joueur Minecraft</th><th>Compte Discord</th><th>Type</th><th>Nom</th><th>Source</th><th>Présenté à</th></tr></thead>
+            <tbody id="rp-tbody"><tr><td colspan="7" class="empty-state"><span class="spinner"></span>Chargement…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pagination" style="margin-top:14px;" id="rp-pagination"></div>
+      </div>
+    </div>
+
+    <!-- ── Page Serveur de jeu & classements (GET /server, /leaderboard*, /clans) ── -->
+    <div id="page-gamedata" class="page">
+      <div class="page-header">
+        <h2>Serveur &amp; classements</h2>
+        <button class="btn-action btn-unlock" onclick="loadGameData()">↻ Actualiser</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Serveur de jeu (Pterodactyl + mcstatus)</div>
+        <div id="gd-server"></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+          <div class="subtabs" id="gd-tabs" style="margin:0;">
+            <button class="subtab active" data-gd="kills" onclick="gdTab('kills')">⚔️ Kills</button>
+            <button class="subtab" data-gd="blocs_poses" onclick="gdTab('blocs_poses')">🧱 Blocs posés</button>
+            <button class="subtab" data-gd="fortune" onclick="gdTab('fortune')">💰 Fortune</button>
+            <button class="subtab" data-gd="referrals" onclick="gdTab('referrals')">🤝 Parrains</button>
+            <button class="subtab" data-gd="streak" onclick="gdTab('streak')">🔥 Streaks</button>
+            <button class="subtab" data-gd="clans" onclick="gdTab('clans')">🏰 Clans</button>
+          </div>
+          <select id="gd-limit" onchange="gdTab(GD_TAB)" style="max-width:120px;">
+            <option value="10">Top 10</option><option value="25">Top 25</option><option value="50">Top 50</option>
+          </select>
+        </div>
+        <div id="gd-meta" style="font-size:12px;color:var(--muted);margin-bottom:10px;"></div>
+        <div class="table-wrap" id="gd-table"></div>
+      </div>
+    </div>
+
+    <!-- ── Page Cohérence des identités (GET /admin/identities/consistency-check) ── -->
+    <div id="page-identities" class="page">
+      <div class="page-header">
+        <h2>Cohérence des identités</h2>
+        <button class="btn-action btn-unlock" onclick="loadIdentities()">↻ Relancer le contrôle</button>
+      </div>
+      <div id="id-root"><div class="empty-state"><span class="spinner"></span>Chargement…</div></div>
     </div>
 
     <!-- ── Page Webhooks ── -->
@@ -1437,6 +1801,110 @@
       </div>
     </div>
 
+    <!-- ── ReLaunch : Vue d’ensemble ── -->
+    <div id="page-rl-overview" class="page rl">
+      <div class="page-header"><h2>Vue d’ensemble</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-overview" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Mises à jour ── -->
+    <div id="page-rl-updates" class="page rl">
+      <div class="page-header"><h2>Mises à jour</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-updates" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Configuration à distance ── -->
+    <div id="page-rl-config" class="page rl">
+      <div class="page-header"><h2>Configuration à distance</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-config" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Accueil &amp; encarts ── -->
+    <div id="page-rl-home" class="page rl">
+      <div class="page-header"><h2>Accueil &amp; encarts</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-home" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Info &amp; News ── -->
+    <div id="page-rl-news" class="page rl">
+      <div class="page-header"><h2>Info &amp; News</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-news" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Notifications ── -->
+    <div id="page-rl-notifs" class="page rl">
+      <div class="page-header"><h2>Notifications</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-notifs" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Skins du launcher ── -->
+    <div id="page-rl-lskins" class="page rl">
+      <div class="page-header"><h2>Skins du launcher</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-lskins" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Modpacks ── -->
+    <div id="page-rl-modpacks" class="page rl">
+      <div class="page-header"><h2>Modpacks</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-modpacks" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Serveurs du launcher ── -->
+    <div id="page-rl-servers" class="page rl">
+      <div class="page-header"><h2>Serveurs du launcher</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-servers" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Events ── -->
+    <div id="page-rl-events" class="page rl">
+      <div class="page-header"><h2>Events</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-events" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : WeLive &amp; partenaires ── -->
+    <div id="page-rl-partners" class="page rl">
+      <div class="page-header"><h2>WeLive &amp; partenaires</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-partners" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Intégration &amp; routes ── -->
+    <div id="page-rl-integration" class="page rl">
+      <div class="page-header"><h2>Intégration &amp; routes</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-integration" style="display:contents"></div>
+    </div>
+
+    <!-- ── ReLaunch : Signalements ── -->
+    <div id="page-rl-reports" class="page rl">
+      <div class="page-header"><h2>Signalements</h2><span class="badge">ReLaunch</span>
+        <div class="rl-hdr"><button class="simbadge" data-go="integration" title="Voir la connexion"></button></div>
+      </div>
+      <div id="rl-body-reports" style="display:contents"></div>
+    </div>
+
   </main>
 </div>
 
@@ -1506,7 +1974,7 @@
     <span class="lk-label">Couleur du reflet</span>
     <div class="lk-line" id="lk-colors"></div>
     <div class="lk-line" style="margin-top:8px;">
-      <input type="color" id="lk-color" oninput="LK.color=this.value;lkRender()" style="width:46px;height:34px;padding:2px;">
+      <input type="color" id="lk-color" oninput="LK.color=this.value;lkRender()" style="width:46px;height:34px;padding:2px;" value="#000000">
       <button class="btn-action btn-link" onclick="LK.color=null;lkRender()">Couleur automatique</button>
     </div>
 
@@ -1619,16 +2087,40 @@ async function login() {
   if (!secretVal) { showError('Entrez votre clé admin.'); return; }
   if (!url)       { showError('Entrez l\'URL du Worker.'); return; }
 
+  let workerUrl;
+  try {
+    const parsed = new URL(url);
+    if (!['https:', 'http:'].includes(parsed.protocol) || parsed.username || parsed.password)
+      throw new Error();
+    workerUrl = parsed.href.replace(/\/+$/, '');
+  } catch {
+    showError('URL du Worker invalide. Entrez une URL http(s) valide, par exemple https://votre-worker.workers.dev.');
+    return;
+  }
+
   ADMIN_SECRET = secretVal;
-  WORKER_URL   = url.replace(/\/$/, '');
+  WORKER_URL   = workerUrl;
   AUTH_MODE    = 'secret';
+  const error = document.getElementById('auth-error');
+  error.style.display = 'none';
 
   try {
     const r = await apiFetch('/admin/flags', 'GET');
-    if (r.error) { showError('Clé incorrecte ou Worker inaccessible.'); return; }
+    if (r.error) {
+      const message = r.status === 401
+        ? 'Worker joignable, mais la clé admin a été refusée (401). Vérifiez ADMIN_SECRET.'
+        : r.status === 403
+          ? 'Worker joignable, mais votre compte n’a pas l’autorisation admin (403).'
+          : r.status === 404
+            ? 'Worker joignable, mais la route /admin/flags est absente (404). Vérifiez que le bon Worker est déployé.'
+            : `Worker joignable, mais la connexion a échoué (HTTP ${r.status || 'inconnu'}) : ${r.error}`;
+      showError(message);
+      return;
+    }
+    try { localStorage.setItem('relink_worker_url', WORKER_URL); } catch {}
     enterPanel();
   } catch(e) {
-    showError('Impossible de joindre le Worker : ' + e.message);
+    showError(`Impossible de joindre ${WORKER_URL} : ${e.message}. Vérifiez l’URL, le réseau et la configuration CORS du Worker.`);
   }
 }
 
@@ -1737,12 +2229,14 @@ async function handleDiscordCallback() {
 
 // ── API helper ────────────────────────────────────────────────────────────
 async function apiFetch(path, method = 'GET', body = null) {
-  const headers = { 'Content-Type': 'application/json' };
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+  const headers = {};
+  if (!isFormData) headers['Content-Type'] = 'application/json';
   if (AUTH_MODE === 'bearer') headers.Authorization = `Bearer ${ACCESS_TOKEN}`;
   else headers['X-Admin-Secret'] = ADMIN_SECRET;
 
   const opts = { method, headers };
-  if (body) opts.body = JSON.stringify(body);
+  if (body) opts.body = isFormData ? body : JSON.stringify(body);
   const r = await fetch(WORKER_URL + path, opts);
 
   // Toujours tenter de lire la réponse, même lorsque le Worker renvoie 4xx/5xx.
@@ -1851,6 +2345,7 @@ const dbAvatar = (u, name) => u && u.avatar_url
 async function loadDashboard() {
   if (dbBusy) return; dbBusy = true;
   const root = document.getElementById('db-root');
+  root.innerHTML = '<div class="db-empty">Chargement des données réelles du Worker…</div>';
   const safe = p => apiFetch(p).catch(e => ({ error: String(e) }));
   try {
     const t0 = performance.now();
@@ -1893,7 +2388,7 @@ async function loadDashboard() {
     if (newSecs) todo.push({ c: '', i: '🆕', t: `${newSecs} nouvelle${newSecs > 1 ? 's' : ''} section${newSecs > 1 ? 's' : ''} détectée${newSecs > 1 ? 's' : ''}`, s: 'Pense à vérifier leur visibilité.', go: 'sites', b: 'Voir' });
     if (hookBad.length) todo.push({ c: 'bad', i: '🪝', t: `${hookBad.length} webhook${hookBad.length > 1 ? 's' : ''} en échec`, s: hookBad.map(h => h.name).slice(0, 3).join(', '), go: 'webhooks', b: 'Voir' });
     if (keysSoon.length) todo.push({ c: 'warn', i: '🔑', t: `${keysSoon.length} clé${keysSoon.length > 1 ? 's' : ''} API expire${keysSoon.length > 1 ? 'nt' : ''} sous 14 jours`, s: 'Pense à les renouveler.', go: 'services', b: 'Voir' });
-    if (identIssues) todo.push({ c: 'warn', i: '🧩', t: `${identIssues} incohérence${identIssues > 1 ? 's' : ''} d’identités`, s: 'Comptes Discord / Minecraft à vérifier.', go: 'users', b: 'Utilisateurs' });
+    if (identIssues) todo.push({ c: 'warn', i: '🧩', t: `${identIssues} incohérence${identIssues > 1 ? 's' : ''} d’identités`, s: 'Comptes Discord / Minecraft à vérifier.', go: 'identities', b: 'Détails' });
     const todoHtml = todo.length ? todo.map(x => `<div class="db-todo ${x.c}"><span class="t-ico">${x.i}</span><div class="t-txt">${esc(x.t)}<small>${esc(x.s || '')}</small></div><button class="btn-action btn-unlock" onclick="dbGo('${x.go}'${x.site ? `,'${escJsAttr(x.site)}'` : ''})">${x.b}</button></div>`).join('')
       : '<div class="db-ok">✅ Rien à signaler, tout est calme.</div>';
 
@@ -2075,14 +2570,33 @@ function userRow(u) {
     <td><span class="badge-status badge-${status}">${labelMap[status] || esc(status)}</span></td><td>${mcCell}</td><td>${eclatsCell}</td><td>${candCell}</td><td><div class="actions">${actions}</div></td></tr>`;
 }
 
+// Toutes les actions en masse passent par POST /admin/users/bulk (500 comptes max par appel) :
+// une seule transaction côté Worker, au lieu d'une requête par utilisateur.
+async function bulkRun(users, payload) {
+  const ids = users.map(u => String(u.discord_id));
+  let done = 0, failed = 0, err = '';
+  for (let i = 0; i < ids.length; i += 500) {
+    const chunk = ids.slice(i, i + 500);
+    const d = await apiFetch('/admin/users/bulk', 'POST', { ...payload, user_ids: chunk });
+    if (d.error) { failed += chunk.length; err = d.error; continue; }
+    const bad = (d.results || []).filter(r => r.ok === false).length;
+    done += Math.max(0, (d.processed || 0) - bad);
+    failed += bad + (d.missing || []).length;
+  }
+  return { done, failed, err };
+}
+function bulkToast(okMsg, r) {
+  if (r.err && !r.done) return toast(r.err, 'error');
+  toast(`${okMsg(r.done)}${r.failed ? `, ${r.failed} échec(s)` : ''}.`, r.failed ? 'error' : 'success');
+}
+
 async function bulkUserAction(action) {
   const users = getSelectedUserObjects(); if (!users.length) return;
   const labels = {suspend:'suspendre',ban:'bannir',unban:'débannir'};
   const ok = await confirm(`Action en masse`, `Voulez-vous ${labels[action]} ${users.length} utilisateur(s) sélectionné(s) ?`, action === 'ban' ? 'btn-confirm-danger' : 'btn-confirm-warn');
   if (!ok) return;
-  let done=0, failed=0;
-  for (const u of users) { const d = await apiFetch(`/admin/users/${u.discord_id}/status`, 'POST', {action}); if (d.ok) done++; else failed++; }
-  toast(`${done} action(s) effectuée(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+  const r = await bulkRun(users, { action });
+  bulkToast(n => `${n} action(s) effectuée(s)`, r);
   selectedUserIds.clear(); selectedUserMap.clear(); loadUsers();
 }
 
@@ -2090,25 +2604,22 @@ async function bulkAssignRole() {
   const users = getSelectedUserObjects(); if (!users.length) return;
   const role = prompt('Nom exact du rôle à attribuer :', 'moderator'); if (!role) return;
   const scope = prompt('Scope du rôle :', 'global') || 'global';
-  let done=0, failed=0;
-  for (const u of users) { const d = await apiFetch(`/admin/users/${u.discord_id}/roles`, 'POST', {role, scope}); if (d.ok) done++; else failed++; }
-  toast(`${role} attribué à ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+  const r = await bulkRun(users, { action: 'assign_role', role, scope });
+  bulkToast(n => `${role} attribué à ${n} utilisateur(s)`, r);
 }
 async function bulkRemoveRole() {
   const users = getSelectedUserObjects(); if (!users.length) return;
   const role = prompt('Nom exact du rôle à retirer :', 'moderator'); if (!role) return;
   const scope = prompt('Scope du rôle :', 'global') || 'global';
-  let done=0, failed=0;
-  for (const u of users) { const d = await apiFetch(`/admin/users/${u.discord_id}/roles/${encodeURIComponent(role)}?scope=${encodeURIComponent(scope)}`, 'DELETE'); if (d.ok) done++; else failed++; }
-  toast(`${role} retiré de ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+  const r = await bulkRun(users, { action: 'remove_role', role, scope });
+  bulkToast(n => `${role} retiré de ${n} utilisateur(s)`, r);
 }
 async function bulkGiveEclats() {
   const users = getSelectedUserObjects(); if (!users.length) return;
   const amount = parseInt(prompt(`Nombre d'Éclats à donner à chacun des ${users.length} utilisateurs :`, '100'),10);
   if (!Number.isFinite(amount) || amount <= 0) return;
-  let done=0, failed=0;
-  for (const u of users) { const d = await apiFetch('/admin/eclats/grant','POST',{discord_id:u.discord_id,amount,reason:'staff_bonus'}); if(d.ok) done++; else failed++; }
-  toast(`+${amount} 💎 donné à ${done} utilisateur(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error':'success');
+  const r = await bulkRun(users, { action: 'give_eclats', amount, reason: 'staff_bonus' });
+  bulkToast(n => `+${amount} 💎 donné à ${n} utilisateur(s)`, r);
   selectedUserIds.clear(); selectedUserMap.clear(); loadUsers();
 }
 
@@ -4005,7 +4516,9 @@ const DEFAULT_WORKER_URL = 'https://relink-auth.refugeemeraudien-direction.worke
   urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
   const savedUrl = localStorage.getItem('relink_worker_url') || DEFAULT_WORKER_URL;
   urlInput.value = savedUrl;
-  urlInput.addEventListener('input', () => localStorage.setItem('relink_worker_url', urlInput.value.trim()));
+  urlInput.addEventListener('input', () => {
+    try { localStorage.setItem('relink_worker_url', urlInput.value.trim()); } catch {}
+  });
   authCard.insertBefore(urlInput, input.nextSibling);
 })();
 
@@ -4616,5 +5129,1299 @@ showPage = function(name) { __originalShowPage(name); updateAutoRefreshBar(); };
   if (!ok) auth.style.visibility = 'visible';
 })();
 </script>
-</body>
-</html>
+
+
+<div class="rl" id="rl-overlays">
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog"></aside>
+<div class="scrim top" id="mscrim" hidden></div>
+<div class="modal" id="modal" hidden role="alertdialog" aria-modal="true"></div>
+</div>
+<script>
+(function(){
+'use strict';
+/* =====================================================================
+   ReLaunch Admin : panel d'administration du launcher.
+   Tout passe par api(cle, params, corps). En mode simulation, chaque appel
+   attend un court instant puis répond { ok:true, simulated:true }.
+   Pour brancher le Worker : renseigner l'URL dans « Connexion Worker »,
+   couper la simulation, et faire répondre le Worker sur les routes de ROUTES.
+   ===================================================================== */
+
+/* ---------- Routes attendues côté Worker ---------- */
+var ROUTES={
+  stats:['GET','/admin/stats','Chiffres de la vue d\'ensemble'],
+  health:['GET','/admin/health','État des services'],
+  releases:['GET','/admin/releases','Liste des versions du launcher'],
+  releaseCreate:['POST','/admin/releases','Publier une nouvelle version (installeur + signature + notes)'],
+  rollout:['PATCH','/admin/channels/:channel/rollout','Changer le pourcentage de déploiement d\'un canal'],
+  pause:['POST','/admin/channels/:channel/pause','Mettre en pause le déploiement d\'un canal'],
+  resume:['POST','/admin/channels/:channel/resume','Reprendre le déploiement d\'un canal'],
+  rollback:['POST','/admin/channels/:channel/rollback','Revenir à la version précédente d\'un canal'],
+  promote:['POST','/admin/releases/:version/promote','Promouvoir une version vers un autre canal'],
+  retire:['POST','/admin/releases/:version/retire','Retirer une version'],
+  notes:['PUT','/admin/releases/:version/notes','Modifier les notes de version'],
+  killSwitch:['PUT','/admin/updates/kill-switch','Arrêt d\'urgence des mises à jour'],
+  minVersion:['PUT','/admin/updates/min-version','Version minimale autorisée'],
+  flag:['PATCH','/admin/flags/:key','Activer, cibler ou déployer une fonctionnalité'],
+  configPublish:['PUT','/admin/config','Publier la configuration à distance'],
+  configRestore:['POST','/admin/config/:version/restore','Restaurer une ancienne configuration'],
+  maintenance:['PUT','/admin/maintenance','Bandeau d\'information et mode maintenance'],
+  cardCreate:['POST','/admin/home/cards','Créer un encart d\'accueil'],
+  cardSave:['PUT','/admin/home/cards/:id','Modifier un encart d\'accueil'],
+  cardOrder:['PUT','/admin/home/cards/order','Réordonner les encarts'],
+  cardArchive:['DELETE','/admin/home/cards/:id','Archiver un encart'],
+  carousel:['PUT','/admin/home/carousel','Réglages par défaut du carrousel'],
+  newsCreate:['POST','/admin/news','Créer un article Info & News'],
+  newsSave:['PUT','/admin/news/:id','Modifier un article'],
+  newsDelete:['DELETE','/admin/news/:id','Supprimer un article'],
+  notifSend:['POST','/admin/notifications','Envoyer ou programmer une notification'],
+  lskinSave:['PUT','/admin/launcher-skins/:id','Modifier un skin du launcher'],
+  lskinCreate:['POST','/admin/launcher-skins','Créer un skin du launcher'],
+  lskinGrant:['POST','/admin/launcher-skins/:id/grant','Offrir un skin du launcher à un joueur'],
+  modpackVersion:['POST','/admin/modpacks/:id/versions','Publier une version de modpack (manifest signé)'],
+  modpackSave:['PATCH','/admin/modpacks/:id','Modifier ou masquer un modpack'],
+  modpackCreate:['POST','/admin/modpacks','Créer une fiche de modpack'],
+  modpackVerify:['POST','/admin/modpacks/:id/verify','Vérifier la signature du manifest'],
+  serverSave:['PUT','/admin/servers/:id','Modifier un serveur ReLaunch'],
+  serverCreate:['POST','/admin/servers','Créer un serveur ReLaunch'],
+  serverMaint:['POST','/admin/servers/:id/maintenance','Mettre un serveur en maintenance'],
+  eventCreate:['POST','/admin/events','Créer un event'],
+  eventSave:['PUT','/admin/events/:id','Modifier un event'],
+  application:['POST','/admin/events/:id/applications/:app','Accepter ou refuser une candidature'],
+  partnerCreate:['POST','/admin/partners','Ajouter un partenaire'],
+  partnerSave:['PATCH','/admin/partners/:id','Modifier un partenaire'],
+  report:['POST','/admin/reports/:id','Traiter un signalement'],
+  state:['GET','/admin/launcher/state','Recharger les données persistées du launcher'],
+  storage:['GET','/admin/launcher/storage','Consulter le stockage R2 des artefacts ReLaunch'],
+  storageDelete:['DELETE','/admin/launcher/storage/:type/:id','Supprimer un artefact ReLaunch ou un objet orphelin du R2'],
+  launcherBootstrap:['GET','/launcher/bootstrap?channel=stable&installId=<uuid>','API publique : configuration, maintenance, catalogue et mise à jour'],
+  launcherCatalog:['GET','/launcher/catalog','API publique : modpacks, serveurs, événements et partenaires'],
+  launcherNews:['GET','/launcher/news','API publique : actualités publiées'],
+  launcherUpdates:['GET','/launcher/updates?channel=stable&installId=<uuid>','API publique : mise à jour compatible avec le déploiement progressif'],
+  launcherNotifications:['GET','/launcher/notifications?deviceId=<uuid>&channel=stable','API publique : notifications destinées à cette installation'],
+  launcherAsset:['GET','/launcher/assets/:version','Téléchargement public avec prise en charge des requêtes Range'],
+  launcherAssetSignature:['GET','/launcher/assets/:version?signature=1','Signature Ed25519 détachée pour vérifier le téléchargement'],
+};
+
+/* ---------- Réglages de connexion (le jeton n'est jamais enregistré) ---------- */
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var CFG={simulate:lsGet('rla-sim-v2',false)};
+var S={sec:'overview',drawer:null,f:{}};
+function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function pathOf(key,params){return ROUTES[key][1].replace(/:(\w+)/g,function(_,k){return encodeURIComponent(params&&params[k]!=null?params[k]:':'+k)})}
+/* Utilise la connexion du panel ReLink (même Worker, même session) */
+async function api(key,params,body){
+  var r=ROUTES[key]; if(!r) throw new Error('route inconnue « '+key+' »');
+  var path=pathOf(key,params);
+  if(CFG.simulate){ await wait(260+Math.random()*420); return {ok:true,simulated:true}; }
+  var d=await window.apiFetch(path,r[0],r[0]==='GET'?null:(body||{}));
+  if(d&&d.error&&d.ok===false) throw new Error(d.error);
+  return d||{ok:true};
+}
+
+/* Lance une action : bouton en attente, appel, mise à jour locale, journal, message. */
+async function run(btn,key,params,body,o){
+  o=o||{};
+  if(btn) btn.classList.add('busy');
+  try{
+    var res=await api(key,params,body);
+    if(o.after) o.after(res);
+    logAudit(o.label||ROUTES[key][2],o.target||'','ok');
+    var successMessage=typeof o.ok==='function'?o.ok(res):o.ok||'Fait';
+    if(res&&res.status==='queued') successMessage='Notification enregistrée dans la file d’attente';
+    else if(res&&res.notification_status==='queued') successMessage=successMessage.replace('notification envoyée','notification mise en file d’attente');
+    toast(successMessage,ROUTES[key][0]+' '+pathOf(key,params)+(CFG.simulate?' · simulé':''));
+    if(o.close) closeDrawer();
+  }catch(e){
+    logAudit(o.label||ROUTES[key][2],o.target||'','err');
+    toast('Échec : '+e.message,'Vérifie la connexion au Worker','err');
+  }finally{
+    if(btn) btn.classList.remove('busy');
+    render(); if(S.drawer&&!o.close) renderDrawer();
+  }
+}
+
+/* ---------- Petits outils ---------- */
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmt(n){return Number(n).toLocaleString('fr-FR')}
+function formatStorageBytes(bytes){var n=Number(bytes)||0;return n>=1073741824?(n/1073741824).toFixed(2).replace('.',',')+' Go':n>=1048576?(n/1048576).toFixed(1).replace('.',',')+' Mo':n>=1024?(n/1024).toFixed(0)+' Ko':n+' o'}
+function exceedsStorageQuota(file,signature){return !!(!CFG.simulate&&DB.storage&&DB.storage.usedBytes+file.size+signature.size>DB.storage.quotaBytes)}
+function rnd(seed){var x=seed||1;return function(){x=(x*16807)%2147483647;return (x-1)/2147483646}}
+function hex(seed,len){var r=rnd(seed),s='';for(var i=0;i<len;i++)s+='0123456789abcdef'[Math.floor(r()*16)];return s}
+function nowStr(){var d=new Date();return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+function initials(n){return n.replace(/[^A-Za-z0-9 _]/g,'').split(/[ _]+/).filter(Boolean).slice(0,2).map(function(w){return w[0]}).join('').toUpperCase()||'?'}
+function uid(p){return p+Math.random().toString(36).slice(2,7)}
+function cmpVer(a,b){var pa=String(a).split(/[.-]/),pb=String(b).split(/[.-]/);for(var i=0;i<3;i++){var x=+pa[i]||0,y=+pb[i]||0;if(x!==y)return x-y}return 0}
+function md(src){
+  var out=[],inList=false;
+  esc(src).split('\n').forEach(function(l){
+    var t=l.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`(.+?)`/g,'<code>$1</code>');
+    if(/^\s*[-*] /.test(l)){ if(!inList){out.push('<ul>');inList=true} out.push('<li>'+t.replace(/^\s*[-*] /,'')+'</li>'); return; }
+    if(inList){out.push('</ul>');inList=false}
+    if(/^### /.test(l)) out.push('<h3>'+t.slice(4)+'</h3>');
+    else if(/^## /.test(l)) out.push('<h2>'+t.slice(3)+'</h2>');
+    else if(/^# /.test(l)) out.push('<h1>'+t.slice(2)+'</h1>');
+    else if(l.trim()) out.push('<p>'+t+'</p>');
+  });
+  if(inList) out.push('</ul>');
+  return out.join('');
+}
+function toast(msg,sub,kind){window.toast(msg+(sub?' — '+sub:''),kind==='err'?'error':'success')}
+function logAudit(){} /* le journal d'audit est tenu par le Worker ReLink */
+
+/* ---------- Icônes ---------- */
+function svg(p){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'}
+var IC={
+  grid:svg('<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>'),
+  upload:svg('<path d="M12 15V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>'),
+  sliders:svg('<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'),
+  layout:svg('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/>'),
+  news:svg('<path d="M5 4h11a2 2 0 012 2v13a1 1 0 01-1 1H6a2 2 0 01-2-2V5a1 1 0 011-1z"/><path d="M18 8h1a1 1 0 011 1v9a2 2 0 01-2 2M8 8h6M8 12h6M8 16h4"/>'),
+  bell:svg('<path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 004 0"/>'),
+  palette:svg('<path d="M12 3a9 9 0 100 18c1.1 0 1.6-.9 1.2-1.8-.5-1.1.2-2.2 1.4-2.2H17a4 4 0 004-4c0-5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/>'),
+  box:svg('<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>'),
+  server:svg('<rect x="3.5" y="4" width="17" height="7" rx="1.5"/><rect x="3.5" y="13" width="17" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>'),
+  calendar:svg('<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>'),
+  live:svg('<circle cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 000 7M15.5 8.5a5 5 0 010 7M5.6 5.6a9 9 0 000 12.8M18.4 5.6a9 9 0 010 12.8"/>'),
+  users:svg('<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0111 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A4.5 4.5 0 0121 18.5"/>'),
+  shield:svg('<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.2-7.5 9.5-4.3-1.3-7.5-5-7.5-9.5V6z"/><path d="M9 12l2 2 4-4"/>'),
+  flag:svg('<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>'),
+  bag:svg('<path d="M5 7h14l-1.2 12.2a2 2 0 01-2 1.8H8.2a2 2 0 01-2-1.8z"/><path d="M9 10V6a3 3 0 016 0v4"/>'),
+  list:svg('<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>'),
+  plug:svg('<path d="M9 3v5M15 3v5M6.5 8h11v3a5.5 5.5 0 01-11 0zM12 16.5V21"/>'),
+  plus:svg('<path d="M12 5v14M5 12h14"/>'),
+  edit:svg('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'),
+  up:svg('<path d="M12 19V5M6 11l6-6 6 6"/>'),
+  down:svg('<path d="M12 5v14M6 13l6 6 6-6"/>'),
+  copy:svg('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/>'),
+  trash:svg('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/>'),
+  close:svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+  menu:svg('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+  pause:svg('<path d="M9 5v14M15 5v14"/>'),
+  play:svg('<path d="M7 5l12 7-12 7z"/>'),
+  undo:svg('<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/>'),
+  check:svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+  send:svg('<path d="M4 12l16-8-6 16-2.5-6.5z"/>'),
+  key:svg('<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/>'),
+  gift:svg('<rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 13h17M12 9v11M12 9c-2-4-6-4-6-1.5S9 9 12 9zm0 0c2-4 6-4 6-1.5S15 9 12 9z"/>'),
+  logout:svg('<path d="M10 4H6a2 2 0 00-2 2v12a2 2 0 002 2h4M15 8l4 4-4 4M19 12H9"/>'),
+  ban:svg('<circle cx="12" cy="12" r="8"/><path d="M6.5 6.5l11 11"/>'),
+  eye:svg('<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>')
+};
+
+/* ---------- Valeurs initiales neutres, hydratées depuis le Worker ---------- */
+var CARDTYPES={event:['Event','#ea580c'],content:['Contenu','#7c3aed'],maj:['MAJ','#16a34a'],discover:['À découvrir','#0284c7'],social:['Réseaux','#db2777'],shop:['Shop','#ca8a04'],video:['Vidéo','#dc2626']};
+var DEST={wecraft:'WeCraft',relaunch:'ReLaunch (events)',welive:'WeLive',live:'Diffusion partenaires',shop:'Shop ReLink',news:'Info & News',discover:'Découvrir',url:'Lien externe'};
+var DB={
+  stats:{online:1284,onlinePeak:1712,accounts:18452,accountsToday:126,sales7:[5200,6100,4800,7400,6900,8200,7700],players24:[640,590,520,470,430,410,420,460,540,610,690,760,820,880,930,990,1060,1180,1320,1480,1650,1712,1540,1284]},
+  health:[
+    {n:'CDN des modpacks',s:'ok',d:'312 Go servis cette semaine'},
+    {n:'Mises à jour du launcher',s:'ok',d:'Signatures Ed25519 vérifiées'},
+  ],
+  channels:{
+    stable:{cur:'2.0.1',prev:'2.0.0',rollout:100,paused:false,adoption:71,crash:0.2},
+    beta:{cur:'2.1.0',prev:'2.0.1',rollout:35,paused:false,adoption:12,crash:0.4},
+    interne:{cur:'2.1.1-dev.3',prev:'2.1.1-dev.2',rollout:100,paused:false,adoption:1,crash:1.2}
+  },
+  updates:{kill:false,minVersion:'1.9.0',blockOld:true},
+  storage:null,
+  releases:[
+    {v:'2.1.1-dev.3',ch:'interne',date:'23 oct. 2026',sig:true,size:'94,2 Mo',sha:hex(11,64),crash:1.2,status:'live',notes:'## Interne\n- Indicateur de téléchargement contextuel\n- Style Mat'},
+    {v:'2.1.0',ch:'beta',date:'21 oct. 2026',sig:true,size:'93,8 Mo',sha:hex(12,64),crash:0.4,status:'deploying',notes:'## Nouveautés\n- **Skins du launcher** : La Grande Vague, Orient Express, Pixel, Néon\n- Versions Liquid Glass et Mat\n- Organisation des barres en 1 ou 2 barres\n## Corrections\n- La barre du bas reste visible sur les petits écrans'},
+    {v:'2.0.1',ch:'stable',date:'14 oct. 2026',sig:true,size:'92,1 Mo',sha:hex(13,64),crash:0.2,status:'live',notes:'## Corrections\n- Lancement plus rapide des instances Fabric\n- Notes de version entièrement lisibles'},
+    {v:'2.0.0',ch:'stable',date:'2 oct. 2026',sig:true,size:'91,7 Mo',sha:hex(14,64),crash:0.9,status:'replaced',notes:'## ReLaunch 2.0\n- Nouvelle interface\n- Installeur complet par utilisateur'},
+    {v:'1.9.4',ch:'stable',date:'12 sept. 2026',sig:false,size:'38,4 Mo',sha:hex(15,64),crash:0.3,status:'retired',notes:'Dernière version WeCraft (Python).'}
+  ],
+  flags:[
+    {k:'welive.enabled',d:'Espace WeLive',on:true,target:'all',pct:100},
+    {k:'live.partners',d:'Bouton Diffusion partenaires',on:true,target:'all',pct:100},
+    {k:'shop.enabled',d:'Shop ReLink dans le launcher',on:true,target:'all',pct:100},
+    {k:'friends.panel',d:'Panneau Amis',on:true,target:'beta',pct:100},
+    {k:'lskins.enabled',d:'Skins du launcher',on:true,target:'pct',pct:35},
+    {k:'lskins.liquidglass',d:'Versions Liquid Glass des skins',on:true,target:'beta',pct:100},
+    {k:'style.mat',d:'Style d\'interface Mat',on:false,target:'internal',pct:100},
+    {k:'downloads.contextual',d:'Indicateur de téléchargement contextuel',on:false,target:'internal',pct:100},
+    {k:'pins.groups',d:'Groupes d\'instances épinglées',on:true,target:'all',pct:100},
+    {k:'staff.menu',d:'Menu staff dans le launcher',on:true,target:'roles',pct:100}
+  ],
+  config:{version:42,json:JSON.stringify({carousel:{defaultCount:3,autoplay:true,speedSeconds:7},news:{pageEnabled:true,autoplay:true},navigation:{defaultPreset:'all'},links:{discord:'https://discord.gg/ton-invitation',status:'https://status.ton-domaine.fr'},minLauncher:'1.9.0'},null,2),
+    history:[{v:42,t:'22 oct. 18:04',who:'Rexi_de_la_mort',d:'Carrousel : 3 encarts par défaut'},{v:41,t:'19 oct. 11:20',who:'NkingLife',d:'Lien Discord mis à jour'},{v:40,t:'14 oct. 09:02',who:'Rexi_de_la_mort',d:'Version minimale 1.9.0'}]},
+  maintenance:{on:false,level:'info',text:'Maintenance des serveurs ReLaunch samedi de 8 h à 10 h.',block:false},
+  cards:[
+    {id:'c1',type:'event',tags:'Survie RP',title:'Ouverture des Terres Brûlées',sub:'Samedi 24 oct. · 21h',c1:'#7c2d12',c2:'#f59e0b',dest:'relaunch',cta:'Voir l\'event',status:'published',from:'2026-10-18',to:'2026-10-25',aud:'all',img:''},
+    {id:'c2',type:'video',tags:'',title:'Bande-annonce de la saison 3',sub:'2 min 14',c1:'#2e1065',c2:'#7c3aed',dest:'welive',cta:'Regarder',status:'published',from:'2026-10-20',to:'',aud:'all',img:''},
+    {id:'c3',type:'maj',tags:'Launcher',title:'ReLaunch 2.0.1',sub:'20 oct. · Notes de mise à jour',c1:'#14532d',c2:'#22c55e',dest:'news',cta:'Lire',status:'published',from:'2026-10-14',to:'',aud:'all',img:''},
+    {id:'c4',type:'discover',tags:'Partenaire',title:'CitéCraft rejoint ReLaunch',sub:'Serveur partenaire',c1:'#0c4a6e',c2:'#38bdf8',dest:'discover',cta:'Découvrir',status:'scheduled',from:'2026-10-27',to:'',aud:'all',img:''},
+    {id:'c5',type:'shop',tags:'Promo',title:'Cape Phénix à -20 %',sub:'Jusqu\'au 27 oct.',c1:'#713f12',c2:'#facc15',dest:'shop',cta:'Ouvrir le shop',status:'published',from:'2026-10-20',to:'2026-10-27',aud:'all',img:''},
+    {id:'c6',type:'social',tags:'Discord',title:'Rejoins le Discord',sub:'4 200 membres',c1:'#312e81',c2:'#818cf8',dest:'url',cta:'Rejoindre',status:'draft',from:'',to:'',aud:'all',img:''}
+  ],
+  carousel:{count:3,autoplay:true,speed:7},
+  news:[
+    {id:'n1',title:'Ouverture des Terres Brûlées',tags:'Event',date:'22 oct.',status:'published',views:3120,body:'## Rendez-vous samedi\nLes portes ouvrent à **21 h**. Le modpack se télécharge tout seul depuis ReLaunch.'},
+    {id:'n2',title:'ReLaunch 2.1 arrive en bêta',tags:'Launcher',date:'21 oct.',status:'published',views:2210,body:'## Les skins du launcher\n- La Grande Vague\n- Orient Express\n- Pixel et Néon'},
+    {id:'n3',title:'Cape Phénix à -20 %',tags:'Shop',date:'20 oct.',status:'published',views:1490,body:'Jusqu\'au 27 octobre dans le shop ReLink.'},
+    {id:'n4',title:'CitéCraft rejoint ReLaunch',tags:'Partenaire',date:'27 oct.',status:'scheduled',views:0,body:'Un nouveau serveur partenaire arrive.'},
+    {id:'n5',title:'Bilan de la saison 2',tags:'Communauté',date:'—',status:'draft',views:0,body:'Brouillon.'}
+  ],
+  notifs:[
+    {t:'22 oct. 20:30',title:'Les Terres Brûlées ouvrent samedi',aud:'Tous les joueurs',sent:15230,open:41},
+    {t:'21 oct. 17:00',title:'ReLaunch 2.1 disponible en bêta',aud:'Canal bêta',sent:2180,open:63},
+    {t:'20 oct. 12:00',title:'Cape Phénix à -20 %',aud:'Tous les joueurs',sent:15112,open:22},
+    {t:'18 oct. 21:45',title:'Maintenance terminée',aud:'Joueurs ReLaunch',sent:6020,open:35}
+  ],
+  lskins:[
+    {id:'none',n:'Classique',status:'published',how:'free',price:0,lg:true,mat:true,themed:true,owners:18452},
+    {id:'wave',n:'La Grande Vague',status:'published',how:'event+shop',price:900,lg:true,mat:true,themed:false,owners:1210},
+    {id:'orient',n:'Orient Express',status:'published',how:'event+shop',price:1200,lg:true,mat:true,themed:false,owners:640},
+    {id:'pixel',n:'Pixel',status:'published',how:'ach+shop',price:300,lg:true,mat:true,themed:true,owners:2940},
+    {id:'neon',n:'Néon',status:'published',how:'event+shop',price:600,lg:true,mat:true,themed:true,owners:880},
+    {id:'sakura',n:'Cerisiers',status:'soon',how:'ach',price:0,lg:false,mat:false,themed:false,owners:0},
+    {id:'gold',n:'Phénix d\'or',status:'soon',how:'premium',price:0,lg:false,mat:false,themed:false,owners:0},
+    {id:'nether',n:'Nether',status:'soon',how:'event',price:0,lg:false,mat:false,themed:false,owners:0}
+  ],
+  modpacks:[
+    {id:'m1',n:'Survie entre potes',mc:'1.20.1',loader:'Fabric 0.16.5',ver:'3.2.0',mods:84,size:'412 Mo',sig:true,visible:true,installs:4210,c1:'#7c2d12',c2:'#f97316'},
+    {id:'m2',n:'Create Above & Beyond',mc:'1.16.5',loader:'Forge 36.2',ver:'1.4.1',mods:212,size:'1,1 Go',sig:true,visible:true,installs:2890,c1:'#1e3a8a',c2:'#60a5fa'},
+    {id:'m3',n:'Vanilla+ léger',mc:'1.21.1',loader:'Fabric 0.16.9',ver:'2.0.3',mods:31,size:'96 Mo',sig:true,visible:true,installs:6120,c1:'#14532d',c2:'#4ade80'},
+    {id:'m4',n:'Nordique',mc:'1.20.1',loader:'NeoForge 47.1',ver:'0.9.0',mods:146,size:'780 Mo',sig:false,visible:false,installs:0,c1:'#155e75',c2:'#67e8f9'},
+    {id:'m5',n:'Terres Brûlées (event)',mc:'1.20.1',loader:'Forge 47.3',ver:'1.0.0',mods:58,size:'356 Mo',sig:true,visible:true,installs:1730,c1:'#450a0a',c2:'#ef4444'}
+  ],
+  servers:[
+    {id:'s1',n:'Survie RP',host:'survie.ton-domaine.fr:25565',state:'online',players:212,max:300,pack:'m5',event:'e1'},
+    {id:'s2',n:'Créatif',host:'crea.ton-domaine.fr:25565',state:'online',players:48,max:120,pack:'m3',event:''},
+    {id:'s3',n:'Mini-jeux',host:'jeux.ton-domaine.fr:25565',state:'maintenance',players:0,max:200,pack:'m3',event:'e3'},
+    {id:'s4',n:'CitéCraft (partenaire)',host:'play.citecraft.example:25565',state:'offline',players:0,max:150,pack:'m1',event:''}
+  ],
+  events:[
+    {id:'e1',n:'Ouverture des Terres Brûlées',date:'2026-10-24T21:00',server:'s1',pack:'m5',state:'upcoming',slots:300,apps:[{id:'a1',who:'LunaCraft',when:'il y a 2 h',msg:'Je joue un forgeron, j\'ai déjà fait la saison 2.'},{id:'a2',who:'Baptou_77',when:'il y a 5 h',msg:'Première fois sur un event RP.'},{id:'a3',who:'Sir_Kevin',when:'hier',msg:'Équipe de 3 avec Ylana et Mox.'}]},
+    {id:'e2',n:'Néon Night',date:'2026-10-31T20:00',server:'s3',pack:'m3',state:'upcoming',slots:120,apps:[]},
+    {id:'e3',n:'Raz-de-marée',date:'2026-11-07T18:00',server:'s3',pack:'m3',state:'draft',slots:200,apps:[]},
+    {id:'e4',n:'Saison 2 · Finale',date:'2026-10-10T21:00',server:'s1',pack:'m1',state:'done',slots:250,apps:[]}
+  ],
+  partners:[
+    {id:'p1',n:'Lyra_Craft',ch:'lyra_craft',live:true,viewers:842,featured:true,cat:'Survie RP'},
+    {id:'p2',n:'Tonton Redstone',ch:'tontonredstone',live:true,viewers:310,featured:false,cat:'Technique'},
+    {id:'p3',n:'MissBlocky',ch:'missblocky',live:false,viewers:0,featured:true,cat:'Créatif'},
+    {id:'p4',n:'PixelPaco',ch:'pixelpaco',live:false,viewers:0,featured:false,cat:'Mini-jeux'},
+    {id:'p5',n:'Garo_Live',ch:'garo_live',live:true,viewers:126,featured:false,cat:'Survie'}
+  ],
+  reports:[
+    {id:'r1',who:'xX_Griefer_Xx',by:'LunaCraft',reason:'Destruction de constructions',where:'Survie RP',when:'il y a 8 min',state:'open',assignee:''},
+    {id:'r2',who:'Baptou_77',by:'Sir_Kevin',reason:'Insultes dans le chat',where:'Survie RP',when:'il y a 34 min',state:'open',assignee:''},
+    {id:'r3',who:'Ylana',by:'Mox',reason:'Pseudo inapproprié',where:'Créatif',when:'il y a 1 h',state:'assigned',assignee:'Mox'},
+    {id:'r4',who:'Sir_Kevin',by:'Baptou_77',reason:'Triche suspectée (vol)',where:'Mini-jeux',when:'il y a 3 h',state:'open',assignee:''},
+    {id:'r5',who:'LunaCraft',by:'Garo_Live',reason:'Spam',where:'Créatif',when:'hier',state:'closed',assignee:'NkingLife'}
+  ],
+};
+DB.stats={online:0,onlinePeak:0,accounts:0,accountsToday:0,sales7:[],players24:[]};
+DB.health=[];
+DB.channels={
+  stable:{cur:'—',prev:'—',rollout:0,paused:false,adoption:0,crash:0},
+  beta:{cur:'—',prev:'—',rollout:0,paused:false,adoption:0,crash:0},
+  interne:{cur:'—',prev:'—',rollout:0,paused:false,adoption:0,crash:0}
+};
+DB.updates={kill:false,minVersion:'',blockOld:true};
+DB.releases=[];
+DB.flags=[];
+DB.config={version:0,json:'{}',history:[]};
+DB.maintenance={on:false,level:'info',text:'',block:false};
+DB.cards=[];
+DB.news=[];
+DB.notifs=[];
+DB.lskins=[];
+DB.modpacks=[];
+DB.servers=[];
+DB.events=[];
+DB.partners=[];
+DB.reports=[];
+DB.carousel={count:3,autoplay:true,speed:7};
+
+/* =====================================================================
+   Navigation
+   ===================================================================== */
+function roleNames(){try{var r=(typeof RBAC!=='undefined'&&RBAC&&RBAC.roles)||[];var n=r.map(function(x){return typeof x==='string'?x:(x.name||x.label||x.id||x.key)}).filter(Boolean);return n.length?n:['Joueur']}catch(e){return ['Joueur']}}
+function navCount(id){
+  if(id==='updates') return DB.updates.kill?['Arrêt','hot']:[DB.channels.beta.rollout+' %',''];
+  if(id==='reports'){var n=DB.reports.filter(function(r){return r.state==='open'}).length;return n?[n,'hot']:null}
+  if(id==='events'){var a=DB.events.reduce(function(s,e){return s+e.apps.length},0);return a?[a,'']:null}
+  return null;
+}
+function renderNav(){
+  $('nav').innerHTML=NAVDEF.map(function(g){
+    return '<h4>'+esc(g[0])+'</h4>'+g[1].map(function(s){var c=navCount(s[0]);
+      return '<button class="nav" data-go="'+s[0]+'"'+(S.sec===s[0]?' aria-current="page"':'')+'>'+IC[s[2]]+esc(s[1])+(c?'<span class="cnt'+(c[1]?' '+c[1]:'')+'">'+esc(c[0])+'</span>':'')+'</button>'}).join('');
+  }).join('');
+}
+
+/* =====================================================================
+   Graphiques
+   ===================================================================== */
+function lineChart(vals,xl){
+  var W=640,H=180,pl=40,pr=12,pt=12,pb=24,max=Math.ceil(Math.max.apply(null,vals)/500)*500,n=vals.length;
+  function x(i){return pl+i*(W-pl-pr)/(n-1)} function y(v){return pt+(H-pt-pb)*(1-v/max)}
+  var g='';[0,max/2,max].forEach(function(t){g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(t)+'" y2="'+y(t)+'" stroke="rgba(255,255,255,.07)"/><text x="'+(pl-8)+'" y="'+(y(t)+3)+'" text-anchor="end">'+fmt(t)+'</text>'});
+  var d=vals.map(function(v,i){return (i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)}).join(' ');
+  var xs=xl.map(function(l){return '<text x="'+x(l[0])+'" y="'+(H-6)+'" text-anchor="'+(l[0]===0?'start':l[0]===n-1?'end':'middle')+'">'+l[1]+'</text>'}).join('');
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Joueurs en ligne sur 24 heures, maximum '+fmt(max)+'">'+
+    '<defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c6ef7" stop-opacity=".32"/><stop offset="1" stop-color="#5c6ef7" stop-opacity="0"/></linearGradient></defs>'+g+
+    '<path d="'+d+' L'+x(n-1)+' '+y(0)+' L'+x(0)+' '+y(0)+' Z" fill="url(#lg1)"/><path d="'+d+'" fill="none" stroke="#5c6ef7" stroke-width="2.2" stroke-linejoin="round"/>'+
+    '<circle cx="'+x(n-1)+'" cy="'+y(vals[n-1])+'" r="4.5" fill="#8c99fa" stroke="#12141b" stroke-width="2"/>'+xs+'</svg>';
+}
+function barChart(vals,labels,unit){
+  var W=640,H=170,pl=44,pr=8,pt=10,pb=24,max=Math.ceil(Math.max.apply(null,vals)/2000)*2000,n=vals.length,bw=(W-pl-pr)/n;
+  function y(v){return pt+(H-pt-pb)*(1-v/max)}
+  var g='';[0,max/2,max].forEach(function(t){g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(t)+'" y2="'+y(t)+'" stroke="rgba(255,255,255,.07)"/><text x="'+(pl-8)+'" y="'+(y(t)+3)+'" text-anchor="end">'+fmt(t)+'</text>'});
+  var b=vals.map(function(v,i){var bx=pl+i*bw+bw*.18,last=i===n-1;return '<rect x="'+bx.toFixed(1)+'" y="'+y(v).toFixed(1)+'" width="'+(bw*.64).toFixed(1)+'" height="'+(y(0)-y(v)).toFixed(1)+'" rx="3" fill="'+(last?'#8c99fa':'rgba(92,110,247,.55)')+'"><title>'+labels[i]+' : '+fmt(v)+' '+unit+'</title></rect><text x="'+(pl+i*bw+bw/2).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle">'+labels[i]+'</text>'}).join('');
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Ventes sur 7 jours en crédits">'+g+b+'</svg>';
+}
+
+/* =====================================================================
+   Sections
+   ===================================================================== */
+var SEC={};
+function st(kind,label){return '<span class="st '+kind+'">'+esc(label)+'</span>'}
+var CH_LABEL={stable:'Stable',beta:'Bêta',interne:'Interne'};
+var REL_ST={live:['ok','En ligne'],deploying:['acc','En déploiement'],replaced:['off','Remplacée'],retired:['bad','Retirée'],draft:['off','Brouillon']};
+
+/* ---------- Vue d'ensemble ---------- */
+SEC.overview=function(){
+  if(!CFG.simulate){
+    var m=DB.launcherMetrics||{}, checks=DB.health||[];
+    var realKpis=[
+      ['Releases',m.releases,'Versions stockées'],
+      ['Modpacks',m.modpacks,'Dans le catalogue admin'],
+      ['Serveurs',m.servers,'Dans le catalogue admin'],
+      ['Signalements',m.reportsOpen,'À traiter']
+    ];
+    return '<div class="grid g4">'+realKpis.map(function(k){return '<div class="panel kpi"><span class="lbl">'+esc(k[0])+'</span><span class="v">'+(k[1]==null?'—':fmt(k[1]))+'</span><span class="d">'+esc(k[2])+'</span></div>'}).join('')+'</div>'+
+      '<div class="grid g2"><section class="panel"><header><h2>État des services</h2><button class="btn sm" data-act="refreshHealth">Actualiser</button></header><div class="list">'+checks.map(function(h){return '<div class="li"><span class="dot '+(h.s==='ok'?'':h.s)+'"></span><span><b>'+esc(h.n)+'</b><br><small class="faint">'+esc(h.d)+'</small></span></div>'}).join('')+'</div></section>'+
+      '<section class="panel"><header><h2>Contenus enregistrés</h2></header><div class="list">'+[['Encarts',m.cards],['Actualités',m.news],['Events',m.events],['Candidatures',m.applications],['Partenaires',m.partners]].map(function(x){return '<div class="li"><span>'+esc(x[0])+'</span><b style="margin-left:auto">'+(x[1]==null?'—':fmt(x[1]))+'</b></div>'}).join('')+'</div></section></div>';
+  }
+  var s=DB.stats, open=DB.reports.filter(function(r){return r.state==='open'}).length, apps=DB.events.reduce(function(a,e){return a+e.apps.length},0);
+  var sales=s.sales7.reduce(function(a,b){return a+b},0);
+  var kp=[
+    ['Joueurs en ligne',fmt(s.online),'Pic du jour <b>'+fmt(s.onlinePeak)+'</b>'],
+    ['Version stable adoptée',DB.channels.stable.adoption+' %','ReLaunch <b>'+esc(DB.channels.stable.cur)+'</b>'],
+    ['Ventes sur 7 jours',fmt(sales)+' cr.','Données de vente non disponibles en simulation']
+  ];
+  var todo=[
+    [open+' signalement'+(open>1?'s':'')+' à traiter','reports',open?'warn':'off'],
+    [apps+' candidature'+(apps>1?'s':'')+' à un event','events',apps?'warn':'off'],
+    ['Bêta '+DB.channels.beta.cur+' déployée à '+DB.channels.beta.rollout+' %','updates','acc'],
+    [DB.cards.filter(function(c){return c.status==='draft'}).length+' encart en brouillon','home','off']
+  ];
+  return '<div class="grid g4">'+kp.map(function(k){return '<div class="panel kpi"><span class="lbl">'+k[0]+'</span><span class="v">'+k[1]+'</span><span class="d">'+k[2]+'</span></div>'}).join('')+'</div>'+
+  '<div class="grid g21">'+
+    '<section class="panel"><header><div><h2>Joueurs en ligne</h2><p>Dernières 24 heures, toutes instances ReLaunch</p></div><span class="tag">'+fmt(s.online)+' maintenant</span></header>'+(s.players24.length?lineChart(s.players24,[[0,'il y a 24 h'],[6,'-18 h'],[12,'-12 h'],[18,'-6 h'],[23,'maintenant']]):'<div class="empty">Aucune donnée de joueurs disponible.</div>')+'</section>'+
+    '<section class="panel"><header><h2>État des services</h2><button class="btn sm" data-act="refreshHealth">Actualiser</button></header><div class="list">'+DB.health.map(function(h){return '<div class="li"><span class="dot '+(h.s==='ok'?'':h.s)+'"></span><span><b>'+esc(h.n)+'</b><br><small class="faint">'+esc(h.d)+'</small></span></div>'}).join('')+'</div></section>'+
+  '</div>'+
+  '<div class="grid g21">'+
+    '<section class="panel"><header><div><h2>Ventes du shop</h2><p>Crédits dépensés par jour</p></div></header>'+(s.sales7.length?barChart(s.sales7,['sam.','dim.','lun.','mar.','mer.','jeu.','ven.'],'crédits'):'<div class="empty">Aucune donnée de vente disponible.</div>')+'</section>'+
+    '<section class="panel"><header><h2>À traiter</h2></header><div class="list">'+todo.map(function(t){return '<div class="li"><span class="dot '+(t[2]==='acc'?'':t[2])+'"></span><span>'+esc(t[0])+'</span><button class="btn sm ghost" style="margin-left:auto" data-go="'+t[1]+'">Ouvrir</button></div>'}).join('')+'</div></section>'+
+  '</div>';
+};
+
+/* ---------- Mises à jour ---------- */
+SEC.updates=function(){
+  var u=DB.updates;
+  var chans=['stable','beta','interne'].map(function(k){var c=DB.channels[k];
+    var state=u.kill?st('bad','Arrêtée'):c.paused?st('warn','En pause'):c.rollout<100?st('acc','Déploiement '+c.rollout+' %'):st('ok','Distribuée');
+    return '<section class="panel chan" data-a="chan-'+k+'"><header><span class="lbl">Canal '+CH_LABEL[k]+'</span>'+state+'</header>'+
+      '<span class="ver">'+esc(c.cur)+'</span>'+
+      '<div class="bar'+(c.paused?' paused':c.rollout>=100?' ok':'')+'"><i style="width:'+c.rollout+'%"></i></div>'+
+      '<dl><dt>Déploiement</dt><dd>'+c.rollout+' % des joueurs du canal</dd><dt>Adoption</dt><dd>'+c.adoption+' % des launchers</dd><dt>Plantages</dt><dd>'+String(c.crash).replace('.',',')+' % des sessions</dd><dt>Précédente</dt><dd class="mono">'+esc(c.prev)+'</dd></dl>'+
+      '<div class="row"><button class="btn sm" data-act="openRollout" data-ch="'+k+'">'+IC.sliders+'Déploiement</button>'+
+        (c.paused?'<button class="btn sm" data-act="resume" data-ch="'+k+'">'+IC.play+'Reprendre</button>':'<button class="btn sm" data-act="pause" data-ch="'+k+'">'+IC.pause+'Pause</button>')+
+        '<button class="btn sm danger" data-act="rollback" data-ch="'+k+'">'+IC.undo+'Revenir à '+esc(c.prev)+'</button>'+
+        (k!=='stable'?'<button class="btn sm ghost" data-act="promote" data-ch="'+k+'">Promouvoir en '+(k==='beta'?'stable':'bêta')+'</button>':'')+'</div></section>'}).join('');
+  var rows=DB.releases.map(function(r){var s=REL_ST[r.status]||['off',r.status];
+    return '<tr><td><b class="mono" style="font-size:13px">'+esc(r.v)+'</b></td><td>'+CH_LABEL[r.ch]+'</td><td class="num">'+esc(r.date)+'</td><td>'+(r.sig?st('ok','Ed25519'):st('bad','Absente'))+'</td><td class="num">'+esc(r.size)+'</td><td><span class="hash" title="'+r.sha+'">'+r.sha.slice(0,12)+'…</span></td><td class="num">'+String(r.crash).replace('.',',')+' %</td><td>'+st(s[0],s[1])+'</td>'+
+      '<td><div class="acts"><button class="btn sm ghost" data-act="openNotes" data-v="'+esc(r.v)+'">Notes</button>'+(r.status!=='retired'?'<button class="btn sm ghost" data-act="retire" data-v="'+esc(r.v)+'">Retirer</button>':'')+'</div></td></tr>'}).join('');
+  var storage=DB.storage,storageRows=storage&&storage.artifacts?storage.artifacts.map(function(a){
+    return '<tr><td>'+esc(a.title)+'</td><td>'+(a.type==='release'?'Release':a.type==='modpack'?'Manifest de modpack':'Fichier orphelin')+'</td><td class="num">'+formatStorageBytes(a.bytes)+'</td><td>'+(a.active?st('warn','Utilisé'):st('off','Inactif'))+'</td><td class="num">'+(a.active?'<span class="faint">Actif</span>':'<button class="btn sm danger" data-act="storageDelete" data-type="'+esc(a.type)+'" data-id="'+esc(a.id)+'" data-title="'+esc(a.title)+'">Supprimer</button>')+'</td></tr>';
+  }).join(''):'';
+  var storagePanel='<section class="panel" style="padding:0;gap:0"><header style="padding:14px 16px"><div><h2>Stockage R2 ReLaunch</h2><p>Quota strict de 10 Go sur tout le bucket dédié relaunchr2.</p></div><button class="btn sm" data-act="storageRefresh"'+(CFG.simulate?' disabled':'')+'>Actualiser</button></header>'+
+    (CFG.simulate?'<div class="simnote">Désactive le mode simulation pour consulter le stockage réel et supprimer des fichiers.</div>':storage?
+      '<div style="padding:0 16px 14px"><div class="spread"><b>'+formatStorageBytes(storage.usedBytes)+' utilisés</b><span class="faint">sur '+formatStorageBytes(storage.quotaBytes)+'</span></div><div class="bar"><i style="width:'+Math.min(100,storage.quotaBytes?storage.usedBytes/storage.quotaBytes*100:0)+'%"></i></div><small class="faint">'+fmt(storage.objectCount)+' objet(s) dans le bucket relaunchr2</small></div>'+
+      '<div class="tw" style="border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px"><table><thead><tr><th>Contenu</th><th>Type</th><th>Taille</th><th>État</th><th></th></tr></thead><tbody>'+(storageRows||'<tr><td colspan="5" class="faint">Aucun artefact à afficher.</td></tr>')+'</tbody></table></div>':
+      '<div class="simnote">Clique sur « Actualiser » pour calculer l’espace actuellement utilisé dans R2.</div>')+'</section>';
+  return (u.kill?'<div class="simnote" style="border-color:rgba(244,63,94,.5);background:rgba(244,63,94,.08);color:#fecdd3"><b style="color:#fda4af">Arrêt d\'urgence actif.</b> Aucun launcher ne reçoit de mise à jour tant qu\'il reste activé.</div>':'')+
+  '<div class="grid g3">'+chans+'</div>'+
+  '<div class="grid g2">'+
+    '<section class="panel danger-zone"><header><div><h2>Arrêt d\'urgence</h2><p>Coupe immédiatement la distribution sur tous les canaux. Les launchers gardent leur version actuelle.</p></div><button class="tog danger" role="switch" aria-checked="'+u.kill+'" data-act="kill" aria-label="Arrêt d\'urgence des mises à jour"></button></header></section>'+
+    '<section class="panel"><header><div><h2>Version minimale</h2><p>Les launchers plus anciens doivent se mettre à jour avant de lancer une instance.</p></div></header>'+
+      '<div class="row"><input type="text" id="minVer" class="mono" value="'+esc(u.minVersion)+'" style="max-width:140px" aria-label="Version minimale"><label class="check"><input type="checkbox" id="minBlock"'+(u.blockOld?' checked':'')+'> Bloquer le lancement en dessous</label><button class="btn sm pri" data-act="saveMin" style="margin-left:auto">Enregistrer</button></div></section>'+
+  '</div>'+
+  '<section class="panel" style="padding:0;gap:0"><header style="padding:14px 16px"><div><h2>Versions publiées</h2><p>Installeur NSIS par utilisateur, signé en Ed25519</p></div><button class="btn pri" data-act="openRelease">'+IC.plus+'Nouvelle version</button></header>'+
+    '<div class="tw" style="border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px"><table><thead><tr><th>Version</th><th>Canal</th><th>Date</th><th>Signature</th><th>Taille</th><th>SHA-256</th><th>Plantages</th><th>État</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></section>'+storagePanel;
+};
+
+/* ---------- Configuration à distance ---------- */
+var TARGETS={all:'Tous les joueurs',beta:'Canal bêta',internal:'Canal interne',roles:'Staff et plus',pct:'Pourcentage'};
+SEC.config=function(){
+  var m=DB.maintenance;
+  var flags=DB.flags.map(function(f,i){
+    return '<tr><td><span class="mono" style="color:var(--ink)">'+esc(f.k)+'</span><br><small class="faint">'+esc(f.d)+'</small></td>'+
+      '<td><select data-chg="flagTarget" data-i="'+i+'" aria-label="Ciblage de '+esc(f.k)+'">'+Object.keys(TARGETS).map(function(t){return '<option value="'+t+'"'+(f.target===t?' selected':'')+'>'+TARGETS[t]+'</option>'}).join('')+'</select></td>'+
+      '<td style="width:150px">'+(f.target==='pct'?'<div class="row" style="flex-wrap:nowrap"><input type="number" min="0" max="100" value="'+f.pct+'" data-chg="flagPct" data-i="'+i+'" style="width:72px" aria-label="Pourcentage"><span class="faint">%</span></div>':'<span class="faint">—</span>')+'</td>'+
+      '<td style="width:60px"><button class="tog" role="switch" aria-checked="'+f.on+'" data-act="flagToggle" data-i="'+i+'" aria-label="Activer '+esc(f.k)+'"></button></td></tr>'}).join('');
+  var lv={info:['info','Information'],warn:['warn','Attention'],crit:['bad','Critique']};
+  return '<section class="panel" style="padding:0;gap:0"><header style="padding:14px 16px"><div><h2>Fonctionnalités</h2><p>Chaque changement part tout de suite vers les launchers connectés</p></div></header><div class="tw" style="border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px"><table><thead><tr><th>Clé</th><th>Ciblage</th><th>Part</th><th>Actif</th></tr></thead><tbody>'+flags+'</tbody></table></div></section>'+
+  '<div class="grid g21">'+
+    '<section class="panel"><header><div><h2>Configuration du launcher</h2><p>Version en ligne : <b class="mono">v'+DB.config.version+'</b></p></div><div class="row"><button class="btn sm" data-act="cfgCheck">Vérifier le JSON</button><button class="btn sm pri" data-act="cfgPublish">Publier en v'+(DB.config.version+1)+'</button></div></header>'+
+      '<textarea class="code" id="cfgJson" spellcheck="false" aria-label="Configuration JSON">'+esc(DB.config.json)+'</textarea><span class="sub" id="cfgMsg">Le JSON est vérifié avant chaque publication.</span></section>'+
+    '<section class="panel"><header><h2>Historique</h2></header><div class="list">'+DB.config.history.map(function(h,i){return '<div class="li"><span><b class="mono">v'+h.v+'</b> · '+esc(h.d)+'<br><small class="faint">'+esc(h.who)+' · '+esc(h.t)+'</small></span>'+(i?'<button class="btn sm ghost" style="margin-left:auto" data-act="cfgRestore" data-v="'+h.v+'">Restaurer</button>':'<span class="tag" style="margin-left:auto">en ligne</span>')+'</div>'}).join('')+'</div></section>'+
+  '</div>'+
+  '<section class="panel"><header><div><h2>Bandeau d\'information</h2><p>S\'affiche en haut du launcher pour tous les joueurs</p></div><button class="tog" role="switch" aria-checked="'+m.on+'" data-act="maintToggle" aria-label="Afficher le bandeau"></button></header>'+
+    '<div class="form"><div class="row"><span class="seg" role="group" aria-label="Niveau">'+Object.keys(lv).map(function(k){return '<button data-act="maintLevel" data-v="'+k+'" aria-pressed="'+(m.level===k)+'">'+lv[k][1]+'</button>'}).join('')+'</span><label class="check"><input type="checkbox" id="maintBlock"'+(m.block?' checked':'')+'> Bloquer le lancement des instances ReLaunch</label></div>'+
+    '<label class="field"><span>Message</span><input type="text" id="maintText" value="'+esc(m.text)+'" maxlength="160"></label>'+
+    '<div class="spread"><span>'+st(lv[m.level][0],'Aperçu : '+m.text)+'</span><button class="btn sm pri" data-act="maintSave">Enregistrer le bandeau</button></div></div></section>';
+};
+
+/* ---------- Accueil & encarts ---------- */
+var CSTAT={published:['ok','Publié'],scheduled:['info','Programmé'],draft:['off','Brouillon']};
+function cardPreview(c){var t=CARDTYPES[c.type]||CARDTYPES.event;
+  return '<div class="ncard" style="--c1:'+esc(c.c1)+';--c2:'+esc(c.c2)+';--tc:'+t[1]+'"><div class="cv'+(c.img?' img':'')+'"'+(c.img?' style="background-image:url('+c.img+')"':'')+'></div><span class="ty">'+t[0]+(c.tags?' · '+esc(c.tags):'')+'</span><div class="bd"><span class="tt">'+esc(c.title||'Titre de l\'encart')+'</span><span class="ss">'+esc(c.sub||'Sous-titre')+'</span></div></div>'}
+SEC.home=function(){
+  var cr=DB.carousel;
+  var cards=DB.cards.map(function(c,i){var s=CSTAT[c.status];
+    return '<div class="ecard" data-a="card-'+c.id+'">'+cardPreview(c)+'<div class="meta">'+st(s[0],s[1])+'<span class="sub">'+(c.from?esc(c.from.slice(8)+'/'+c.from.slice(5,7)):'—')+(c.to?' → '+esc(c.to.slice(8)+'/'+c.to.slice(5,7)):'')+' · '+esc(DEST[c.dest])+'</span></div>'+
+      '<div class="row" style="gap:4px"><button class="iconbtn" data-act="cardMove" data-i="'+i+'" data-d="-1" aria-label="Monter"'+(i===0?' disabled':'')+'>'+IC.up+'</button><button class="iconbtn" data-act="cardMove" data-i="'+i+'" data-d="1" aria-label="Descendre"'+(i===DB.cards.length-1?' disabled':'')+'>'+IC.down+'</button>'+
+      '<button class="btn sm" data-act="openCard" data-id="'+c.id+'" style="margin-left:auto">'+IC.edit+'Modifier</button><button class="iconbtn" data-act="cardDup" data-id="'+c.id+'" aria-label="Dupliquer">'+IC.copy+'</button><button class="iconbtn" data-act="cardArchive" data-id="'+c.id+'" aria-label="Archiver">'+IC.trash+'</button></div></div>'}).join('');
+  return '<section class="panel"><header><div><h2>Carrousel de l\'accueil</h2><p>Réglages par défaut. Les joueurs peuvent les changer dans leurs réglages.</p></div><button class="btn sm pri" data-act="carouselSave">Enregistrer</button></header>'+
+    '<div class="row" style="gap:22px"><div class="field"><span>Encarts affichés</span><span class="seg" role="group" aria-label="Encarts affichés">'+[1,2,3,4,5].map(function(n){return '<button data-act="carCount" data-v="'+n+'" aria-pressed="'+(cr.count===n)+'">'+n+'</button>'}).join('')+'</span></div>'+
+    '<div class="field"><span>Défilement automatique</span><button class="tog" role="switch" aria-checked="'+cr.autoplay+'" data-act="carAuto" aria-label="Défilement automatique"></button></div>'+
+    '<label class="field" style="min-width:220px;flex:1"><span>Vitesse : <b id="carSpeedV">'+cr.speed+' s</b> par encart</span><input type="range" min="3" max="15" value="'+cr.speed+'" data-inp="carSpeed"></label></div></section>'+
+  '<div class="spread"><div><h2 style="font-size:15px">Encarts</h2><p class="sub">L\'ordre ci-dessous est l\'ordre d\'affichage dans le launcher</p></div><button class="btn pri" data-act="openCard">'+IC.plus+'Nouvel encart</button></div>'+
+  '<div class="cards">'+cards+'</div>';
+};
+
+/* ---------- Info & News ---------- */
+SEC.news=function(){
+  var rows=DB.news.map(function(n){var s=CSTAT[n.status];return '<tr class="click" data-act="openNews" data-id="'+n.id+'"><td><b>'+esc(n.title)+'</b></td><td><span class="tag">'+esc(n.tags)+'</span></td><td class="num">'+esc(n.date)+'</td><td>'+st(s[0],s[1])+'</td><td class="num">'+(n.views?fmt(n.views):'—')+'</td><td><div class="acts"><button class="btn sm ghost" data-act="openNews" data-id="'+n.id+'">Modifier</button><button class="iconbtn" data-act="newsDelete" data-id="'+n.id+'" aria-label="Supprimer">'+IC.trash+'</button></div></td></tr>'}).join('');
+  return '<div class="spread"><p class="sub">Les articles s\'affichent dans la page Info &amp; News du launcher et dans le menu des notifications.</p><button class="btn pri" data-act="openNews">'+IC.plus+'Nouvel article</button></div>'+
+  '<div class="tw"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>État</th><th>Vues</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+};
+
+/* ---------- Notifications ---------- */
+SEC.notifs=function(){
+  var f=S.f.notif||(S.f.notif={title:'',body:'',aud:'all',role:'Staff',players:'',dest:'news',when:'now',at:''});
+  return '<div class="grid g21">'+
+    '<section class="panel"><header><h2>Nouvelle notification</h2></header><div class="form">'+
+      '<label class="field"><span>Titre</span><input type="text" data-nf="title" value="'+esc(f.title)+'" maxlength="60" placeholder="Les Terres Brûlées ouvrent ce soir"></label>'+
+      '<label class="field"><span>Message <small id="nfCount">'+f.body.length+' / 140</small></span><textarea data-nf="body" maxlength="140" placeholder="Rendez-vous à 21 h sur Survie RP.">'+esc(f.body)+'</textarea></label>'+
+      '<div class="two"><label class="field"><span>Destinataires</span><select data-nf="aud"><option value="all"'+(f.aud==='all'?' selected':'')+'>Tous les joueurs</option><option value="beta"'+(f.aud==='beta'?' selected':'')+'>Canal bêta</option><option value="relaunch"'+(f.aud==='relaunch'?' selected':'')+'>Joueurs ReLaunch</option><option value="role" disabled'+(f.aud==='role'?' selected':'')+'>Un rôle (connexion requise)</option><option value="players" disabled'+(f.aud==='players'?' selected':'')+'>Joueurs précis (connexion requise)</option></select></label>'+
+      (f.aud==='role'?'<label class="field"><span>Rôle</span><select data-nf="role">'+roleNames().map(function(r){return '<option'+(f.role===r?' selected':'')+'>'+r+'</option>'}).join('')+'</select></label>':f.aud==='players'?'<label class="field"><span>Pseudos (séparés par des virgules)</span><input type="text" data-nf="players" value="'+esc(f.players)+'"></label>':'<label class="field"><span>Ouvre</span><select data-nf="dest">'+Object.keys(DEST).map(function(d){return '<option value="'+d+'"'+(f.dest===d?' selected':'')+'>'+DEST[d]+'</option>'}).join('')+'</select></label>')+'</div>'+
+      '<div class="row"><span class="seg" role="group" aria-label="Envoi"><button data-act="nfWhen" data-v="now" aria-pressed="'+(f.when==='now')+'">Maintenant</button><button data-act="nfWhen" data-v="later" aria-pressed="'+(f.when==='later')+'">Programmer</button></span>'+(f.when==='later'?'<input type="datetime-local" data-nf="at" value="'+esc(f.at)+'" style="width:auto" aria-label="Date d\'envoi">':'')+'<button class="btn pri" data-act="nfSend" style="margin-left:auto">'+IC.send+(f.when==='later'?'Programmer':'Envoyer')+'</button></div>'+
+    '</div></section>'+
+    '<section class="panel"><header><h2>Aperçu dans le launcher</h2></header><div class="toast" style="max-width:none;animation:none" id="nfPrev"><i style="background:var(--acc)"></i><span><b>'+esc(f.title||'Titre de la notification')+'</b><br><span class="soft">'+esc(f.body||'Le message apparaît ici.')+'</span></span></div><p class="sub">Les notifications sont mises en file et récupérées par le launcher; le Worker ne prétend pas les avoir livrées. Le ciblage par rôle ou par joueur attend la liaison d’identité du launcher.</p></section>'+
+  '</div>'+
+  '<div class="tw"><table><thead><tr><th>Créée / prévue</th><th>Titre</th><th>Destinataires</th><th>État</th></tr></thead><tbody>'+DB.notifs.map(function(n){var status=n.status==='queued'?st('info','Dans la file'):n.status==='scheduled'?st('acc','Programmée'):st('off',n.status||'—');return '<tr><td class="num">'+esc(n.t)+'</td><td><b>'+esc(n.title)+'</b></td><td>'+esc(n.aud)+'</td><td>'+status+'</td></tr>'}).join('')+'</tbody></table></div>';
+};
+
+/* ---------- Skins du launcher ---------- */
+var HOW={free:'Inclus','event+shop':'Event ou shop','ach+shop':'Succès ou shop',ach:'Succès',premium:'Premium',event:'Event',shop:'Shop'};
+var LSST={published:['ok','Publié'],soon:['info','À venir'],off:['off','Désactivé']};
+SEC.lskins=function(){
+  return '<div class="spread"><p class="sub">Les skins changent tout le launcher. Ceux marqués « À venir » apparaissent verrouillés dans le catalogue des joueurs.</p><div class="row"><button class="btn pri" data-act="openNewLskin">'+IC.plus+'Nouveau skin</button><button class="btn" data-act="openGrant">'+IC.gift+'Offrir un skin</button></div></div>'+
+  '<div class="tw"><table><thead><tr><th>Skin</th><th>État</th><th>Déblocage</th><th>Prix</th><th>Versions</th><th>Thème du joueur</th><th>Détenteurs</th><th></th></tr></thead><tbody>'+DB.lskins.map(function(k){var s=LSST[k.status];
+    return '<tr><td><b>'+esc(k.n)+'</b></td><td>'+st(s[0],s[1])+'</td><td>'+esc(HOW[k.how]||k.how)+'</td><td class="num">'+(k.price?fmt(k.price)+' cr.':'—')+'</td><td><div class="chips"><span class="tag">Standard</span>'+(k.lg?'<span class="tag">Liquid Glass</span>':'')+(k.mat?'<span class="tag">Mat</span>':'')+'</div></td><td>'+(k.themed?'Suit le thème':'Couleurs imposées')+'</td><td class="num">'+fmt(k.owners)+'</td><td><div class="acts">'+(k.id!=='none'?'<button class="btn sm ghost" data-act="openLskin" data-id="'+k.id+'">Modifier</button>':'')+'</div></td></tr>'}).join('')+'</tbody></table></div>';
+};
+
+/* ---------- Modpacks ---------- */
+SEC.modpacks=function(){
+  return '<div class="spread"><p class="sub">Modpacks officiels proposés dans WeCraft. Chaque version publiée est décrite par un manifest signé, servi par le CDN.</p><button class="btn pri" data-act="openNewPack">'+IC.plus+'Nouveau modpack</button></div>'+
+  '<div class="tw"><table><thead><tr><th>Modpack</th><th>Minecraft</th><th>Loader</th><th>Version</th><th>Mods</th><th>Taille</th><th>Manifest</th><th>Installations</th><th>Visible</th><th></th></tr></thead><tbody>'+DB.modpacks.map(function(m,i){
+    return '<tr><td><div class="who2"><span class="head" style="--c1:'+m.c1+';--c2:'+m.c2+'">'+initials(m.n)+'</span><b>'+esc(m.n)+'</b></div></td><td class="num">'+m.mc+'</td><td>'+esc(m.loader)+'</td><td class="mono">'+esc(m.ver)+'</td><td class="num">'+m.mods+'</td><td class="num">'+m.size+'</td><td>'+(m.sig?st('ok','Signé'):st('bad','Non signé'))+'</td><td class="num">'+fmt(m.installs)+'</td>'+
+      '<td><button class="tog" role="switch" aria-checked="'+m.visible+'" data-act="packVisible" data-i="'+i+'" aria-label="Afficher '+esc(m.n)+'"></button></td>'+
+      '<td><div class="acts"><button class="btn sm ghost" data-act="packVerify" data-i="'+i+'">Vérifier</button><button class="btn sm" data-act="openPack" data-id="'+m.id+'">'+IC.upload+'Nouvelle version</button></div></td></tr>'}).join('')+'</tbody></table></div>';
+};
+
+/* ---------- Serveurs ---------- */
+var SVST={online:['ok','En ligne'],maintenance:['warn','Maintenance'],offline:['bad','Hors ligne']};
+function packName(id){var m=DB.modpacks.filter(function(x){return x.id===id})[0];return m?m.n:'—'}
+function eventName(id){var e=DB.events.filter(function(x){return x.id===id})[0];return e?e.n:'—'}
+SEC.servers=function(){
+  return '<div class="spread"><p class="sub">Les adresses et réglages définissent les serveurs proposés au launcher.</p><button class="btn pri" data-act="openNewServer">'+IC.plus+'Nouveau serveur</button></div>'+
+  '<div class="tw"><table><thead><tr><th>Serveur</th><th>Adresse</th><th>État</th><th>Joueurs</th><th>Modpack requis</th><th>Event</th><th></th></tr></thead><tbody>'+DB.servers.map(function(s,i){var x=SVST[s.state];
+    return '<tr><td><b>'+esc(s.n)+'</b></td><td class="mono">'+esc(s.host)+'</td><td>'+st(x[0],x[1])+'</td><td style="min-width:140px"><span class="num">'+s.players+' / '+s.max+'</span><div class="bar" style="margin-top:4px"><i style="width:'+Math.round(s.players/s.max*100)+'%"></i></div></td><td>'+esc(packName(s.pack))+'</td><td>'+esc(eventName(s.event))+'</td>'+
+    '<td><div class="acts">'+(s.state==='maintenance'?'<button class="btn sm" data-act="srvMaint" data-i="'+i+'" data-v="0">Rouvrir</button>':'<button class="btn sm ghost" data-act="srvMaint" data-i="'+i+'" data-v="1">Maintenance</button>')+'<button class="btn sm ghost" data-act="openServer" data-id="'+s.id+'">Modifier</button></div></td></tr>'}).join('')+'</tbody></table></div>';
+};
+
+/* ---------- Events ---------- */
+var EVST={upcoming:['acc','À venir'],live:['ok','En cours'],draft:['off','Brouillon'],done:['off','Terminé']};
+SEC.events=function(){
+  var MO=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  return '<div class="spread"><p class="sub">Les events apparaissent dans l\'espace ReLaunch du launcher, avec le modpack et le serveur à rejoindre.</p><button class="btn pri" data-act="openEvent">'+IC.plus+'Nouvel event</button></div>'+
+  '<div class="calendar">'+DB.events.map(function(e){var d=new Date(e.date),s=EVST[e.state];
+    return '<div class="ev" data-a="event-'+e.id+'"><div class="dt"><b>'+d.getDate()+'</b><small>'+MO[d.getMonth()]+'</small></div><div style="min-width:0"><h3>'+esc(e.n)+'</h3><p class="sub">'+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})+' · '+esc((DB.servers.filter(function(x){return x.id===e.server})[0]||{}).n||'—')+' · '+esc(packName(e.pack))+' · '+e.slots+' places</p></div>'+
+      '<div class="row">'+st(s[0],s[1])+(e.apps.length?'<button class="btn sm" data-act="openApps" data-id="'+e.id+'">'+e.apps.length+' candidature'+(e.apps.length>1?'s':'')+'</button>':'')+'<button class="btn sm ghost" data-act="openEvent" data-id="'+e.id+'">Modifier</button></div></div>'}).join('')+'</div>';
+};
+
+/* ---------- Partenaires ---------- */
+SEC.partners=function(){
+  return '<div class="spread"><p class="sub">Les partenaires en direct apparaissent dans « Diffusion partenaires ». Ceux mis en avant passent en premier dans WeLive.</p><button class="btn pri" data-act="openPartner">'+IC.plus+'Ajouter un partenaire</button></div>'+
+  '<div class="tw"><table><thead><tr><th>Partenaire</th><th>Chaîne Twitch</th><th>Direct</th><th>Catégorie</th><th>Mis en avant</th><th></th></tr></thead><tbody>'+DB.partners.map(function(p,i){
+    return '<tr><td><div class="who2"><span class="head" style="--c1:#4c1d95;--c2:#a78bfa">'+initials(p.n)+'</span><b>'+esc(p.n)+'</b></div></td><td><a class="mono" href="https://www.twitch.tv/'+encodeURIComponent(p.ch)+'" target="_blank" rel="noopener">twitch.tv/'+esc(p.ch)+'</a></td><td>'+(p.live?st('bad','En direct · '+fmt(p.viewers)):st('off','Hors ligne'))+'</td><td>'+esc(p.cat)+'</td>'+
+    '<td><button class="tog" role="switch" aria-checked="'+p.featured+'" data-act="partnerFeat" data-i="'+i+'" aria-label="Mettre en avant '+esc(p.n)+'"></button></td><td><div class="acts"><button class="btn sm ghost" data-act="openPartner" data-id="'+p.id+'">Modifier</button></div></td></tr>'}).join('')+'</tbody></table></div>';
+};
+
+/* ---------- Joueurs ---------- */
+var PST={active:['ok','Actif'],muted:['warn','Muet'],banned:['bad','Banni']};
+var RST={open:['warn','Ouvert'],assigned:['info','Assigné'],closed:['off','Clos']};
+
+SEC.reports=function(){
+  var f=S.f.rep||(S.f.rep='open');
+  var list=DB.reports.filter(function(r){return f==='all'||r.state===f});
+  var cnt=function(k){return DB.reports.filter(function(r){return r.state===k}).length};
+  return '<div class="spread"><span class="seg" role="group" aria-label="Filtre"><button data-act="repF" data-v="open" aria-pressed="'+(f==='open')+'">Ouverts ('+cnt('open')+')</button><button data-act="repF" data-v="assigned" aria-pressed="'+(f==='assigned')+'">Assignés ('+cnt('assigned')+')</button><button data-act="repF" data-v="closed" aria-pressed="'+(f==='closed')+'">Clos</button><button data-act="repF" data-v="all" aria-pressed="'+(f==='all')+'">Tous</button></span><p class="sub">Les signalements arrivent depuis le menu staff et le jeu.</p></div>'+
+  '<div class="tw"><table><thead><tr><th>Joueur signalé</th><th>Motif</th><th>Lieu</th><th>Signalé par</th><th>Quand</th><th>État</th><th></th></tr></thead><tbody>'+(list.map(function(r){var s=RST[r.state];
+    return '<tr><td><b>'+esc(r.who)+'</b></td><td>'+esc(r.reason)+'</td><td>'+esc(r.where)+'</td><td>'+esc(r.by)+'</td><td>'+esc(r.when)+'</td><td>'+st(s[0],s[1]+(r.assignee?' · '+r.assignee:''))+'</td>'+
+    '<td><div class="acts">'+(r.state!=='closed'?(r.state==='open'?'<button class="btn sm ghost" data-act="repAssign" data-id="'+r.id+'">M\'assigner</button>':'')+'<button class="btn sm" data-act="repSanction" data-id="'+r.id+'">Sanctionner</button><button class="btn sm ghost" data-act="repClose" data-id="'+r.id+'">Classer</button>':'')+'</div></td></tr>'}).join('')||'<tr><td colspan="7" class="empty">Aucun signalement ici.</td></tr>')+'</tbody></table></div>';
+};
+
+/* ---------- Shop ---------- */
+/* ---------- Intégration (connexion partagée avec ReLink) ---------- */
+SEC.integration=function(){
+  var keys=Object.keys(ROUTES), wu=(typeof WORKER_URL!=='undefined'?WORKER_URL:'');
+  return '<div class="grid g2">'+
+    '<section class="panel"><header><div><h2>Connexion</h2><p>ReLaunch utilise la session du panel ReLink : même Worker, mêmes permissions, même journal d\'audit.</p></div>'+(CFG.simulate?'<span class="st warn">Simulation</span>':'<span class="st ok">Worker réel</span>')+'</header><div class="form">'+
+      '<p class="soft">Worker : <b class="mono">'+esc(wu||'—')+'</b></p>'+
+      '<div class="spread"><label class="check" style="gap:10px"><button class="tog" role="switch" aria-checked="'+CFG.simulate+'" data-act="simToggle" aria-label="Mode simulation"></button><span>Mode simulation</span></label></div>'+
+    '</div></section>'+
+    '<section class="panel"><header><h2>Brancher les routes</h2></header><div class="md">'+
+      '<p>En simulation, chaque action réussit sans rien envoyer au Worker.</p>'+
+      '<p>Une fois la simulation coupée, les données sont chargées depuis le Worker ReLink et les actions utilisent la session du panel, sans paramètre d’environnement.</p></div></section>'+
+  '</div>'+
+  '<section class="panel" style="padding:0;gap:0"><header style="padding:14px 16px"><div><h2>Routes attendues</h2><p>'+keys.length+' routes, préfixées par l\'URL du Worker ReLink</p></div><button class="btn sm" data-act="routesCopy">Copier la liste</button></header><div class="tw"><table><thead><tr><th>Méthode</th><th>Route</th><th>Rôle</th></tr></thead><tbody>'+keys.map(function(k){var r=ROUTES[k];return '<tr><td><span class="tag">'+r[0]+'</span></td><td class="mono">'+esc(r[1])+'</td><td>'+esc(r[2])+'</td></tr>'}).join('')+'</tbody></table></div></section>';
+};
+
+/* =====================================================================
+   Panneau latéral (formulaires) et confirmation
+   ===================================================================== */
+function F(label,inner,hint){return '<label class="field"><span>'+label+'</span>'+inner+(hint?'<small>'+hint+'</small>':'')+'</label>'}
+function I(k,v,a){return '<input type="text" data-k="'+k+'" value="'+esc(v)+'" '+(a||'')+'>'}
+function N(k,v,a){return '<input type="number" data-k="'+k+'" value="'+esc(v)+'" '+(a||'')+'>'}
+function SEL(k,v,opts,rr){return '<select data-k="'+k+'"'+(rr?' data-rr="1"':'')+'>'+opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(String(v)===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
+function SEG(k,v,opts){return '<span class="seg" role="group">'+opts.map(function(o){return '<button data-act="dset" data-k="'+k+'" data-v="'+esc(o[0])+'" aria-pressed="'+(String(v)===String(o[0]))+'">'+esc(o[1])+'</button>'}).join('')+'</span>'}
+function CHK(k,v,label){return '<label class="check"><input type="checkbox" data-k="'+k+'"'+(v?' checked':'')+'> '+label+'</label>'}
+function TA(k,v,a){return '<textarea data-k="'+k+'" '+(a||'')+'>'+esc(v)+'</textarea>'}
+function fileBox(kind,label,accept,info){return '<label class="drop">'+(info?'<b>'+esc(info)+'</b><span>Cliquer pour remplacer</span>':'<b>'+label+'</b><span>Cliquer pour choisir un fichier</span>')+'<input type="file" data-file="'+kind+'" accept="'+accept+'" hidden></label>'}
+function errBox(d){return d.err?'<div class="simnote" style="border-color:rgba(248,113,113,.5);background:rgba(248,113,113,.08);color:#fecaca"><b style="color:var(--bad)">À corriger :</b> '+esc(d.err)+'</div>':''}
+function byId(list,id){return list.filter(function(x){return x.id===id})[0]}
+function clone(o){return JSON.parse(JSON.stringify(o))}
+var VER_RE=/^\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$/;
+
+var DR={};
+DR.rollout=function(d){var c=DB.channels[d.ch];
+  return {title:'Déploiement · canal '+CH_LABEL[d.ch],
+    body:'<p class="soft">Version <b class="mono">'+esc(c.cur)+'</b>. Le pourcentage décide quelle part des launchers du canal reçoit la mise à jour au prochain démarrage.</p>'+
+      F('Part des joueurs : <b id="roV">'+d.draft.pct+' %</b>','<input type="range" min="0" max="100" step="1" data-k="pct" value="'+d.draft.pct+'">','Le Worker applique ce pourcentage aux launchers enregistrés sur ce canal.')+
+      '<div class="row">'+[1,5,10,25,50,100].map(function(p){return '<button class="btn sm'+(d.draft.pct===p?' pri':'')+'" data-act="dset" data-k="pct" data-v="'+p+'">'+p+' %</button>'}).join('')+'</div>'+
+      '<div class="panel" style="background:var(--panel-2)"><span class="lbl">Garde-fou</span><p class="sub">Si le taux de plantage dépasse 2 % des sessions, le Worker met le déploiement en pause tout seul.</p></div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="rolloutSave">Appliquer '+d.draft.pct+' %</button>'};
+};
+DR.release=function(d){var x=d.draft;
+  return {title:'Nouvelle version du launcher',
+    body:errBox(x)+'<div class="form"><div class="two">'+F('Version',I('v',x.v,'class="mono" placeholder="2.1.1"'),'Format 2.1.1 ou 2.1.1-beta.1')+F('Canal',SEL('ch',x.ch,[['interne','Interne'],['beta','Bêta'],['stable','Stable']]),'Actuelle : '+esc(DB.channels[x.ch].cur))+'</div>'+
+      F('Installeur',fileBox('relFile','Installeur .exe (NSIS)','.exe,.msi,.zip',x.file?x.file+' · '+x.size:''),x.sha?'SHA-256 calculé dans ton navigateur : <span class="hash">'+x.sha+'</span>':'Le SHA-256 est calculé localement; le Worker le vérifie avant le stockage R2.')+
+      F('Signature Ed25519',fileBox('relSig','Fichier .sig','.sig,.txt',x.sig||''),'Obligatoire pour tous les canaux; le Worker la vérifie avec la clé publique configurée.')+
+      F('Notes de version',TA('notes',x.notes,'rows="7" placeholder="## Nouveautés&#10;- …"'))+'<div class="preview-box md" id="relPrev">'+md(x.notes||'*Aperçu des notes*')+'</div>'+
+      '<div class="two">'+F('Déploiement de départ',SEL('pct',x.pct,[[1,'1 %'],[5,'5 %'],[10,'10 %'],[25,'25 %'],[50,'50 %'],[100,'100 %']]))+'<div class="field"><span>Obligatoire</span>'+CHK('mandatory',x.mandatory,'Les joueurs ne peuvent pas la reporter')+'</div></div></div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="releasePublish">'+IC.upload+'Publier '+(x.v?esc(x.v):'')+'</button>'};
+};
+DR.notes=function(d){return {title:'Notes de '+d.v,body:F('Notes (Markdown simple)',TA('notes',d.draft.notes,'rows="10"'))+'<div class="preview-box md" id="notesPrev">'+md(d.draft.notes)+'</div>',foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="notesSave">Enregistrer</button>'}};
+DR.card=function(d){var x=d.draft;
+  return {title:d.id?'Modifier l\'encart':'Nouvel encart',
+    body:errBox(x)+'<div id="cardPrev">'+cardPreview(x)+'</div><div class="form">'+
+      '<div class="two">'+F('Type',SEL('type',x.type,Object.keys(CARDTYPES).map(function(k){return [k,CARDTYPES[k][0]]})))+F('Étiquette',I('tags',x.tags,'maxlength="20" placeholder="Survie RP"'))+'</div>'+
+      F('Titre',I('title',x.title,'maxlength="48"'))+F('Sous-titre',I('sub',x.sub,'maxlength="60"'))+
+      '<div class="two"><div class="field"><span>Couleurs du fond</span><div class="row"><input type="color" data-k="c1" value="'+esc(x.c1)+'" aria-label="Couleur 1"><input type="color" data-k="c2" value="'+esc(x.c2)+'" aria-label="Couleur 2"></div></div>'+F('Image',fileBox('cardImg','Image de fond','image/*',x.img?'Image choisie':''))+'</div>'+
+      '<div class="two">'+F('Le bouton ouvre',SEL('dest',x.dest,Object.keys(DEST).map(function(k){return [k,DEST[k]]}),true))+F('Texte du bouton',I('cta',x.cta,'maxlength="24"'))+'</div>'+
+      (x.dest==='url'?F('Lien',I('url',x.url||'','class="mono" placeholder="https://"')):'')+
+      '<div class="two">'+F('Début',I('from',x.from,'type="date"'))+F('Fin',I('to',x.to,'type="date"'),'Vide : pas de fin')+'</div>'+
+      F('Public',SEL('aud',x.aud,[['all','Tous les joueurs'],['beta','Canal bêta'],['premium','Premium'],['staff','Staff']]))+
+      '<div class="field"><span>État</span>'+SEG('status',x.status,[['draft','Brouillon'],['scheduled','Programmé'],['published','Publié']])+'</div></div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="cardSave">'+(d.id?'Enregistrer':'Créer l\'encart')+'</button>'};
+};
+DR.news=function(d){var x=d.draft;
+  return {title:d.id?'Modifier l\'article':'Nouvel article',
+    body:errBox(x)+'<div class="form">'+F('Titre',I('title',x.title,'maxlength="70"'))+'<div class="two">'+F('Catégorie',SEL('tags',x.tags,[['Event','Event'],['Launcher','Launcher'],['Shop','Shop'],['Partenaire','Partenaire'],['Communauté','Communauté']]))+F('Date de publication',I('date',x.date,'type="date"'))+'</div>'+
+      F('Contenu (Markdown simple)',TA('body',x.body,'rows="9"'))+'<div class="preview-box md" id="newsPrev">'+md(x.body)+'</div>'+
+      '<div class="field"><span>État</span>'+SEG('status',x.status,[['draft','Brouillon'],['scheduled','Programmé'],['published','Publié']])+'</div>'+CHK('notify',x.notify,'Envoyer aussi une notification aux joueurs')+'</div>',
+    foot:(d.id?'<button class="btn danger" data-act="newsDelete" data-id="'+d.id+'" style="margin-right:auto">Supprimer</button>':'')+'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="newsSave">Enregistrer</button>'};
+};
+DR.lskin=function(d){var x=d.draft;
+  return {title:d.id?'Skin · '+x.n:'Nouveau skin launcher',
+    body:'<div class="form">'+(d.id?'':F('Nom',I('n',x.n,'maxlength="60"')))+'<div class="field"><span>État dans le catalogue</span>'+SEG('status',x.status,[['published','Publié'],['soon','À venir'],['off','Désactivé']])+'</div>'+
+      '<div class="field"><span>Façons de le débloquer</span><div class="row">'+CHK('uEvent',x.uEvent,'Event')+CHK('uShop',x.uShop,'Shop')+CHK('uAch',x.uAch,'Succès')+CHK('uPrem',x.uPrem,'Premium')+'</div></div>'+
+      (x.uShop?F('Prix (crédits)',N('price',x.price,'min="0" step="50"')):'')+(x.uEvent?F('Event qui le débloque',I('evName',x.evName||'','placeholder="Raz-de-marée"')):'')+(x.uAch?F('Succès à obtenir',I('achText',x.achText||'','placeholder="50 lancements"')):'')+
+      '<div class="field"><span>Versions proposées</span><div class="row"><label class="check"><input type="checkbox" checked disabled> Standard</label>'+CHK('lg',x.lg,'Liquid Glass')+CHK('mat',x.mat,'Mat')+'</div></div>'+
+      '<div class="field"><span>Couleurs</span>'+SEG('themed',x.themed?'1':'0',[['1','Suit le thème du joueur'],['0','Couleurs imposées']])+'</div></div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="lskinSave">Enregistrer</button>'};
+};
+DR.grant=function(d){var x=d.draft;
+  return {title:'Offrir un skin du launcher',
+    body:errBox(x)+'<div class="form">'+F('Joueur','<input type="text" data-k="player" value="'+esc(x.player)+'" placeholder="Pseudo ou identifiant ReLink">')+
+      F('Skin',SEL('skin',x.skin,DB.lskins.filter(function(k){return k.id!=='none'}).map(function(k){return [k.id,k.n]})))+F('Motif',I('reason',x.reason,'placeholder="Gagnant de l\'event Terres Brûlées"'),'Visible dans le journal d\'audit')+'</div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="grantSave">'+IC.gift+'Offrir</button>'};
+};
+DR.pack=function(d){var m=byId(DB.modpacks,d.id),x=d.draft;
+  return {title:'Nouvelle version · '+m.n,
+    body:errBox(x)+'<p class="soft">Version actuelle <b class="mono">'+esc(m.ver)+'</b> · Minecraft '+m.mc+' · '+esc(m.loader)+'</p><div class="form">'+
+      '<div class="two">'+F('Version du modpack',I('ver',x.ver,'class="mono" placeholder="3.2.1"'))+F('Loader',I('loader',x.loader))+'</div>'+
+      F('Manifest',fileBox('packFile','manifest.json','.json',x.file?x.file+' · '+x.size:''),x.sha?'SHA-256 : <span class="hash">'+x.sha+'</span>':'Liste des fichiers, tailles et empreintes du modpack.')+
+      F('Signature du manifest',fileBox('packSig','Fichier .sig','.sig,.txt',x.sig||''),'Signature Ed25519 brute (64 octets) ou encodée en base64.')+
+      F('Changements',TA('changelog',x.changelog,'rows="5" placeholder="- Ajout de Create 0.5.1"'))+CHK('mandatory',x.mandatory,'Obligatoire pour rejoindre les serveurs ReLaunch')+'</div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="packPublish">'+IC.upload+'Publier</button>'};
+};
+DR.packCreate=function(d){var x=d.draft;
+  return {title:'Nouveau modpack',body:errBox(x)+'<div class="form">'+
+    F('Nom',I('n',x.n,'maxlength="80"'))+'<div class="two">'+F('Version Minecraft',I('mc',x.mc,'placeholder="1.21.1"'))+F('Loader',I('loader',x.loader,'placeholder="Fabric 0.16.9"'))+'</div>'+
+    F('Description',TA('description',x.description,'rows="4"'))+'<p class="sub">Le modpack reste masqué jusqu’à la publication d’un manifest dont la signature Ed25519 est vérifiée.</p></div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="packCreate">Créer le modpack</button>'};
+};
+DR.server=function(d){var x=d.draft;
+  return {title:(d.id?'Serveur · ':'Nouveau serveur · ')+x.n,body:'<div class="form">'+F('Nom',I('n',x.n))+F('Adresse',I('host',x.host,'class="mono" placeholder="play.example.fr:25565"'))+'<div class="two">'+F('Places',N('max',x.max,'min="1"'))+F('Modpack requis',SEL('pack',x.pack,DB.modpacks.map(function(m){return [m.id,m.n]})))+'</div>'+F('Event lié',SEL('event',x.event,[['','Aucun']].concat(DB.events.map(function(e){return [e.id,e.n]}))))+'</div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="serverSave">Enregistrer</button>'};
+};
+DR.event=function(d){var x=d.draft;
+  return {title:d.id?'Modifier l\'event':'Nouvel event',body:errBox(x)+'<div class="form">'+F('Nom',I('n',x.n,'maxlength="60"'))+'<div class="two">'+F('Date et heure',I('date',x.date,'type="datetime-local"'))+F('Places',N('slots',x.slots,'min="1"'))+'</div>'+
+    '<div class="two">'+F('Serveur',SEL('server',x.server,DB.servers.map(function(s){return [s.id,s.n]})))+F('Modpack',SEL('pack',x.pack,DB.modpacks.map(function(m){return [m.id,m.n]})))+'</div>'+
+    F('Description',TA('desc',x.desc||'','rows="4"'))+'<div class="field"><span>État</span>'+SEG('state',x.state,[['draft','Brouillon'],['upcoming','À venir'],['live','En cours'],['done','Terminé']])+'</div>'+(d.id?'':CHK('card',x.card,'Créer aussi un encart d\'accueil en brouillon'))+'</div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="eventSave">'+(d.id?'Enregistrer':'Créer l\'event')+'</button>'};
+};
+DR.apps=function(d){var e=byId(DB.events,d.id);
+  return {title:'Candidatures · '+e.n,body:e.apps.length?e.apps.map(function(a){return '<div class="panel" style="background:var(--panel-2)"><div class="spread"><b>'+esc(a.who)+'</b><span class="sub">'+esc(a.when)+'</span></div><p class="soft">'+esc(a.msg)+'</p><div class="row end"><button class="btn sm ghost" data-act="appDecide" data-app="'+a.id+'" data-v="refuse">Refuser</button><button class="btn sm pri" data-act="appDecide" data-app="'+a.id+'" data-v="accept">'+IC.check+'Accepter</button></div></div>'}).join(''):'<div class="empty">Toutes les candidatures sont traitées.</div>',
+    foot:'<button class="btn" data-act="closeDrawer">Fermer</button>'};
+};
+DR.partner=function(d){var x=d.draft;
+  return {title:d.id?'Modifier le partenaire':'Nouveau partenaire',body:errBox(x)+'<div class="form">'+F('Nom affiché',I('n',x.n))+F('Chaîne Twitch',I('ch',x.ch,'class="mono" placeholder="nom_de_chaine"'),'Le direct est détecté par le Worker.')+F('Catégorie',I('cat',x.cat))+CHK('featured',x.featured,'Mettre en avant dans WeLive')+'</div>',
+    foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="partnerSave">Enregistrer</button>'};
+};
+var LIVE={
+  rollout:function(d){$('roV').textContent=d.draft.pct+' %';var b=document.querySelector('[data-act="rolloutSave"]');if(b)b.textContent='Appliquer '+d.draft.pct+' %'},
+  release:function(d){var p=$('relPrev');if(p)p.innerHTML=md(d.draft.notes||'*Aperçu des notes*')},
+  notes:function(d){$('notesPrev').innerHTML=md(d.draft.notes)},
+  card:function(d){$('cardPrev').innerHTML=cardPreview(d.draft)},
+  news:function(d){$('newsPrev').innerHTML=md(d.draft.body)}
+};
+function openDrawer(d){d.draft=d.draft||{};S.drawer=d;renderDrawer();setTimeout(function(){var f=$('drawer').querySelector('input:not([type=hidden]):not([type=file]),select,textarea');if(f)f.focus()},40)}
+function closeDrawer(){S.drawer=null;renderDrawer()}
+function renderDrawer(){
+  var d=S.drawer,el=$('drawer');
+  if(!d){el.hidden=true;$('scrim').hidden=true;return}
+  keepFocus(el,function(){var r=DR[d.kind](d);
+    el.innerHTML='<header><h3>'+esc(r.title)+'</h3><button class="iconbtn" data-act="closeDrawer" aria-label="Fermer">'+IC.close+'</button></header><div class="dbody">'+r.body+'</div><footer>'+r.foot+'</footer>';});
+  el.hidden=false;$('scrim').hidden=false;
+}
+function keepFocus(scope,fn){
+  var a=document.activeElement,key=null,sel=null,sc=scope.querySelector('.dbody');var top=sc?sc.scrollTop:0;
+  if(a&&scope.contains(a)){key=a.id?'#'+a.id:a.dataset.k?'[data-k="'+a.dataset.k+'"]':null;try{sel=[a.selectionStart,a.selectionEnd]}catch(e){}}
+  fn();
+  var sc2=scope.querySelector('.dbody');if(sc2)sc2.scrollTop=top;
+  if(key){var n=scope.querySelector(key);if(n){n.focus();if(sel&&sel[0]!=null){try{n.setSelectionRange(sel[0],sel[1])}catch(e){}}}}
+}
+var modalResolve=null;
+function confirmBox(o){
+  return new Promise(function(res){
+    modalResolve=res;
+    var danger=!!o.danger, need=danger&&o.word;
+    var m=$('modal');m.className='modal'+(danger?' prod':'');m.dataset.word=need?o.word:'';
+    m.innerHTML='<h3>'+esc(o.title)+'</h3><p class="soft">'+o.text+'</p>'+(danger?'<div class="warnbox">Action sensible: cette operation peut affecter les joueurs et le service.</div>':'')+
+      (need?'<label class="field"><span>Tape <b class="mono">'+esc(o.word)+'</b> pour confirmer</span><input type="text" id="mWord" class="mono" autocomplete="off"></label>':'')+
+      '<div class="row end"><button class="btn ghost" data-act="mNo">Annuler</button><button class="btn '+(o.danger?'danger':'pri')+'" data-act="mYes" id="mYes"'+(need?' disabled':'')+'>'+esc(o.ok||'Confirmer')+'</button></div>';
+    m.hidden=false;$('mscrim').hidden=false;
+    setTimeout(function(){(need?$('mWord'):$('mYes')).focus()},30);
+  });
+}
+function closeModal(v){$('modal').hidden=true;$('mscrim').hidden=true;if(modalResolve){var r=modalResolve;modalResolve=null;r(v)}}
+
+/* =====================================================================
+   Actions
+   ===================================================================== */
+var ACT={},CHG={},INP={},FILE={};
+ACT.closeDrawer=closeDrawer;
+ACT.mNo=function(){closeModal(false)};
+ACT.mYes=function(){closeModal(true)};
+ACT.dset=function(el){var d=S.drawer;var v=el.dataset.v;d.draft[el.dataset.k]=/^\d+$/.test(v)&&el.dataset.k==='pct'?+v:v;renderDrawer()};
+
+/* -- Vue d'ensemble -- */
+ACT.refreshHealth=function(b){run(b,'health',{},null,{ok:'Services actualisés',label:'Actualiser l\'état des services',after:function(res){DB.health=Object.keys(res.services||{}).map(function(key){var ok=res.services[key]==='ok';return {n:key.toUpperCase(),s:ok?'ok':'bad',d:ok?'Disponible':key==='r2'?'Binding R2 manquant':'Indisponible'}})}})};
+ACT.reloadState=function(){stateLoaded=false;stateLoadError='';loadLauncherState()};
+ACT.storageRefresh=function(b){
+  if(CFG.simulate){toast('Mode simulation','Désactive la simulation pour lire le stockage R2.','err');return}
+  run(b,'storage',{},null,{ok:'Stockage R2 actualisé',after:function(res){DB.storage=res.storage||null}});
+};
+ACT.storageDelete=async function(b){
+  if(CFG.simulate){toast('Mode simulation','Désactive la simulation pour supprimer un artefact R2.','err');return}
+  var title=b.dataset.title||b.dataset.id;
+  var detail=b.dataset.type==='orphan'?'Cet objet sera supprimé définitivement du stockage R2.':'« '+esc(title)+' » et sa signature seront supprimés définitivement du stockage R2.';
+  if(!(await confirmBox({title:'Supprimer cet artefact ?',text:detail,ok:'Supprimer les fichiers',danger:true,word:'SUPPRIMER'})))return;
+  run(b,'storageDelete',{type:b.dataset.type,id:b.dataset.id},{},{ok:function(res){return 'Artefact supprimé · '+formatStorageBytes(res.freedBytes||0)+' libérés'},target:title,after:function(){
+    DB.storage=null;
+    setTimeout(function(){ACT.storageRefresh()},0);
+  }});
+};
+
+/* -- Mises à jour -- */
+ACT.openRollout=function(b){openDrawer({kind:'rollout',ch:b.dataset.ch,draft:{pct:DB.channels[b.dataset.ch].rollout}})};
+ACT.rolloutSave=async function(b){var d=S.drawer,c=DB.channels[d.ch],p=d.draft.pct;
+  if(p===100&&d.ch!=='interne'&&c.rollout<100&&!(await confirmBox({title:'Distribuer à tout le canal ?',text:'<b class="mono">'+esc(c.cur)+'</b> sera proposée à tous les launchers du canal '+CH_LABEL[d.ch]+'.',ok:'Distribuer à 100 %',danger:true,word:c.cur})))return;
+  run(b,'rollout',{channel:d.ch},{percent:p,version:c.cur},{ok:'Canal '+CH_LABEL[d.ch]+' : '+p+' % des joueurs',target:CH_LABEL[d.ch]+' · '+c.rollout+' % → '+p+' %',close:true,after:function(){c.rollout=p}})};
+ACT.pause=function(b){var k=b.dataset.ch;run(b,'pause',{channel:k},{},{ok:'Déploiement '+CH_LABEL[k]+' en pause',target:CH_LABEL[k]+' · '+DB.channels[k].cur,after:function(){DB.channels[k].paused=true}})};
+ACT.resume=function(b){var k=b.dataset.ch;run(b,'resume',{channel:k},{},{ok:'Déploiement '+CH_LABEL[k]+' repris',target:CH_LABEL[k]+' · '+DB.channels[k].cur,after:function(){DB.channels[k].paused=false}})};
+ACT.rollback=async function(b){var k=b.dataset.ch,c=DB.channels[k];
+  if(!(await confirmBox({title:'Revenir à '+c.prev+' ?',text:'Les launchers du canal '+CH_LABEL[k]+' repasseront de <b class="mono">'+esc(c.cur)+'</b> à <b class="mono">'+esc(c.prev)+'</b> au prochain démarrage. La version '+esc(c.cur)+' sera retirée.',ok:'Revenir à '+c.prev,danger:true,word:c.prev})))return;
+  var from=c.cur;
+  run(b,'rollback',{channel:k},{to:c.prev},{ok:'Canal '+CH_LABEL[k]+' revenu à '+c.prev,target:CH_LABEL[k]+' · '+from+' → '+c.prev,after:function(){
+    DB.releases.forEach(function(r){if(r.v===from)r.status='retired';if(r.v===c.prev)r.status='live'});
+    var older=DB.releases.filter(function(r){return r.ch===k&&cmpVer(r.v,c.prev)<0&&r.status!=='retired'}).sort(function(a,b){return cmpVer(b.v,a.v)})[0];
+    c.cur=c.prev;c.prev=older?older.v:'—';c.rollout=100;c.paused=false}})};
+ACT.promote=async function(b){var k=b.dataset.ch,to=k==='beta'?'stable':'beta',c=DB.channels[k],t=DB.channels[to];
+  if(!(await confirmBox({title:'Promouvoir '+c.cur+' en '+CH_LABEL[to].toLowerCase()+' ?',text:'La version démarre à <b>10 %</b> du canal '+CH_LABEL[to]+'. Tu pourras augmenter ensuite.',ok:'Promouvoir',danger:to==='stable',word:c.cur})))return;
+  run(b,'promote',{version:c.cur},{channel:to,percent:10},{ok:c.cur+' promue en '+CH_LABEL[to].toLowerCase()+' (10 %)',target:c.cur+' · '+CH_LABEL[k]+' → '+CH_LABEL[to],after:function(){t.prev=t.cur;t.cur=c.cur;t.rollout=10;t.paused=false;t.adoption=0;var r=DB.releases.filter(function(x){return x.v===c.cur})[0];if(r){r.ch=to;r.status='deploying'}}})};
+ACT.kill=async function(b){var on=!DB.updates.kill;
+  if(on&&!(await confirmBox({title:'Arrêter toutes les mises à jour ?',text:'Plus aucun launcher ne reçoit de mise à jour, sur tous les canaux, jusqu\'à ce que tu relances la distribution.',ok:'Arrêter la distribution',danger:true,word:'ARRÊT'})))return;
+  run(b,'killSwitch',{},{enabled:on},{ok:on?'Distribution des mises à jour arrêtée':'Distribution des mises à jour relancée',target:on?'activé':'désactivé',after:function(){DB.updates.kill=on}})};
+ACT.saveMin=function(b){var v=$('minVer').value.trim(),blk=$('minBlock').checked;
+  if(!VER_RE.test(v)){toast('Version invalide','Format attendu : 1.9.0','err');return}
+  run(b,'minVersion',{},{version:v,blockLaunch:blk},{ok:'Version minimale : '+v,target:DB.updates.minVersion+' → '+v,after:function(){DB.updates.minVersion=v;DB.updates.blockOld=blk}})};
+ACT.openRelease=function(){openDrawer({kind:'release',draft:{v:'',ch:'beta',file:'',size:'',sha:'',sig:'',notes:'',pct:10,mandatory:false,err:''}})};
+ACT.releasePublish=async function(b){var x=S.drawer.draft,c=DB.channels[x.ch];x.err='';
+  if(!VER_RE.test(x.v))x.err='la version doit suivre le format 2.1.1 ou 2.1.1-beta.1.';
+  else if(cmpVer(x.v,c.cur)<=0&&x.v!==c.cur)x.err='la version doit être plus récente que '+c.cur+', la version actuelle du canal.';
+  else if(DB.releases.some(function(r){return r.v===x.v}))x.err='la version '+x.v+' existe déjà.';
+  else if(!x.uploadFile)x.err='choisis l\'installeur à publier.';
+  else if(!x.signatureFile)x.err='joins le fichier de signature Ed25519.';
+  else if(exceedsStorageQuota(x.uploadFile,x.signatureFile))x.err='cet upload dépasserait le quota R2 de 10 Go. Supprime d’abord des artefacts dans Stockage R2.';
+  if(x.err){renderDrawer();return}
+  if(x.ch==='stable'&&!(await confirmBox({title:'Publier '+x.v+' en stable ?',text:'Elle sera proposée à '+x.pct+' % des joueurs du canal stable.',ok:'Publier',danger:true,word:x.v})))return;
+  var form=new FormData();form.append('metadata',JSON.stringify({version:x.v,channel:x.ch,sha256:x.sha,notes:x.notes,rollout:+x.pct,mandatory:x.mandatory}));form.append('file',x.uploadFile,x.uploadFile.name);form.append('signature',x.signatureFile,x.signatureFile.name);
+  run(b,'releaseCreate',{},form,{ok:'ReLaunch '+x.v+' publiée en '+CH_LABEL[x.ch].toLowerCase(),target:x.v+' · '+CH_LABEL[x.ch].toLowerCase(),close:true,after:function(res){
+    var release=res.release||{};DB.releases.unshift({v:x.v,ch:x.ch,date:new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}),sig:true,size:x.size||'—',sha:release.sha256||x.sha,crash:0,status:+x.pct>=100?'live':'deploying',notes:x.notes});
+    c.prev=c.cur;c.cur=x.v;c.rollout=+x.pct;c.paused=false;c.adoption=0;c.crash=0;if(!CFG.simulate){DB.storage=null;setTimeout(function(){ACT.storageRefresh()},0)}}})};
+ACT.openNotes=function(b){var r=DB.releases.filter(function(x){return x.v===b.dataset.v})[0];openDrawer({kind:'notes',v:r.v,draft:{notes:r.notes}})};
+ACT.notesSave=function(b){var d=S.drawer,r=DB.releases.filter(function(x){return x.v===d.v})[0];run(b,'notes',{version:d.v},{notes:d.draft.notes},{ok:'Notes de '+d.v+' enregistrées',target:d.v,close:true,after:function(){r.notes=d.draft.notes}})};
+ACT.retire=async function(b){var v=b.dataset.v,r=DB.releases.filter(function(x){return x.v===v})[0];var live=Object.keys(DB.channels).filter(function(k){return DB.channels[k].cur===v})[0];
+  if(live){toast('Version encore en service','Fais d\'abord un retour arrière sur le canal '+CH_LABEL[live]+'.','err');return}
+  if(!(await confirmBox({title:'Retirer '+v+' ?',text:'Elle ne pourra plus être installée ni servir de retour arrière.',ok:'Retirer',danger:true})))return;
+  run(b,'retire',{version:v},{},{ok:v+' retirée',target:v,after:function(){r.status='retired'}})};
+
+/* -- Configuration -- */
+ACT.flagToggle=function(b){var f=DB.flags[+b.dataset.i];run(b,'flag',{key:f.k},{enabled:!f.on},{ok:f.k+(f.on?' désactivé':' activé'),target:f.k,after:function(){f.on=!f.on}})};
+CHG.flagTarget=function(el){var f=DB.flags[+el.dataset.i],v=el.value;run(null,'flag',{key:f.k},{target:v,percent:f.pct},{ok:f.k+' : '+TARGETS[v],target:f.k+' · '+TARGETS[v],after:function(){f.target=v}})};
+CHG.flagPct=function(el){var f=DB.flags[+el.dataset.i],v=Math.max(0,Math.min(100,parseInt(el.value,10)||0));run(null,'flag',{key:f.k},{target:'pct',percent:v},{ok:f.k+' : '+v+' % des joueurs',target:f.k+' · '+v+' %',after:function(){f.pct=v}})};
+function parseCfg(){try{return {ok:JSON.parse($('cfgJson').value)}}catch(e){return {err:e.message}}}
+ACT.cfgCheck=function(){var r=parseCfg(),m=$('cfgMsg');if(r.err){m.innerHTML='<span class="st bad">JSON invalide</span> '+esc(r.err)}else{m.innerHTML='<span class="st ok">JSON valide</span> '+Object.keys(r.ok).length+' clés au premier niveau'}};
+ACT.cfgPublish=async function(b){var r=parseCfg();if(r.err){ACT.cfgCheck();toast('JSON invalide',r.err,'err');return}
+  var nv=DB.config.version+1;
+  if(!(await confirmBox({title:'Publier la configuration v'+nv+' ?',text:'Les launchers la récupèrent au prochain démarrage ou dans les 5 minutes.',ok:'Publier v'+nv,danger:true,word:'v'+nv})))return;
+  run(b,'configPublish',{},{version:nv,config:r.ok},{ok:'Configuration v'+nv+' publiée',target:'v'+nv,after:function(){DB.config.json=JSON.stringify(r.ok,null,2);DB.config.version=nv;DB.config.history.unshift({v:nv,t:nowStr(),who:'Administrateur',d:'Configuration publiée depuis le panel'})}})};
+ACT.cfgRestore=async function(b){var v=+b.dataset.v,nv=DB.config.version+1;
+  if(!(await confirmBox({title:'Restaurer la v'+v+' ?',text:'Elle sera republiée en v'+nv+'.',ok:'Restaurer',danger:true})))return;
+  run(b,'configRestore',{version:v},{},{ok:'v'+v+' restaurée en v'+nv,target:'v'+v+' → v'+nv,after:function(){DB.config.version=nv;DB.config.history.unshift({v:nv,t:nowStr(),who:'Administrateur',d:'Restauration de la v'+v})}})};
+ACT.maintToggle=function(b){var m=DB.maintenance;run(b,'maintenance',{},{enabled:!m.on,level:m.level,text:m.text,blockLaunch:m.block},{ok:m.on?'Bandeau retiré':'Bandeau affiché dans le launcher',target:m.on?'retiré':'affiché',after:function(){m.on=!m.on}})};
+ACT.maintLevel=function(b){var m=DB.maintenance;m.text=$('maintText').value;m.block=$('maintBlock').checked;m.level=b.dataset.v;render()};
+ACT.maintSave=function(b){var m=DB.maintenance,t=$('maintText').value.trim(),blk=$('maintBlock').checked;if(!t){toast('Message vide','Écris le texte du bandeau.','err');return}
+  run(b,'maintenance',{},{enabled:m.on,level:m.level,text:t,blockLaunch:blk},{ok:'Bandeau enregistré',target:t,after:function(){m.text=t;m.block=blk}})};
+
+/* -- Accueil -- */
+ACT.carCount=function(b){DB.carousel.count=+b.dataset.v;render()};
+ACT.carAuto=function(){DB.carousel.autoplay=!DB.carousel.autoplay;render()};
+INP.carSpeed=function(el){DB.carousel.speed=+el.value;$('carSpeedV').textContent=el.value+' s'};
+ACT.carouselSave=function(b){var c=DB.carousel;run(b,'carousel',{},{count:c.count,autoplay:c.autoplay,speedSeconds:c.speed},{ok:'Carrousel : '+c.count+' encarts, '+(c.autoplay?c.speed+' s par encart':'sans défilement'),target:c.count+' encarts'})};
+ACT.cardMove=function(b){var i=+b.dataset.i,j=i+(+b.dataset.d),L=DB.cards;if(j<0||j>=L.length)return;var t=L[i];L[i]=L[j];L[j]=t;
+  run(null,'cardOrder',{},{order:L.map(function(c){return c.id})},{ok:'Ordre des encarts enregistré',target:t.title})};
+ACT.openCard=function(b){var id=b.dataset.id,c=id?clone(byId(DB.cards,id)):{type:'event',tags:'',title:'',sub:'',c1:'#7c2d12',c2:'#f59e0b',dest:'relaunch',url:'',cta:'Voir',status:'draft',from:'',to:'',aud:'all',img:''};c.err='';openDrawer({kind:'card',id:id||null,draft:c})};
+ACT.cardSave=function(b){var d=S.drawer,x=d.draft;x.err='';
+  if(!x.title.trim())x.err='donne un titre à l\'encart.';else if(x.dest==='url'&&!/^https:\/\//.test(x.url||''))x.err='le lien doit commencer par https://.';else if(x.status==='scheduled'&&!x.from)x.err='choisis une date de début pour programmer l\'encart.';
+  if(x.err){renderDrawer();return}
+  var nw=!d.id;run(b,nw?'cardCreate':'cardSave',{id:d.id},x,{ok:nw?'Encart créé':'Encart enregistré',target:x.title,close:true,after:function(res){var c=clone(x);delete c.err;if(nw){c.id=res.id||uid('c');DB.cards.push(c)}else{DB.cards[DB.cards.indexOf(byId(DB.cards,d.id))]=Object.assign(c,{id:d.id})}}})};
+ACT.cardDup=function(b){var c=clone(byId(DB.cards,b.dataset.id));c.id=uid('c');c.title+=' (copie)';c.status='draft';run(b,'cardCreate',{},c,{ok:'Encart dupliqué en brouillon',target:c.title,after:function(){DB.cards.push(c)}})};
+ACT.cardArchive=async function(b){var c=byId(DB.cards,b.dataset.id);if(!(await confirmBox({title:'Archiver « '+c.title+' » ?',text:'L\'encart disparaît du launcher. Il reste dans les archives du Worker.',ok:'Archiver'})))return;
+  run(b,'cardArchive',{id:c.id},null,{ok:'Encart archivé',target:c.title,after:function(){DB.cards.splice(DB.cards.indexOf(c),1)}})};
+
+/* -- Info & News -- */
+ACT.openNews=function(b){var id=b.dataset.id,n=id?clone(byId(DB.news,id)):{title:'',tags:'Event',date:'',status:'draft',body:'',views:0};n.notify=false;n.err='';if(n.date&&!/^\d{4}/.test(n.date))n.date='';openDrawer({kind:'news',id:id||null,draft:n})};
+ACT.newsSave=function(b){var d=S.drawer,x=d.draft;x.err='';if(!x.title.trim())x.err='donne un titre à l\'article.';else if(!x.body.trim())x.err='l\'article est vide.';if(x.err){renderDrawer();return}
+  var nw=!d.id;run(b,nw?'newsCreate':'newsSave',{id:d.id},x,{ok:(x.status==='published'?'Article publié':'Article enregistré')+(x.notify?' et notification envoyée':''),target:x.title,close:true,after:function(res){
+    var n={id:d.id||res.id||uid('n'),title:x.title,tags:x.tags,date:x.date?x.date.split('-').reverse().slice(0,2).join('/'):(x.status==='published'?'aujourd\'hui':'—'),status:x.status,views:x.views||0,body:x.body};
+    if(nw)DB.news.unshift(n);else DB.news[DB.news.indexOf(byId(DB.news,d.id))]=n;
+    if(x.notify)DB.notifs.unshift({t:nowStr(),title:x.title,aud:'Tous les joueurs',sent:0,open:0,status:res.notification_status||'queued'})}})};
+ACT.newsDelete=async function(b){var n=byId(DB.news,b.dataset.id);if(!(await confirmBox({title:'Supprimer « '+n.title+' » ?',text:'L\'article disparaît de la page Info &amp; News.',ok:'Supprimer',danger:true})))return;
+  run(b,'newsDelete',{id:n.id},null,{ok:'Article supprimé',target:n.title,close:!!S.drawer,after:function(){DB.news.splice(DB.news.indexOf(n),1)}})};
+
+/* -- Notifications -- */
+var AUDN={all:'Tous les joueurs',beta:'Canal bêta',relaunch:'Joueurs ReLaunch',role:'Rôle',players:'Joueurs précis'};
+ACT.nfWhen=function(b){S.f.notif.when=b.dataset.v;render()};
+ACT.nfSend=async function(b){var f=S.f.notif;
+  if(!f.title.trim()||!f.body.trim()){toast('Titre et message obligatoires','','err');return}
+  if(f.when==='later'&&!f.at){toast('Choisis la date d\'envoi','','err');return}
+  var label=AUDN[f.aud];
+  if(f.when==='now'&&!(await confirmBox({title:'Mettre cette notification en file ?',text:'« '+esc(f.title)+' » sera récupérée au prochain appel du launcher. Le Worker ne confirme pas sa livraison.',ok:'Mettre en file',danger:true})))return;
+  run(b,'notifSend',{},{title:f.title,body:f.body,audience:f.aud,role:f.role,players:f.players,open:f.dest,sendAt:f.when==='later'?f.at:null},{ok:f.when==='later'?'Notification programmée':'Notification mise en file pour '+label.toLowerCase(),target:f.title,after:function(res){
+    DB.notifs.unshift({t:f.when==='later'?f.at.replace('T',' '):nowStr(),title:f.title,aud:label,sent:0,open:0,status:res.status||'queued'});S.f.notif=null}})};
+
+/* -- Skins du launcher -- */
+ACT.openLskin=function(b){var k=clone(byId(DB.lskins,b.dataset.id));k.uEvent=/event/.test(k.how);k.uShop=/shop/.test(k.how);k.uAch=/ach/.test(k.how);k.uPrem=k.how==='premium';openDrawer({kind:'lskin',id:k.id,draft:k})};
+ACT.openNewLskin=function(){openDrawer({kind:'lskin',id:null,draft:{n:'',status:'soon',price:0,lg:false,mat:false,themed:false,uEvent:false,uShop:false,uAch:false,uPrem:false}})};
+ACT.lskinSave=function(b){var d=S.drawer,x=d.draft,k=byId(DB.lskins,d.id);
+  var how=[x.uEvent&&'event',x.uAch&&'ach',x.uShop&&'shop'].filter(Boolean).join('+')||(x.uPrem?'premium':'free');if(x.uPrem&&how!=='premium')how+='+premium';
+  var nw=!d.id,payload={status:x.status,unlock:{event:x.uEvent?x.evName||true:false,shop:x.uShop?+x.price:false,achievement:x.uAch?x.achText||true:false,premium:x.uPrem},versions:{liquidGlass:x.lg,mat:x.mat},followsTheme:x.themed==='1'||x.themed===true};
+  if(nw)payload.n=x.n;
+  if(nw&&!x.n.trim()){x.err='indique le nom du skin.';renderDrawer();return}
+  run(b,nw?'lskinCreate':'lskinSave',{id:d.id},payload,{ok:'Skin « '+(x.n||k.n)+' » enregistré',target:x.n||k.n,close:true,after:function(res){
+    if(nw){var record=res.record||{};DB.lskins.push(Object.assign({id:res.id,n:x.n,owners:0},record,{id:res.id,how:how,price:x.uShop?+x.price:0,lg:x.lg,mat:x.mat,themed:x.themed==='1'||x.themed===true}))}
+    else{k.status=x.status;k.how=how;k.price=x.uShop?+x.price:0;k.lg=x.lg;k.mat=x.mat;k.themed=x.themed==='1'||x.themed===true}}})};
+ACT.openGrant=function(){openDrawer({kind:'grant',draft:{player:'',skin:DB.lskins[0]?.id||'',reason:'',err:''}})};
+ACT.grantSave=function(b){var x=S.drawer.draft,k=byId(DB.lskins,x.skin);x.err='';
+  if(!x.player.trim())x.err='indique le pseudo ou l\'identifiant ReLink du joueur.';else if(!x.reason.trim())x.err='indique un motif.';
+  if(x.err){renderDrawer();return}
+  run(b,'lskinGrant',{id:k.id},{player:x.player.trim(),reason:x.reason},{ok:k.n+' offert à '+x.player.trim(),target:x.player.trim()+' · '+k.n,close:true,after:function(){k.owners++}})};
+
+
+/* -- Modpacks -- */
+ACT.packVisible=function(b){var m=DB.modpacks[+b.dataset.i];if(!m.visible&&!m.sig){toast('Manifest non signé','Publie une version signée avant d\'afficher '+m.n+'.','err');return}
+  run(b,'modpackSave',{id:m.id},{visible:!m.visible},{ok:m.n+(m.visible?' masqué':' visible dans WeCraft'),target:m.n,after:function(){m.visible=!m.visible}})};
+ACT.packVerify=function(b){var m=DB.modpacks[+b.dataset.i];run(b,'modpackVerify',{id:m.id},{},{ok:'Manifest de '+m.n+' vérifié',target:m.n+' '+m.ver,after:function(){m.sig=true}})};
+ACT.openPack=function(b){var m=byId(DB.modpacks,b.dataset.id);openDrawer({kind:'pack',id:m.id,draft:{ver:'',loader:m.loader,file:'',size:'',sha:'',sig:'',changelog:'',mandatory:false,err:''}})};
+ACT.openNewPack=function(){openDrawer({kind:'packCreate',draft:{n:'',mc:'',loader:'',description:'',err:''}})};
+ACT.packCreate=function(b){var d=S.drawer,x=d.draft;x.err='';
+  if(!x.n.trim())x.err='indique le nom du modpack.';else if(!x.mc.trim())x.err='indique la version Minecraft.';else if(!x.loader.trim())x.err='indique le loader.';
+  if(x.err){renderDrawer();return}
+  run(b,'modpackCreate',{}, {n:x.n.trim(),mc:x.mc.trim(),loader:x.loader.trim(),description:x.description.trim()},{ok:x.n+' créé',target:x.n,close:true,after:function(res){
+    DB.modpacks.push(Object.assign({id:res.id,n:x.n,mc:x.mc,loader:x.loader,ver:'0.0.0',mods:0,size:'—',sig:false,visible:false,installs:0,c1:'#334155',c2:'#94a3b8'},res.record||{},{id:res.id}))}})};
+ACT.packPublish=function(b){var d=S.drawer,x=d.draft,m=byId(DB.modpacks,d.id);x.err='';
+  if(!VER_RE.test(x.ver))x.err='la version doit suivre le format 3.2.1.';else if(cmpVer(x.ver,m.ver)<=0)x.err='la version doit être plus récente que '+m.ver+'.';  else if(!x.uploadFile)x.err='choisis le manifest.';else if(!x.signatureFile)x.err='joins la signature du manifest.';else if(exceedsStorageQuota(x.uploadFile,x.signatureFile))x.err='cet upload dépasserait le quota R2 de 10 Go. Supprime d’abord des artefacts dans Stockage R2.';
+  if(x.err){renderDrawer();return}
+  var form=new FormData();form.append('metadata',JSON.stringify({version:x.ver,loader:x.loader,sha256:x.sha,changelog:x.changelog,mandatory:x.mandatory}));form.append('file',x.uploadFile,x.uploadFile.name);form.append('signature',x.signatureFile,x.signatureFile.name);
+  run(b,'modpackVersion',{id:m.id},form,{ok:m.n+' '+x.ver+' publié',target:m.n+' · '+m.ver+' → '+x.ver,close:true,after:function(){m.ver=x.ver;m.loader=x.loader;m.sig=true;if(!CFG.simulate){DB.storage=null;setTimeout(function(){ACT.storageRefresh()},0)}}})};
+
+/* -- Serveurs -- */
+ACT.srvMaint=async function(b){var s=DB.servers[+b.dataset.i],on=b.dataset.v==='1';
+  if(on&&s.players&&!(await confirmBox({title:'Mettre '+s.n+' en maintenance ?',text:'<b>'+s.players+' joueurs</b> seront déconnectés avec un message.',ok:'Mettre en maintenance',danger:true,word:s.n})))return;
+  run(b,'serverMaint',{id:s.id},{enabled:on},{ok:s.n+(on?' en maintenance':' rouvert'),target:s.n,after:function(){s.state=on?'maintenance':'online';if(on)s.players=0}})};
+ACT.openServer=function(b){openDrawer({kind:'server',id:b.dataset.id,draft:clone(byId(DB.servers,b.dataset.id))})};
+ACT.openNewServer=function(){openDrawer({kind:'server',id:null,draft:{n:'',host:'',state:'offline',players:0,max:100,pack:DB.modpacks[0]?.id||'',event:''}})};
+ACT.serverSave=function(b){var d=S.drawer,x=d.draft,s=byId(DB.servers,d.id),nw=!d.id;
+  if(!x.n.trim()||!x.host.trim()){toast('Nom et adresse obligatoires','','err');return}
+  run(b,nw?'serverCreate':'serverSave',{id:d.id},Object.assign({},x,{max:+x.max}),{ok:x.n+(nw?' créé':' enregistré'),target:x.n,close:true,after:function(res){
+    if(nw)DB.servers.push(Object.assign({id:res.id,players:0,visible:true},res.record||{},{id:res.id,max:+x.max}));
+    else Object.assign(s,{n:x.n,host:x.host,max:+x.max,pack:x.pack,event:x.event})}})};
+
+/* -- Events -- */
+ACT.openEvent=function(b){var id=b.dataset.id,e=id?clone(byId(DB.events,id)):{n:'',date:'',server:'',pack:'',slots:100,state:'draft',desc:'',card:true,apps:[]};e.err='';openDrawer({kind:'event',id:id||null,draft:e})};
+ACT.eventSave=function(b){var d=S.drawer,x=d.draft;x.err='';if(!x.n.trim())x.err='donne un nom à l\'event.';else if(!x.date)x.err='choisis la date et l\'heure.';if(x.err){renderDrawer();return}
+  var nw=!d.id;run(b,nw?'eventCreate':'eventSave',{id:d.id},x,{ok:nw?'Event créé'+(x.card?' avec son encart':''):'Event enregistré',target:x.n,close:true,after:function(){
+    var e={id:d.id||uid('e'),n:x.n,date:x.date,server:x.server,pack:x.pack,state:x.state,slots:+x.slots,desc:x.desc,apps:nw?[]:byId(DB.events,d.id).apps};
+    if(nw){DB.events.unshift(e);if(x.card)DB.cards.push({id:uid('c'),type:'event',tags:'',title:x.n,sub:new Date(x.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'}),c1:'#7c2d12',c2:'#f59e0b',dest:'relaunch',cta:'Voir l\'event',status:'draft',from:'',to:'',aud:'all',img:''})}
+    else DB.events[DB.events.indexOf(byId(DB.events,d.id))]=e}})};
+ACT.openApps=function(b){openDrawer({kind:'apps',id:b.dataset.id})};
+ACT.appDecide=function(b){var e=byId(DB.events,S.drawer.id),a=byId(e.apps,b.dataset.app),ok=b.dataset.v==='accept';
+  run(b,'application',{id:e.id,app:a.id},{decision:ok?'accept':'refuse'},{ok:a.who+(ok?' accepté':' refusé')+' pour '+e.n,target:a.who+' · '+e.n,after:function(){e.apps.splice(e.apps.indexOf(a),1)}})};
+
+/* -- Partenaires -- */
+ACT.partnerFeat=function(b){var p=DB.partners[+b.dataset.i];run(b,'partnerSave',{id:p.id},{featured:!p.featured},{ok:p.n+(p.featured?' n\'est plus mis en avant':' mis en avant'),target:p.n,after:function(){p.featured=!p.featured}})};
+ACT.openPartner=function(b){var id=b.dataset.id,p=id?clone(byId(DB.partners,id)):{n:'',ch:'',cat:'',featured:false,live:false,viewers:0};p.err='';openDrawer({kind:'partner',id:id||null,draft:p})};
+ACT.partnerSave=function(b){var d=S.drawer,x=d.draft;x.err='';if(!x.n.trim())x.err='indique un nom.';else if(!/^[A-Za-z0-9_]{3,25}$/.test(x.ch))x.err='le nom de chaîne Twitch ne contient que lettres, chiffres et _ (3 à 25 caractères).';if(x.err){renderDrawer();return}
+  var nw=!d.id;run(b,nw?'partnerCreate':'partnerSave',{id:d.id},x,{ok:x.n+(nw?' ajouté':' enregistré'),target:x.n,close:true,after:function(){var p={id:d.id||uid('p'),n:x.n,ch:x.ch,cat:x.cat,featured:x.featured,live:x.live,viewers:x.viewers};if(nw)DB.partners.push(p);else DB.partners[DB.partners.indexOf(byId(DB.partners,d.id))]=p}})};
+
+/* -- Modération -- */
+ACT.repF=function(b){S.f.rep=b.dataset.v;render()};
+ACT.repAssign=function(b){var r=byId(DB.reports,b.dataset.id);run(b,'report',{id:r.id},{action:'assign'},{ok:'Signalement assigné',target:r.who+' · '+r.reason,after:function(){r.state='assigned';r.assignee='Administrateur'}})};
+ACT.repClose=function(b){var r=byId(DB.reports,b.dataset.id);run(b,'report',{id:r.id},{action:'close'},{ok:'Signalement classé sans suite',target:r.who+' · '+r.reason,after:function(){r.state='closed';r.assignee=r.assignee||'Administrateur'}})};
+ACT.repSanction=function(b){var r=byId(DB.reports,b.dataset.id);toast('Sanction à appliquer depuis Utilisateurs','Compte : '+r.who);window.showPage('users')};
+
+function copyText(txt,what){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast(what+' copié dans le presse-papiers')},function(){toast('Copie refusée par le navigateur','Sélectionne le texte à la main.','err')})}
+  else toast('Copie indisponible ici','Sélectionne le texte à la main.','err');
+}
+
+/* -- Intégration -- */
+ACT.simToggle=function(){CFG.simulate=!CFG.simulate;lsSet('rla-sim-v2',CFG.simulate);if(CFG.simulate)stateLoaded=false;else{stateLoaded=false;stateLoadError=''}toast(CFG.simulate?'Mode simulation activé':'Simulation coupée',CFG.simulate?'Rien n\'est envoyé au Worker.':'Les données vont être chargées depuis le Worker ReLink.');render()};
+ACT.routesCopy=function(){copyText(Object.keys(ROUTES).map(function(k){return ROUTES[k][0]+' '+ROUTES[k][1]}).join('\n'),'Les routes')};
+
+
+/* -- Fichiers : empreinte SHA-256 calculée dans le navigateur -- */
+async function sha256(file){var buf=await file.arrayBuffer();var h=await crypto.subtle.digest('SHA-256',buf);return Array.prototype.map.call(new Uint8Array(h),function(b){return b.toString(16).padStart(2,'0')}).join('')}
+function sizeOf(n){return n>1048576?(n/1048576).toFixed(1).replace('.',',')+' Mo':Math.max(1,Math.round(n/1024))+' Ko'}
+async function hashInto(file,x){x.signatureFile=null;x.sig='';if(file.size>94*1048576){x.uploadFile=null;x.file='';x.sha='';toast('Fichier trop lourd','94 Mio maximum.','err');renderDrawer();return}x.file=file.name;x.uploadFile=file;x.size=sizeOf(file.size);x.sha='';renderDrawer();try{x.sha=await sha256(file)}catch(e){x.uploadFile=null;toast('Empreinte impossible',e.message,'err')}renderDrawer()}
+FILE.relFile=function(f){hashInto(f,S.drawer.draft)};
+FILE.packFile=function(f){hashInto(f,S.drawer.draft)};
+FILE.relSig=function(f){S.drawer.draft.sig=f.name;S.drawer.draft.signatureFile=f;renderDrawer()};
+FILE.packSig=function(f){S.drawer.draft.sig=f.name;S.drawer.draft.signatureFile=f;renderDrawer()};
+FILE.cardImg=function(f){if(f.size>3*1048576){toast('Image trop lourde','3 Mo maximum.','err');return}var r=new FileReader();r.onload=function(){S.drawer.draft.img=r.result;renderDrawer()};r.readAsDataURL(f)};
+
+/* =====================================================================
+   Rendu, navigation, événements
+   ===================================================================== */
+
+var PAGES={};
+var stateLoaded=false,stateLoading=false,stateLoadError='';
+function applyLauncherState(state){
+  var c=state.collections||{}, settings=state.settings||{}, list=function(name){return Array.isArray(c[name])?c[name]:[]};
+  DB.releases=list('releases').map(function(r){return {v:r.version||r.id,ch:r.channel||'stable',date:r.createdAt||'',sig:r.signatureVerified===true,size:r.size?sizeOf(r.size):'—',sha:r.sha256||'',crash:0,status:r.status||'live',notes:r.notes||''}});
+  DB.channels={};['stable','beta','interne'].forEach(function(k){var v=settings['channel:'+k]||{};DB.channels[k]={cur:v.version||'—',prev:v.previousVersion||'—',rollout:Number.isInteger(v.rollout)?v.rollout:0,paused:v.paused===true,adoption:0,crash:0}});
+  DB.updates=settings.updates||{kill:false,minVersion:'',blockOld:true};
+  DB.flags=Object.keys(settings).filter(function(k){return k.indexOf('flag:')===0}).map(function(k){var f=settings[k]||{};return {k:f.key||k.slice(5),d:f.description||'',on:f.enabled===true,target:f.target||'all',pct:Number.isInteger(f.percent)?f.percent:100}});
+  var maintenance=settings.maintenance||{};DB.maintenance={on:maintenance.enabled===true,level:maintenance.level||'info',text:maintenance.text||'',block:maintenance.blockLaunch===true};
+  var carousel=settings['home:carousel']||{count:3,autoplay:true,speedSeconds:7};DB.carousel={count:carousel.count||3,autoplay:carousel.autoplay!==false,speed:carousel.speedSeconds||7};
+  DB.cards=list('home_cards').filter(function(item){return !item.archived}).map(function(item){return Object.assign({type:'event',tags:'',title:'',sub:'',c1:'#7c2d12',c2:'#f59e0b',dest:'relaunch',cta:'Voir',status:'draft',from:'',to:'',aud:'all',img:''},item)});
+  DB.news=list('news').map(function(item){return Object.assign({tags:'',date:'',views:0,body:''},item)});
+  DB.lskins=list('skins').map(function(item){var u=item.unlock||{},v=item.versions||{};return Object.assign({},item,{n:item.n||item.name||item.id,how:[u.event&&'event',u.achievement&&'ach',u.shop&&'shop'].filter(Boolean).join('+')||(u.premium?'premium':'free'),price:typeof u.shop==='number'?u.shop:0,lg:v.liquidGlass===true,mat:v.mat===true,themed:item.followsTheme===true,owners:item.owners||0})});
+  DB.modpacks=list('modpacks').map(function(item){return Object.assign({n:item.n||item.name||item.id,mc:item.mc||'—',ver:item.version||item.ver||'—',mods:item.mods||0,size:item.size?sizeOf(item.size):'—',sig:item.sig===true,visible:item.visible===true,installs:item.installs||0,c1:'#334155',c2:'#94a3b8'},item)});
+  DB.servers=list('servers').map(function(item){return Object.assign({n:item.n||item.name||item.id,host:item.host||'',state:'offline',players:0,max:0,pack:'',event:''},item)});
+  DB.events=list('events').map(function(item){return Object.assign({n:item.n||item.name||item.id,date:'',server:'',pack:'',slots:0,state:'draft',desc:'',apps:[]},item)});
+  DB.partners=list('partners').map(function(item){return Object.assign({n:item.n||item.name||item.id,ch:'',cat:'',featured:false,live:false,viewers:0},item)});
+  DB.reports=list('reports').map(function(item){return Object.assign({who:'',reason:'',where:'',by:'',when:'',state:'open',apps:[]},item)});
+  var revisions=Array.isArray(state.revisions)?state.revisions:[];
+  DB.config={version:revisions.length?revisions[0].version:0,json:revisions.length?JSON.stringify(revisions[0].config,null,2):'{}',
+    history:revisions.map(function(r){return {v:r.version,t:r.createdAt||'',who:r.actorId||'—',d:'Configuration publiée'}})};
+  DB.notifs=(state.notifications||[]).map(function(n){return {t:n.createdAt||n.sendAt||'',title:n.title||'',aud:n.audience||'',sent:0,open:0,status:n.status}});
+  DB.launcherMetrics=state.metrics||{};
+  DB.health=Object.keys(state.services||{}).map(function(key){var ok=state.services[key]==='ok';return {n:key.toUpperCase(),s:ok?'ok':'bad',d:ok?'Disponible':key==='r2'?'Binding R2 manquant':'Indisponible'}});
+}
+async function loadLauncherState(){
+  if(CFG.simulate||stateLoaded||stateLoading)return;
+  stateLoading=true;stateLoadError='';
+  try{
+    var state=await window.apiFetch(ROUTES.state[1],'GET');
+    if(!state||!state.collections)throw new Error('Réponse d’état launcher invalide.');
+    applyLauncherState(state);stateLoaded=true;
+  }catch(e){stateLoadError=e.message||String(e)}
+  finally{stateLoading=false;render()}
+}
+function render(){
+  renderNav();
+  document.querySelectorAll('.simbadge').forEach(function(sb){sb.className='simbadge'+(CFG.simulate?'':' live');sb.textContent=CFG.simulate?'SIMULATION':'WORKER RÉEL'});
+  var el=$('rl-body-'+S.sec); if(!el||!SEC[S.sec]) return;
+  if(!CFG.simulate&&!stateLoaded){
+    el.innerHTML=stateLoading?'<section class="panel"><p class="soft">Chargement des données ReLaunch depuis le Worker…</p></section>':
+      stateLoadError?'<section class="panel"><p class="soft">Échec du chargement : '+esc(stateLoadError)+'</p><button class="btn pri" data-act="reloadState">Réessayer</button></section>':'<section class="panel"><p class="soft">Chargement des données ReLaunch…</p></section>';
+    loadLauncherState();return;
+  }
+  keepFocus(el,function(){
+    el.innerHTML=(CFG.simulate?'<div class="simnote"><b>Mode simulation.</b> Chaque action réussit sans rien envoyer au Worker. Les chiffres et les noms sont des exemples.<button class="btn sm" data-go="integration" style="margin-left:auto">Brancher le Worker</button></div>':'')+SEC[S.sec]();
+  });
+}
+function renderNav(){
+  ['updates','reports','events'].forEach(function(id){
+    var b=document.querySelector('[data-page="rl-'+id+'"]'); if(!b) return;
+    var c=navCount(id), o=b.querySelector('.rl-cnt'); if(o)o.remove();
+    if(c){var s=document.createElement('span');s.className='rl-cnt'+(c[1]?' '+c[1]:'');s.textContent=c[0];b.appendChild(s)}
+  });
+}
+function go(sec){ window.showPage(SEC[sec]?'rl-'+sec:sec) }
+
+document.addEventListener('click',function(e){
+  var t=e.target;
+  if(t.id==='scrim'){closeDrawer();return}
+  if(t.id==='mscrim'){closeModal(false);return}
+  var g=t.closest('.rl [data-go]');if(g){go(g.dataset.go);return}
+  var a=t.closest('.rl [data-act]');if(a&&!a.disabled&&ACT[a.dataset.act]){e.preventDefault();ACT[a.dataset.act](a)}
+});
+function bindDraft(el){
+  var d=S.drawer;if(!d||!el.closest('#drawer'))return false;
+  var k=el.dataset.k;if(!k)return false;
+  d.draft[k]=el.type==='checkbox'?el.checked:el.type==='range'?+el.value:el.value;
+  if(el.dataset.rr||el.type==='checkbox')renderDrawer();else if(LIVE[d.kind])LIVE[d.kind](d);
+  return true;
+}
+document.addEventListener('input',function(e){
+  var el=e.target;
+  if(el.id==='mWord'){$('mYes').disabled=el.value.trim().toUpperCase()!==String($('modal').dataset.word).toUpperCase();return}
+  if(el.type!=='checkbox'&&el.tagName!=='SELECT'&&bindDraft(el))return;
+  if(el.dataset.nf){var f=S.f.notif;f[el.dataset.nf]=el.value;if(el.tagName==='SELECT'){render();return}
+    var p=$('nfPrev');if(p)p.innerHTML='<i style="background:var(--acc)"></i><span><b>'+esc(f.title||'Titre de la notification')+'</b><br><span class="soft">'+esc(f.body||'Le message apparaît ici.')+'</span></span>';var c=$('nfCount');if(c)c.textContent=f.body.length+' / 140';return}
+  if(el.dataset.inp&&INP[el.dataset.inp])INP[el.dataset.inp](el);
+});
+document.addEventListener('change',function(e){
+  var el=e.target;
+  if(el.dataset.file&&FILE[el.dataset.file]){var f=el.files&&el.files[0];if(f)FILE[el.dataset.file](f);return}
+  if((el.type==='checkbox'||el.tagName==='SELECT')&&bindDraft(el))return;
+  if(el.dataset.chg&&CHG[el.dataset.chg])CHG[el.dataset.chg](el);
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){if(!$('modal').hidden)closeModal(false);else if(S.drawer)closeDrawer();}
+  if(e.key==='Enter'&&e.target.id==='mWord'&&!$('mYes').disabled)closeModal(true);
+});
+
+/* Carte ReLaunch sur le tableau de bord ReLink */
+function dashCard(){
+  var host=$('rl-dash-card'); if(!host) return;
+  if(!CFG.simulate&&!stateLoaded){
+    host.innerHTML='<div class="db-card"><h3>🚀 ReLaunch</h3><small>'+esc(stateLoadError||'Chargement des données du Worker…')+'</small></div>';
+    if(!stateLoading&&!stateLoadError)loadLauncherState().then(dashCard);
+    return;
+  }
+  if(!CFG.simulate){
+    var metrics=DB.launcherMetrics||{}, services=DB.health||[];
+    host.innerHTML='<div class="db-cols" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))"><div class="db-card"><h3>🚀 ReLaunch <a onclick="showPage(\'rl-overview\')">Ouvrir →</a></h3>'+
+      row('Stable '+esc(DB.channels.stable.cur),'Déploiement '+DB.channels.stable.rollout+' %'+(DB.channels.stable.paused?' · en pause':''))+
+      row('Bêta '+esc(DB.channels.beta.cur),'Déploiement '+DB.channels.beta.rollout+' %'+(DB.channels.beta.paused?' · en pause':''))+
+      row(DB.updates.kill?'Arrêt d\'urgence actif':'Mises à jour actives','Version minimale '+esc(DB.updates.minVersion||'—'))+
+      row((metrics.reportsOpen||0)+' signalements · '+(metrics.applications||0)+' candidatures','Stockés dans le Worker')+
+      '<small>'+services.filter(function(s){return s.s==='ok'}).length+'/'+services.length+' services disponibles</small>'+
+      '</div></div>';
+    return;
+  }
+  var c=DB.channels, open=DB.reports.filter(function(r){return r.state==='open'}).length, apps=DB.events.reduce(function(a,e){return a+e.apps.length},0);
+  function row(b,s,w){return '<div class="db-feed"><span style="font-size:15px">•</span><div class="who"><b>'+b+'</b><small>'+s+'</small></div><span class="when">'+(w||'')+'</span></div>'}
+  host.innerHTML='<div class="db-cols" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))"><div class="db-card"><h3>🚀 ReLaunch <a onclick="showPage(\'rl-overview\')">Ouvrir →</a></h3>'+
+    row('Stable '+esc(c.stable.cur),'Déployée à '+c.stable.rollout+' % · adoption '+c.stable.adoption+' %')+
+    row('Bêta '+esc(c.beta.cur),'Déployée à '+c.beta.rollout+' %'+(c.beta.paused?' · en pause':''))+
+    row(DB.updates.kill?'Arrêt d\'urgence actif':'Mises à jour actives','Version minimale '+esc(DB.updates.minVersion))+
+    row(open+' signalement'+(open>1?'s':'')+' · '+apps+' candidature'+(apps>1?'s':'')+' à un event','',CFG.simulate?'simulation':'')+
+    '</div></div>';
+}
+window.RL={show:function(sec){S.sec=SEC[sec]?sec:'overview';render()},dashCard:dashCard,render:render};
+render();
+
+})();
+</script>
+
+<script>
+// ── Intégration ReLaunch : chargement des pages + palette de commandes ──
+(function(){
+  var NAVRL=[["overview", "📊", "Vue d’ensemble", "ReLaunch — Pilotage"], ["updates", "⬆️", "Mises à jour", "ReLaunch — Pilotage"], ["config", "🎛️", "Configuration à distance", "ReLaunch — Pilotage"], ["home", "🏠", "Accueil & encarts", "ReLaunch — Contenu"], ["news", "📰", "Info & News", "ReLaunch — Contenu"], ["notifs", "🔔", "Notifications", "ReLaunch — Contenu"], ["lskins", "🎨", "Skins du launcher", "ReLaunch — Contenu"], ["modpacks", "🧱", "Modpacks", "ReLaunch — Jeu"], ["servers", "🖥️", "Serveurs du launcher", "ReLaunch — Jeu"], ["events", "📅", "Events", "ReLaunch — Jeu"], ["partners", "📡", "WeLive & partenaires", "ReLaunch — Jeu"], ["integration", "🔌", "Intégration & routes", "ReLaunch — Système"], ["reports", "🚩", "Signalements", "Gestion"]];
+  var KEY='rl_nav_collapsed', g=document.getElementById('rl-group');
+  function setC(c){ g.classList.toggle('collapsed',c); g.querySelector('.rl-group-head').setAttribute('aria-expanded',String(!c)); try{localStorage.setItem(KEY,c?'1':'0')}catch(e){} }
+  window.rlToggleGroup=function(){ setC(!g.classList.contains('collapsed')); };
+  try{ if(localStorage.getItem(KEY)==='1') g.classList.add('collapsed'); }catch(e){}
+  var _lp=loadPage;
+  loadPage=function(n){ if(n.indexOf('rl-')===0){ if(n!=='rl-reports'&&g.classList.contains('collapsed')) setC(false); RL.show(n.slice(3)); return; } _lp(n); if(n==='dashboard') RL.dashCard(); };
+  var _cp=cpBuildItems;
+  cpBuildItems=function(){ var it=_cp();
+    NAVRL.forEach(function(x){ it.push({group:'Pages',id:'page:rl-'+x[0],ico:x[1],label:'ReLaunch : '+x[2],hint:x[3],kw:'launcher relaunch '+x[2],run:function(){showPage('rl-'+x[0])}}); });
+    return it; };
+})();
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+// Pages ajoutées : Noms RP · Serveur & classements · Cohérence des identités
+// ══════════════════════════════════════════════════════════════════════════
+function nxEl(id) { return document.getElementById(id); }
+function nxVal(id) { const e = nxEl(id); return e ? e.value.trim() : ''; }
+function nxLoading(cols) { return `<tr><td colspan="${cols}" class="empty-state"><span class="spinner"></span>Chargement…</td></tr>`; }
+function nxCsv(name, cols, rows) {
+  if (!rows.length) { toast('Aucune ligne à exporter.', 'error'); return; }
+  const csv = [cols.join(','), ...rows.map(r => cols.map(c => `"${String(r[c] ?? '').replace(/"/g, '""')}"`).join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = `${name}-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.csv`;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function nxAvatar(u) {
+  const n = (u.pseudo || u.mc_username || '?');
+  return u.avatar_url
+    ? `<img class="avatar" src="${esc(u.avatar_url)}" alt="" onerror="this.style.display='none'">`
+    : `<span class="avatar-placeholder">${esc(n[0].toUpperCase())}</span>`;
+}
+function nxUserLink(id, label) {
+  return id ? `<a style="cursor:pointer;color:var(--accent);" onclick="openUserCard('${escJsAttr(id)}')">${esc(label || id)}</a>` : '';
+}
+
+// ── Noms RP ───────────────────────────────────────────────────────────────
+const RP_LIMIT = 25;
+let RP_OFFSET = 0, RP_LAST = [], rpTimer = null;
+const RP_SOURCES = { player: 'Joueur', kept: 'Conservé', staff: 'Staff', alias: 'Présentation' };
+
+function rpDebounced() { clearTimeout(rpTimer); rpTimer = setTimeout(() => loadRpNames(true), 300); }
+function rpReset() { nxEl('rp-q').value = ''; nxEl('rp-uuid').value = ''; nxEl('rp-kind').value = ''; loadRpNames(true); }
+function rpFilterUuid(u) { nxEl('rp-uuid').value = u; loadRpNames(true); }
+function rpExport() {
+  nxCsv('noms-rp', ['created_at', 'mc_username', 'mc_uuid', 'discord_id', 'discord_pseudo', 'kind', 'previous_rp_name', 'rp_name', 'source', 'set_by', 'shown_to_username', 'shown_to_uuid'], RP_LAST);
+}
+
+async function loadRpNames(reset = true) {
+  if (reset) RP_OFFSET = 0;
+  const tb = nxEl('rp-tbody');
+  tb.innerHTML = nxLoading(7);
+  const qs = new URLSearchParams({ limit: RP_LIMIT, offset: RP_OFFSET });
+  const q = nxVal('rp-q'), uuid = nxVal('rp-uuid'), kind = nxVal('rp-kind');
+  if (q) qs.set('q', q);
+  if (uuid) qs.set('uuid', uuid);
+  if (kind) qs.set('kind', kind);
+  const d = await apiFetch('/admin/rp-names?' + qs.toString());
+  if (d.error) {
+    tb.innerHTML = `<tr><td colspan="7" class="empty-state">${esc(errMsg(d))}</td></tr>`;
+    nxEl('rp-pagination').innerHTML = ''; nxEl('rp-count').textContent = '—';
+    return;
+  }
+  const list = d.entries || [];
+  RP_LAST = list;
+  nxEl('rp-count').textContent = `${(d.total || 0).toLocaleString()} entrée${d.total > 1 ? 's' : ''}`;
+  tb.innerHTML = list.length ? list.map(e => {
+    const isAlias = e.kind === 'alias';
+    const name = e.previous_rp_name && !isAlias
+      ? `<span style="color:var(--muted);text-decoration:line-through;">${esc(e.previous_rp_name)}</span> → <strong>${esc(e.rp_name)}</strong>`
+      : `<strong>${esc(e.rp_name)}</strong>`;
+    const src = (RP_SOURCES[e.source] || esc(e.source)) + (e.set_by ? ` · ${esc(e.set_by)}` : '');
+    const shown = isAlias ? esc(e.shown_to_username || e.shown_to_uuid || '—') : '<span style="color:var(--muted);">—</span>';
+    return `<tr>
+      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${fmtDate(e.created_at)}</td>
+      <td><strong>${esc(e.mc_username || '—')}</strong><br><a style="cursor:pointer;color:var(--muted);font-size:11px;font-family:ui-monospace,monospace;" title="Filtrer sur ce joueur" onclick="rpFilterUuid('${esc(e.mc_uuid)}')">${esc(e.mc_uuid)}</a></td>
+      <td>${e.discord_id ? nxUserLink(e.discord_id, e.discord_pseudo) : '<span class="badge-mc-unlinked">Non lié</span>'}</td>
+      <td><span class="badge-sub">${isAlias ? 'Pseudonyme' : 'Nom RP'}</span></td>
+      <td>${name}</td><td>${src}</td><td>${shown}</td></tr>`;
+  }).join('') : `<tr><td colspan="7" class="empty-state">Aucune entrée.</td></tr>`;
+  const hasNext = RP_OFFSET + RP_LIMIT < (d.total || 0);
+  nxEl('rp-pagination').innerHTML =
+    `<button class="btn-action btn-unlock" ${RP_OFFSET === 0 ? 'disabled' : ''} onclick="RP_OFFSET=Math.max(0,RP_OFFSET-RP_LIMIT);loadRpNames(false)">← Précédent</button>
+     <span>${list.length ? RP_OFFSET + 1 : 0}–${RP_OFFSET + list.length} / ${d.total || 0}</span>
+     <button class="btn-action btn-unlock" ${hasNext ? '' : 'disabled'} onclick="RP_OFFSET+=RP_LIMIT;loadRpNames(false)">Suivant →</button>`;
+}
+
+// ── Serveur de jeu & classements ──────────────────────────────────────────
+let GD_TAB = 'kills';
+
+function gdBar(label, used, limit, fmt) {
+  const pct = limit > 0 ? Math.min(100, used / limit * 100) : 0;
+  const col = pct >= 90 ? 'var(--red)' : pct >= 70 ? 'var(--amber)' : 'var(--green)';
+  return `<div class="stat-card"><div class="stat-lbl" style="margin:0 0 6px;">${label}</div>
+    <div style="font-size:20px;font-weight:700;">${fmt(used)}<span style="font-size:12px;color:var(--muted);font-weight:500;"> / ${limit > 0 ? fmt(limit) : '∞'}</span></div>
+    <div style="height:6px;border-radius:4px;background:var(--border);margin-top:8px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${col};"></div></div></div>`;
+}
+
+async function loadGameServer() {
+  const box = nxEl('gd-server');
+  if (AUTH_MODE !== 'bearer') {
+    box.innerHTML = `<div class="empty-state" style="padding:20px;">Cette route est protégée par un jeton Discord : connecte-toi avec Discord (et non avec le secret admin) pour voir l’état du serveur.</div>`;
+    return;
+  }
+  box.innerHTML = `<div class="empty-state" style="padding:20px;"><span class="spinner"></span>Interrogation du panel…</div>`;
+  const d = await apiFetch('/server');
+  if (d.error) { box.innerHTML = `<div class="empty-state" style="padding:20px;">${esc(errMsg(d))}</div>`; return; }
+  const st = String(d.status || 'inconnu');
+  const stCls = st === 'running' ? 'badge-active' : (st === 'offline' || st === 'stopping') ? 'badge-banned' : 'badge-suspended';
+  const stLbl = { running: 'En ligne', offline: 'Hors ligne', starting: 'Démarrage', stopping: 'Arrêt en cours' }[st] || st;
+  const pl = d.players || {};
+  box.innerHTML = `<div class="stats-row" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+    <div class="stat-card"><div class="stat-lbl" style="margin:0 0 6px;">État</div><span class="badge-status ${stCls}">${esc(stLbl)}</span></div>
+    <div class="stat-card"><div class="stat-lbl" style="margin:0 0 6px;">Joueurs</div><div style="font-size:20px;font-weight:700;">${pl.current ?? '—'}<span style="font-size:12px;color:var(--muted);font-weight:500;"> / ${pl.max ?? '—'}</span></div></div>
+    ${gdBar('RAM', d.ram?.used_mb || 0, d.ram?.limit_mb || 0, v => v.toLocaleString() + ' Mo')}
+    ${gdBar('CPU', d.cpu_percent || 0, d.cpu_limit || 0, v => v + ' %')}
+    ${gdBar('Disque', d.disk_mb || 0, d.disk_limit_mb || 0, v => v.toLocaleString() + ' Mo')}
+  </div>`;
+}
+
+function gdTable(head, rows) {
+  if (!rows.length) return `<div class="empty-state">Aucune donnée.</div>`;
+  return `<table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+}
+function gdPlayerCell(r) {
+  const link = r.discord_id ? nxUserLink(r.discord_id, r.pseudo) : `<strong>${esc(r.pseudo || '—')}</strong>`;
+  return `${nxAvatar(r)}${link}${r.discord_id && r.linked !== undefined ? '' : ''}`;
+}
+const gdRank = n => n === 1 ? '🥇' : n === 2 ? '🥈' : n === 3 ? '🥉' : `#${n}`;
+
+function gdClans(list) {
+  if (!Array.isArray(list) || !list.length) return `<div class="empty-state">Aucun clan synchronisé.</div>`;
+  const cols = [];
+  list.forEach(c => Object.keys(c || {}).forEach(k => { if (!cols.includes(k)) cols.push(k); }));
+  const show = cols.slice(0, 8);
+  const cell = v => {
+    if (v === null || v === undefined) return '<span style="color:var(--muted);">—</span>';
+    if (Array.isArray(v)) return `<span title="${esc(JSON.stringify(v).slice(0, 400))}">${v.length} élément${v.length > 1 ? 's' : ''}</span>`;
+    if (typeof v === 'object') return `<span title="${esc(JSON.stringify(v).slice(0, 400))}">{…}</span>`;
+    return esc(String(v));
+  };
+  return gdTable(show.map(esc), list.map(c => `<tr>${show.map(k => `<td>${cell((c || {})[k])}</td>`).join('')}</tr>`))
+    + (cols.length > show.length ? `<p style="font-size:11px;color:var(--muted);margin-top:8px;">${cols.length - show.length} colonne(s) masquée(s) : ${esc(cols.slice(show.length).join(', '))}</p>` : '');
+}
+
+async function gdTab(tab) {
+  GD_TAB = tab;
+  document.querySelectorAll('#gd-tabs .subtab').forEach(b => b.classList.toggle('active', b.dataset.gd === tab));
+  const box = nxEl('gd-table'), meta = nxEl('gd-meta');
+  box.innerHTML = `<div class="empty-state"><span class="spinner"></span>Chargement…</div>`; meta.textContent = '';
+  const limit = nxVal('gd-limit') || '10';
+  const path = tab === 'referrals' ? `/leaderboard/referrals?limit=${limit}`
+    : tab === 'streak' ? `/leaderboard/streak?limit=${limit}`
+    : tab === 'clans' ? '/clans'
+    : `/leaderboard?type=${tab}&limit=${limit}`;
+  const d = await apiFetch(path);
+  if (GD_TAB !== tab) return; // l'utilisateur a changé d'onglet entre-temps
+  if (d.error) { box.innerHTML = `<div class="empty-state">${esc(errMsg(d))}</div>`; return; }
+  if (tab === 'clans') { box.innerHTML = gdClans(Array.isArray(d) ? d : (d.data || [])); return; }
+  const res = d.results || [];
+  if (d.updated_at) meta.textContent = `Dernière mise à jour des stats : ${fmtDate(d.updated_at)}`;
+  if (tab === 'referrals') {
+    box.innerHTML = gdTable(['Rang', 'Parrain', 'Filleuls validés'], res.map(r =>
+      `<tr><td>${gdRank(r.rank)}</td><td>${gdPlayerCell(r)}</td><td><strong>${r.referral_count}</strong></td></tr>`));
+  } else if (tab === 'streak') {
+    box.innerHTML = gdTable(['Rang', 'Joueur', 'Série en cours', 'Record'], res.map(r =>
+      `<tr><td>${gdRank(r.rank)}</td><td>${gdPlayerCell(r)}</td><td><strong>🔥 ${r.current_streak}</strong></td><td>${r.longest_streak}</td></tr>`));
+  } else {
+    const hi = k => `style="${tab === k ? 'font-weight:700;color:var(--accent);' : ''}"`;
+    box.innerHTML = gdTable(['Rang', 'Joueur', 'Dynastie', 'Kills', 'Morts', 'K/D', 'Blocs posés', 'Fortune'], res.map(r => {
+      const kd = r.deaths > 0 ? (r.kills / r.deaths).toFixed(2) : (r.kills || 0).toFixed(2);
+      return `<tr><td>${gdRank(r.rank)}</td><td>${gdPlayerCell(r)}${r.discord_id ? '' : ' <span class="badge-mc-unlinked">non lié</span>'}</td>
+        <td>${esc(r.dynasty || '—')}</td><td ${hi('kills')}>${(r.kills || 0).toLocaleString()}</td><td>${(r.deaths || 0).toLocaleString()}</td><td>${kd}</td>
+        <td ${hi('blocs_poses')}>${(r.blocs_poses || 0).toLocaleString()}</td><td ${hi('fortune')}>${Number(r.fortune || 0).toLocaleString()}</td></tr>`;
+    }));
+  }
+}
+function loadGameData() { loadGameServer(); gdTab(GD_TAB); }
+
+// ── Cohérence des identités ───────────────────────────────────────────────
+async function loadIdentities() {
+  const root = nxEl('id-root');
+  root.innerHTML = `<div class="empty-state"><span class="spinner"></span>Contrôle en cours…</div>`;
+  const d = await apiFetch('/admin/identities/consistency-check');
+  if (d.error) { root.innerHTML = `<div class="card"><div class="empty-state">${esc(errMsg(d))}</div></div>`; return; }
+  const cnt = o => { const n = o?.count || 0; return n >= 50 ? '50+' : String(n); };
+  const kpi = (ico, lbl, o, hint) => {
+    const n = o?.count || 0;
+    return `<div class="db-kpi${n ? ' warn' : ''}" style="--c:${n ? 'var(--amber)' : 'var(--green)'};cursor:default;"><div class="ico">${ico}</div><div class="val">${cnt(o)}</div><div class="lbl">${lbl}</div><div class="sub">${hint}</div></div>`;
+  };
+  const sec = (title, o, head, rowFn, help) => {
+    const s = o?.sample || [];
+    return `<div class="card"><div class="card-title">${title} (${cnt(o)})</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">${help}</p>
+      ${s.length ? `<div class="table-wrap">${gdTable(head, s.map(rowFn))}</div>` : `<div class="empty-state" style="padding:18px;">✅ Rien à signaler.</div>`}</div>`;
+  };
+  const mono = v => v ? `<code style="font-size:11px;">${esc(v)}</code>` : '<span style="color:var(--muted);">— absente —</span>';
+  const ficheBtn = id => `<button class="btn-action btn-unlock" onclick="openUserCard('${escJsAttr(id)}')">👤 Fiche</button>`;
+  root.innerHTML = `
+    <div class="db-grid-kpi">
+      <div class="db-kpi" style="--c:var(--accent);cursor:default;"><div class="ico">👥</div><div class="val">${(d.total_users || 0).toLocaleString()}</div><div class="lbl">Comptes</div><div class="sub">dans la table users</div></div>
+      ${kpi('💬', 'Sans identité Discord', d.missing_discord_identity, 'Corrigé à la prochaine connexion')}
+      ${kpi('⛏️', 'UUID Minecraft divergent', d.mismatched_minecraft_identity, 'users ≠ identities')}
+      ${kpi('👻', 'Identités orphelines', d.orphan_identities, 'Compte supprimé')}
+    </div>
+    ${sec('Comptes sans identité Discord miroir', d.missing_discord_identity, ['Pseudo', 'Discord ID', ''],
+      r => `<tr><td><strong>${esc(r.pseudo || '—')}</strong></td><td>${mono(r.discord_id)}</td><td>${ficheBtn(r.discord_id)}</td></tr>`,
+      'Comptes créés avant l’introduction de la table identities et jamais reconnectés depuis.')}
+    ${sec('UUID Minecraft différent entre users et identities', d.mismatched_minecraft_identity, ['Pseudo', 'UUID (users)', 'UUID (identities)', ''],
+      r => `<tr><td><strong>${esc(r.pseudo || '—')}</strong></td><td>${mono(r.users_uuid)}</td><td>${mono(r.identities_uuid)}</td><td>${ficheBtn(r.discord_id)}</td></tr>`,
+      'Typiquement une liaison forcée depuis le panel, ou un compte lié avant la mise en place du miroir.')}
+    ${sec('Identités orphelines', d.orphan_identities, ['Discord ID', 'Fournisseur', 'Identifiant fournisseur'],
+      r => `<tr><td>${mono(r.discord_id)}</td><td>${esc(r.provider)}</td><td>${mono(r.provider_user_id)}</td></tr>`,
+      'Lignes identities dont le compte n’existe plus dans users.')}
+    <p style="font-size:11px;color:var(--muted);">${esc(d.note || '')} Les listes sont limitées à 50 lignes par catégorie.</p>`;
+}
+
+// ── Branchement : chargement des pages + palette de commandes ──────────────
+(function () {
+  const LOADERS = { rpnames: () => loadRpNames(true), gamedata: loadGameData, identities: loadIdentities };
+  const _lp = loadPage;
+  loadPage = function (n) { if (LOADERS[n]) { LOADERS[n](); return; } _lp(n); };
+  const _cp = cpBuildItems;
+  cpBuildItems = function () {
+    const it = _cp();
+    [
+      ['rpnames', '🎭', 'Noms RP', 'Historique des noms et pseudonymes', 'rp wathe nom pseudo identité roleplay'],
+      ['gamedata', '🏆', 'Serveur & classements', 'État du serveur, tops, clans', 'classement leaderboard kills fortune clans parrains streak pterodactyl ram cpu'],
+      ['identities', '🧬', 'Cohérence des identités', 'Contrôle users / identities', 'identités discord minecraft incohérence orphelin'],
+    ].forEach(x => it.push({ group: 'Pages', id: 'page:' + x[0], ico: x[1], label: x[2], hint: x[3], kw: x[4], run: () => showPage(x[0]) }));
+    return it;
+  };
+})();
+</script>
+</body></html>
