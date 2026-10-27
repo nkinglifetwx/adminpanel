@@ -5852,7 +5852,7 @@ DR.packCreate=function(d){var x=d.draft;
     foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="packCreate">Créer le modpack</button>'};
 };
 DR.server=function(d){var x=d.draft;
-  return {title:(d.id?'Serveur · ':'Nouveau serveur · ')+x.n,body:'<div class="form">'+F('Nom',I('n',x.n))+F('Adresse',I('host',x.host,'class="mono" placeholder="play.example.fr:25565"'))+'<div class="two">'+F('Places',N('max',x.max,'min="1"'))+F('Modpack requis',SEL('pack',x.pack,DB.modpacks.map(function(m){return [m.id,m.n]})))+'</div>'+F('Event lié',SEL('event',x.event,[['','Aucun']].concat(DB.events.map(function(e){return [e.id,e.n]}))))+'</div>',
+  return {title:(d.id?'Serveur · ':'Nouveau serveur · ')+x.n,body:'<div class="form">'+F('Nom',I('n',x.n))+F('Adresse',I('host',x.host,'class="mono" placeholder="play.example.fr:25565"'))+'<div class="two">'+F('Places',N('max',x.max,'min="1"'))+F('Modpack lié',SEL('pack',x.pack,[['','Aucun']].concat(DB.modpacks.map(function(m){return [m.id,m.n]}))),'Un modpack = un serveur : c\u2019est le serveur rejoint par le compte non officiel quand le joueur lance ce modpack.')+'</div>'+F('Event lié',SEL('event',x.event,[['','Aucun']].concat(DB.events.map(function(e){return [e.id,e.n]}))))+'</div>',
     foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="serverSave">Enregistrer</button>'};
 };
 /* Rappel affiché à la création d'un event et à l'envoi d'un modpack d'event (règles d'usage de Minecraft) */
@@ -6167,7 +6167,7 @@ ACT.srvMaint=async function(b){var s=DB.servers[+b.dataset.i],on=b.dataset.v==='
   if(on&&s.players&&!(await confirmBox({title:'Mettre '+s.n+' en maintenance ?',text:'<b>'+s.players+' joueurs</b> seront déconnectés avec un message.',ok:'Mettre en maintenance',danger:true,word:s.n})))return;
   run(b,'serverMaint',{id:s.id},{enabled:on},{ok:s.n+(on?' en maintenance':' rouvert'),target:s.n,after:function(){s.state=on?'maintenance':'online';if(on)s.players=0}})};
 ACT.openServer=function(b){openDrawer({kind:'server',id:b.dataset.id,draft:clone(byId(DB.servers,b.dataset.id))})};
-ACT.openNewServer=function(){openDrawer({kind:'server',id:null,draft:{n:'',host:'',state:'offline',players:0,max:100,pack:DB.modpacks[0]?.id||'',event:''}})};
+ACT.openNewServer=function(){openDrawer({kind:'server',id:null,draft:{n:'',host:'',state:'offline',players:0,max:100,pack:'',event:''}})};
 ACT.serverSave=function(b){var d=S.drawer,x=d.draft,s=byId(DB.servers,d.id),nw=!d.id;
   if(!x.n.trim()||!x.host.trim()){toast('Nom et adresse obligatoires','','err');return}
   run(b,nw?'serverCreate':'serverSave',{id:d.id},Object.assign({},x,{max:+x.max}),{ok:x.n+(nw?' créé':' enregistré'),target:x.n,close:true,after:function(res){
