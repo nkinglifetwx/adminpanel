@@ -243,6 +243,8 @@
 
   .badge-mc-linked   { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--green-bg); color: var(--green); }
   .badge-mc-unlinked { display: inline-block; font-size: 11px; color: var(--muted); padding: 2px 8px; }
+  .badge-mc-offline  { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--amber-bg); color: var(--amber); margin-top: 3px; }
+  .offline-lockinfo  { display: block; font-size: 10px; color: var(--muted); padding: 1px 8px; }
 
   /* ── Flags toggles ── */
   .flags-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
@@ -1146,6 +1148,7 @@
       <div class="page-header">
         <h2>Utilisateurs</h2>
         <span class="badge" id="user-count">…</span>
+        <button class="btn-action btn-link" style="margin-left:auto;" onclick="offlineSyncAll()" title="Lie chaque pseudo hors-ligne déjà enregistré à son compte ReLink (aucune récompense)">🔗 Lier les pseudos hors-ligne</button>
       </div>
 
       <div class="stats-row" id="user-stats"></div>
@@ -1953,6 +1956,24 @@
   </div>
 </div>
 
+<!-- Pseudo hors-ligne : attribuer / changer -->
+<div id="offline-overlay" class="modal-overlay">
+  <div class="modal">
+    <h3>🎮 Pseudo hors-ligne</h3>
+    <p>Attribuer un pseudo hors-ligne à <strong id="offline-pseudo-label"></strong>. Il est lié automatiquement à son compte ReLink, <strong>sans aucune récompense</strong> (pas de 1000 éclats). Un Minecraft officiel déjà lié n'est jamais modifié.</p>
+    <input type="hidden" id="offline-discord-id">
+    <label class="field-label">Pseudo (3 à 16 caractères : lettres, chiffres ou _)</label>
+    <input type="text" id="offline-name" maxlength="16" placeholder="ex: Steve_42" autocomplete="off">
+    <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:12px;text-align:left;"><input type="checkbox" id="offline-lock" style="width:auto;"> Verrouiller 90 jours (sinon le joueur peut le changer librement)</label>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;text-align:left;"><input type="checkbox" id="offline-skip" style="width:auto;"> Ignorer la vérification Mojang (si leur API est indisponible)</label>
+    <div id="offline-error" style="margin-top:10px;color:var(--red);font-size:12px;display:none;"></div>
+    <div class="modal-actions" style="margin-top:18px;">
+      <button onclick="closeOfflineSet()">Annuler</button>
+      <button class="btn-confirm-ok" onclick="submitOfflineSet()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Apparence d'un site -->
 <div id="look-overlay" class="modal-overlay" onclick="if(event.target===this)closeLook()">
   <div class="modal" style="max-width:480px;width:94vw;text-align:left;max-height:92vh;overflow-y:auto;">
@@ -2529,6 +2550,7 @@ async function loadUsers() {
   document.getElementById('user-count').textContent = userTotal + ' membres';
   const all = data.users || [];
   lastLoadedUsers = all;
+  await loadOfflineMap();
   all.forEach(u => { if (selectedUserIds.has(String(u.discord_id))) selectedUserMap.set(String(u.discord_id), u); });
 
   const active = all.filter(u => !u.status || u.status === 'active').length;
@@ -2553,7 +2575,16 @@ function userRow(u) {
     ? `<img class="avatar" src="${esc(u.avatar_url)}" alt="" onerror="this.style.display='none';this.nextSibling.style.display='inline-flex'"><span class="avatar-placeholder" style="display:none">${esc((u.pseudo||'?')[0].toUpperCase())}</span>`
     : `<span class="avatar-placeholder">${esc((u.pseudo||'?')[0].toUpperCase())}</span>`;
   const mcLinked = !!u.minecraft_uuid;
-  const mcCell = mcLinked ? `<span class="badge-mc-linked" title="${esc(u.minecraft_uuid)}">✓ ${esc(u.minecraft_username)}</span>` : `<span class="badge-mc-unlinked">Non lié</span>`;
+  // Un UUID « version 3 » est un UUID hors-ligne (OfflinePlayer:<pseudo>) : lié automatiquement, non vérifié chez Mojang, sans récompense.
+  const off = OFFLINE_MAP[String(u.discord_id)];
+  const mcIsOffline = mcLinked && /^[0-9a-f]{8}-[0-9a-f]{4}-3[0-9a-f]{3}-/i.test(String(u.minecraft_uuid));
+  let mcCell = mcLinked
+    ? (mcIsOffline
+        ? `<span class="badge-mc-offline" title="${esc(u.minecraft_uuid)} · lié automatiquement, non vérifié, sans récompense">🎮 ${esc(u.minecraft_username)} · hors-ligne</span>`
+        : `<span class="badge-mc-linked" title="${esc(u.minecraft_uuid)}">✓ ${esc(u.minecraft_username)}</span>`)
+    : `<span class="badge-mc-unlinked">Non lié</span>`;
+  if (off && !mcIsOffline) mcCell += `<br><span class="badge-mc-offline" title="Pseudo hors-ligne enregistré">🎮 ${esc(off.name)} · hors-ligne</span>`;
+  if (off && off.locked) mcCell += `<span class="offline-lockinfo">🔒 pseudo verrouillé jusqu'au ${esc(offlineFmtDate(off.lockedUntil))}</span>`;
   let actions = '';
   if (status === 'active') {
     actions += `<button class="btn-action btn-suspend" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','suspend')">Suspendre</button><button class="btn-action btn-ban" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','ban')">Bannir</button>`;
@@ -4347,11 +4378,12 @@ function ucRowClick(e, id) { if (e.target.closest('button,input,a,select,label')
 async function openUserCard(discordId) {
   const id = String(discordId);
   const u = (typeof lastLoadedUsers !== 'undefined' && lastLoadedUsers.find(x => String(x.discord_id) === id)) || UC_CACHE[id] || { discord_id: id };
-  UC = { id, user: u, roles: Array.isArray(u.roles) ? u.roles.slice() : [], scope: 'global', picker: false, changed: false };
+  UC = { id, user: u, roles: Array.isArray(u.roles) ? u.roles.slice() : [], scope: 'global', picker: false, changed: false, offline: undefined };
   document.getElementById('usercard-overlay').classList.add('open');
   renderUserCard(true);
-  const [rb, ur] = await Promise.all([apiFetch('/admin/rbac'), apiFetch(`/admin/users/${encodeURIComponent(id)}/roles`)]);
+  const [rb, ur, off] = await Promise.all([apiFetch('/admin/rbac'), apiFetch(`/admin/users/${encodeURIComponent(id)}/roles`), apiFetch(`/admin/launcher/offline?q=${encodeURIComponent(id)}&limit=5`)]);
   if (UC.id !== id) return;
+  UC.offline = off.error ? false : ((off.names || []).find(n => String(n.discordId) === id) || null);
   if (!rb.error) RBAC = rb; else toast(errMsg(rb), 'error');
   if (!ur.error) UC.roles = ur.roles || []; else toast(errMsg(ur), 'error');
   renderUserCard(false);
@@ -4421,6 +4453,8 @@ function renderUserCard(loading) {
       <div><b>E-mail</b><span>${esc(u.email || '—')}</span></div>
       <div><b>Candidatures</b><span>${esc(cand)}</span></div></div></div>
 
+    ${ucOfflineBox()}
+
     <div class="uc-box"><div class="uc-title">Rôles</div>
       <div class="uc-chips">${chips.join('')}<button class="uc-add ${UC.picker ? 'on' : ''}" title="Ajouter / retirer un rôle" onclick="UC.picker=!UC.picker;renderUserCard(false)">+</button></div>
       ${UC.picker ? `<div style="margin-top:12px;">${scopeSel}</div>${picker}` : ''}
@@ -4480,6 +4514,102 @@ function ucConfirmRemoveAdmin() {
 function ucDo(action) { const u = UC.user || {}, id = UC.id; closeUserCard(); doUserAction(id, u.pseudo || id, action); }
 function ucGiveEclats() { const u = UC.user || {}, id = UC.id; closeUserCard(); openGiveEclatsFor(id, u.pseudo || id, u.eclats || 0); }
 function ucForceLink() { const u = UC.user || {}, id = UC.id; closeUserCard(); openForceLink(id, u.pseudo || id, u.minecraft_uuid || '', u.minecraft_username || ''); }
+
+// ── Pseudos hors-ligne : liés automatiquement au compte ReLink, SANS récompense ─────────────────────
+let OFFLINE_MAP = {};
+function offlineFmtDate(iso) {
+  const d = new Date(iso);
+  return isNaN(d) || d.getFullYear() < 2001 ? '—' : d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+async function loadOfflineMap() {
+  const d = await apiFetch('/admin/launcher/offline?limit=1000');
+  if (d && !d.error && Array.isArray(d.names)) OFFLINE_MAP = Object.fromEntries(d.names.map(n => [String(n.discordId), n]));
+}
+
+function ucOfflineBox() {
+  const o = UC.offline;
+  let body;
+  if (o === undefined) body = '<span class="empty-state">Chargement…</span>';
+  else if (o === false) body = '<span class="empty-state">Indisponible (le Worker est-il à jour ?).</span>';
+  else {
+    const facts = o
+      ? `<div class="uc-facts">
+          <div><b>Pseudo hors-ligne</b><span>🎮 ${esc(o.name)}</span></div>
+          <div><b>Délai de 90 jours</b><span>${o.locked ? '🔒 jusqu\'au ' + esc(offlineFmtDate(o.lockedUntil)) : '🔓 débloqué'}</span></div>
+          <div><b>Dernier choix</b><span>${esc(offlineFmtDate(o.changedAt))}</span></div>
+          <div><b>Récompense</b><span>Aucune (non vérifié)</span></div></div>`
+      : '<span class="empty-state">Aucun pseudo hors-ligne pour ce compte.</span>';
+    body = facts + `<div class="uc-actions" style="margin-top:12px;">
+        <button class="btn-action btn-link" onclick="ucOfflineSet()">${o ? '✏️ Changer le pseudo' : '➕ Ajouter un pseudo'}</button>
+        ${o && o.locked ? '<button class="btn-action btn-unban" onclick="ucOfflineUnlock()">🔓 Débloquer le délai</button>' : ''}
+        ${o ? '<button class="btn-action btn-delete" onclick="ucOfflineRelease()">Libérer le pseudo</button>' : ''}</div>`;
+  }
+  return `<div class="uc-box"><div class="uc-title">Compte hors-ligne</div>${body}</div>`;
+}
+
+async function ucOfflineRefresh() {
+  const id = UC.id; if (!id) return;
+  const d = await apiFetch(`/admin/launcher/offline?q=${encodeURIComponent(id)}&limit=5`);
+  UC.offline = d.error ? false : ((d.names || []).find(n => String(n.discordId) === String(id)) || null);
+  UC.changed = true;
+  renderUserCard(false);
+}
+
+async function ucOfflineUnlock() {
+  const id = UC.id, o = UC.offline; if (!id || !o) return;
+  const who = UC.user?.pseudo || id;
+  if (!(await confirm('Débloquer le délai', `${who} garde son pseudo hors-ligne « ${o.name} » mais pourra le changer (ou l'oublier) tout de suite. Continuer ?`, 'btn-confirm-ok'))) return;
+  const d = await apiFetch(`/admin/launcher/offline/${encodeURIComponent(id)}/unlock`, 'POST', {});
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  toast('Délai débloqué : le joueur peut changer son pseudo.', 'success');
+  await ucOfflineRefresh();
+}
+
+async function ucOfflineRelease() {
+  const id = UC.id, o = UC.offline; if (!id || !o) return;
+  const who = UC.user?.pseudo || id;
+  if (!(await confirm('Libérer le pseudo hors-ligne', `Le pseudo « ${o.name} » est retiré à ${who} et redevient libre, délai remis à zéro. S'il était lié automatiquement au compte, la liaison est retirée (un Minecraft officiel n'est jamais touché). Continuer ?`, 'btn-confirm-danger'))) return;
+  const d = await apiFetch(`/admin/launcher/offline/${encodeURIComponent(id)}`, 'DELETE');
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  toast('Pseudo hors-ligne libéré.', 'success');
+  await ucOfflineRefresh();
+}
+
+function ucOfflineSet() {
+  const u = UC.user || {};
+  document.getElementById('offline-discord-id').value = UC.id;
+  document.getElementById('offline-pseudo-label').textContent = u.pseudo || UC.id;
+  document.getElementById('offline-name').value = UC.offline?.name || '';
+  document.getElementById('offline-lock').checked = false;
+  document.getElementById('offline-skip').checked = false;
+  document.getElementById('offline-error').style.display = 'none';
+  document.getElementById('offline-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('offline-name').focus(), 50);
+}
+function closeOfflineSet() { document.getElementById('offline-overlay').classList.remove('open'); }
+
+async function submitOfflineSet() {
+  const id = document.getElementById('offline-discord-id').value;
+  const name = document.getElementById('offline-name').value.trim();
+  const lock = document.getElementById('offline-lock').checked;
+  const skipOfficialCheck = document.getElementById('offline-skip').checked;
+  const errEl = document.getElementById('offline-error');
+  const fail = (m) => { errEl.textContent = m; errEl.style.display = 'block'; };
+  if (!/^[A-Za-z0-9_]{3,16}$/.test(name)) return fail('Pseudo invalide : 3 à 16 caractères (lettres, chiffres ou _).');
+  const d = await apiFetch(`/admin/launcher/offline/${encodeURIComponent(id)}`, 'PUT', { name, lock, skipOfficialCheck });
+  if (!d.ok) return fail(d.error || 'Erreur lors de l\'enregistrement.');
+  closeOfflineSet();
+  toast(`Pseudo hors-ligne « ${name} » enregistré${d.linked ? ' et lié au compte (aucune récompense)' : ''}.`, 'success');
+  if (UC.id === id) await ucOfflineRefresh(); else loadUsers();
+}
+
+async function offlineSyncAll() {
+  if (!(await confirm('Lier les pseudos hors-ligne', 'Chaque pseudo hors-ligne déjà enregistré est lié au compte ReLink correspondant, sans aucune récompense. Les comptes déjà liés à un Minecraft sont laissés intacts. Continuer ?', 'btn-confirm-ok'))) return;
+  const d = await apiFetch('/admin/launcher/offline/sync', 'POST', {});
+  if (!d.ok) { toast(errMsg(d), 'error'); return; }
+  toast(`${d.linked} compte(s) lié(s) · ${d.kept} déjà liés à un Minecraft · ${d.conflict} conflit(s).`, 'success');
+  loadUsers();
+}
 
 // ── Utils ─────────────────────────────────────────────────────────────────
 function esc(s) {
