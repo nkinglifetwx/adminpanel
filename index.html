@@ -1189,14 +1189,15 @@
                 <th style="width:34px;"><input class="user-check" type="checkbox" id="select-all-users" onchange="toggleAllUsers(this.checked)" title="Tout sélectionner"></th>
                 <th>Utilisateur</th>
                 <th>Statut</th>
-                <th>Minecraft</th>
+                <th>Minecraft Java</th>
+                <th>Hors-ligne</th>
                 <th>Éclats</th>
                 <th>Candidature</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody id="users-tbody">
-              <tr><td colspan="7" class="empty-state"><span class="spinner"></span>Chargement…</td></tr>
+              <tr><td colspan="8" class="empty-state"><span class="spinner"></span>Chargement…</td></tr>
             </tbody>
           </table>
         </div>
@@ -2563,7 +2564,7 @@ async function loadUsers() {
     <div class="stat-card"><div class="stat-val">${userTotal}</div><div class="stat-lbl">Total</div></div>`;
 
   const tbody = document.getElementById('users-tbody');
-  tbody.innerHTML = all.length ? all.map(u => userRow(u)).join('') : '<tr><td colspan="7" class="empty-state">Aucun utilisateur trouvé.</td></tr>';
+  tbody.innerHTML = all.length ? all.map(u => userRow(u)).join('') : '<tr><td colspan="8" class="empty-state">Aucun utilisateur trouvé.</td></tr>';
   updateSelectionToolbar();
   renderPagination();
 }
@@ -2575,16 +2576,18 @@ function userRow(u) {
     ? `<img class="avatar" src="${esc(u.avatar_url)}" alt="" onerror="this.style.display='none';this.nextSibling.style.display='inline-flex'"><span class="avatar-placeholder" style="display:none">${esc((u.pseudo||'?')[0].toUpperCase())}</span>`
     : `<span class="avatar-placeholder">${esc((u.pseudo||'?')[0].toUpperCase())}</span>`;
   const mcLinked = !!u.minecraft_uuid;
-  // Un UUID « version 3 » est un UUID hors-ligne (OfflinePlayer:<pseudo>) : lié automatiquement, non vérifié chez Mojang, sans récompense.
+  // Un UUID « version 3 » est un UUID hors-ligne (OfflinePlayer:<pseudo>) : lié automatiquement, non vérifié, sans récompense.
+  // Un joueur peut avoir LES DEUX : un compte Java (officiel) et un pseudo hors-ligne, affichés dans deux colonnes.
   const off = OFFLINE_MAP[String(u.discord_id)];
   const mcIsOffline = mcLinked && /^[0-9a-f]{8}-[0-9a-f]{4}-3[0-9a-f]{3}-/i.test(String(u.minecraft_uuid));
-  let mcCell = mcLinked
-    ? (mcIsOffline
-        ? `<span class="badge-mc-offline" title="${esc(u.minecraft_uuid)} · lié automatiquement, non vérifié, sans récompense">🎮 ${esc(u.minecraft_username)} · hors-ligne</span>`
-        : `<span class="badge-mc-linked" title="${esc(u.minecraft_uuid)}">✓ ${esc(u.minecraft_username)}</span>`)
+  const mcCell = (mcLinked && !mcIsOffline)
+    ? `<span class="badge-mc-linked" title="${esc(u.minecraft_uuid)}">✓ ${esc(u.minecraft_username)}</span>`
     : `<span class="badge-mc-unlinked">Non lié</span>`;
-  if (off && !mcIsOffline) mcCell += `<br><span class="badge-mc-offline" title="Pseudo hors-ligne enregistré">🎮 ${esc(off.name)} · hors-ligne</span>`;
-  if (off && off.locked) mcCell += `<span class="offline-lockinfo">🔒 pseudo verrouillé jusqu'au ${esc(offlineFmtDate(off.lockedUntil))}</span>`;
+  const offName = off ? off.name : (mcIsOffline ? u.minecraft_username : '');
+  const offCell = offName
+    ? `<span class="badge-mc-offline" title="Lié automatiquement, non vérifié, sans récompense">🎮 ${esc(offName)}</span>`
+      + (off && off.locked ? `<span class="offline-lockinfo">🔒 jusqu'au ${esc(offlineFmtDate(off.lockedUntil))}</span>` : '')
+    : `<span class="badge-mc-unlinked">—</span>`;
   let actions = '';
   if (status === 'active') {
     actions += `<button class="btn-action btn-suspend" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','suspend')">Suspendre</button><button class="btn-action btn-ban" onclick="doUserAction('${u.discord_id}','${escJsAttr(u.pseudo)}','ban')">Bannir</button>`;
@@ -2598,7 +2601,7 @@ function userRow(u) {
   const identifiers = [u.email ? `✉ ${u.email}` : '', u.minecraft_uuid ? `UUID ${u.minecraft_uuid}` : '', roleText ? `🛡️ ${roleText}` : ''].filter(Boolean).map(x => `<span class="identifier">${esc(x)}</span>`).join('');
   return `<tr class="user-row" onclick="ucRowClick(event,'${escJsAttr(u.discord_id)}')"><td><input class="user-check user-row-check" type="checkbox" ${selectedUserIds.has(String(u.discord_id)) ? 'checked' : ''} onchange="toggleUserSelection('${escJsAttr(u.discord_id)}',this.checked)"></td>
     <td>${avatar}<strong>${esc(u.pseudo || u.discord_username || '—')}</strong><br><span style="color:var(--muted);font-size:11px">${esc(u.discord_id)}</span><div class="user-identifiers">${identifiers}</div></td>
-    <td><span class="badge-status badge-${status}">${labelMap[status] || esc(status)}</span></td><td>${mcCell}</td><td>${eclatsCell}</td><td>${candCell}</td><td><div class="actions">${actions}</div></td></tr>`;
+    <td><span class="badge-status badge-${status}">${labelMap[status] || esc(status)}</span></td><td>${mcCell}</td><td>${offCell}</td><td>${eclatsCell}</td><td>${candCell}</td><td><div class="actions">${actions}</div></td></tr>`;
 }
 
 // Toutes les actions en masse passent par POST /admin/users/bulk (500 comptes max par appel) :
@@ -4448,7 +4451,8 @@ function renderUserCard(loading) {
         <span class="badge-status badge-${esc(status)}">${esc(stLabel)}</span></div></div></div>
 
     <div class="uc-box"><div class="uc-title">Profil</div><div class="uc-facts">
-      <div><b>Minecraft</b><span>${u.minecraft_username ? '✓ ' + esc(u.minecraft_username) : 'Non lié'}</span></div>
+      <div><b>Minecraft Java</b><span>${u.minecraft_username && !/^[0-9a-f]{8}-[0-9a-f]{4}-3[0-9a-f]{3}-/i.test(String(u.minecraft_uuid || '')) ? '✓ ' + esc(u.minecraft_username) : 'Non lié'}</span></div>
+      <div><b>Hors-ligne</b><span>${UC.offline ? '🎮 ' + esc(UC.offline.name) : (UC.offline === undefined ? '…' : 'Aucun')}</span></div>
       <div><b>Éclats</b><span>💎 ${esc(u.eclats || 0)}${u.is_partner ? ' · Partenaire ' + esc(u.partner_bonus_percent || 0) + '%' : ''}</span></div>
       <div><b>E-mail</b><span>${esc(u.email || '—')}</span></div>
       <div><b>Candidatures</b><span>${esc(cand)}</span></div></div></div>
