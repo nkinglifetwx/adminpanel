@@ -5868,6 +5868,7 @@ DR.event=function(d){var x=d.draft;
     '<div class="two">'+F('Serveur',SEL('server',x.server,DB.servers.map(function(s){return [s.id,s.n]})))+F('Modpack',SEL('pack',x.pack,DB.modpacks.map(function(m){return [m.id,m.n]})))+'</div>'+
     F('Description',TA('desc',x.desc||'','rows="4"'))+'<div class="field"><span>État</span>'+SEG('state',x.state,[['draft','Brouillon'],['upcoming','À venir'],['live','En cours'],['done','Terminé']])+'</div>'+
     CHK('requireMicrosoft',x.requireMicrosoft,'Compte Microsoft connecté dans ReLaunch obligatoire')+'<p class="sub" style="margin:-4px 0 0">Coché : le modpack de cet event ne se lance qu\'avec le compte Microsoft connecté dans ReLaunch (lancement direct), jamais via le launcher officiel, et ce compte est lié au compte ReLink du joueur. Tant que Mojang n\'a pas validé l\'application WeCraft, personne ne pourra lancer ce modpack. À compléter côté serveur (mode online ou plugin ReLink).</p>'+
+    (x.requireMicrosoft?'<p class="sub" style="margin:0">Comptes hors-ligne : indisponibles tant que le compte Microsoft est obligatoire.</p>':CHK('allowOffline',x.allowOffline,'Comptes hors-ligne acceptés')+'<p class="sub" style="margin:-4px 0 0">Par défaut, un joueur en compte hors-ligne ne peut lancer <b>aucune</b> instance, event compris. Coché : il peut lancer cet event, et ReLaunch le connecte <b>automatiquement</b> au serveur ci-dessous, sans écran de choix ni possibilité d\'annuler. Son pseudo est vérifié par ReLink (jamais un pseudo de compte officiel). Le serveur doit accepter les comptes hors-ligne (online-mode=false) : protège-le (whitelist ou plugin ReLink), sinon n\'importe qui peut s\'y connecter.</p>'+(x.allowOffline?F('Serveur des comptes hors-ligne',I('offlineHost',x.offlineHost||'','class="mono" placeholder="play.example.fr:25565"'),'Obligatoire : adresse où les comptes hors-ligne sont connectés (domaine ou IP, port facultatif).'):''))+
     (d.id?'':CHK('card',x.card,'Créer aussi un encart d\'accueil en brouillon'))+EVENT_RULES+'</div>',
     foot:'<button class="btn ghost" data-act="closeDrawer">Annuler</button><button class="btn pri" data-act="eventSave">'+(d.id?'Enregistrer':'Créer l\'event')+'</button>'};
 };
@@ -6175,10 +6176,14 @@ ACT.serverSave=function(b){var d=S.drawer,x=d.draft,s=byId(DB.servers,d.id),nw=!
     else Object.assign(s,{n:x.n,host:x.host,max:+x.max,pack:x.pack,event:x.event})}})};
 
 /* -- Events -- */
-ACT.openEvent=function(b){var id=b.dataset.id,e=id?clone(byId(DB.events,id)):{n:'',date:'',server:'',pack:'',slots:100,state:'draft',desc:'',card:true,requireMicrosoft:false,apps:[]};e.requireMicrosoft=e.requireMicrosoft===true;e.err='';openDrawer({kind:'event',id:id||null,draft:e})};
-ACT.eventSave=function(b){var d=S.drawer,x=d.draft;x.err='';if(!x.n.trim())x.err='donne un nom à l\'event.';else if(!x.date)x.err='choisis la date et l\'heure.';if(x.err){renderDrawer();return}
+ACT.openEvent=function(b){var id=b.dataset.id,e=id?clone(byId(DB.events,id)):{n:'',date:'',server:'',pack:'',slots:100,state:'draft',desc:'',card:true,requireMicrosoft:false,allowOffline:false,offlineHost:'',apps:[]};e.requireMicrosoft=e.requireMicrosoft===true;e.allowOffline=e.allowOffline===true&&!e.requireMicrosoft;e.offlineHost=e.offlineHost||'';e.err='';openDrawer({kind:'event',id:id||null,draft:e})};
+ACT.eventSave=function(b){var d=S.drawer,x=d.draft;x.err='';if(!x.n.trim())x.err='donne un nom à l\'event.';else if(!x.date)x.err='choisis la date et l\'heure.';
+  if(x.requireMicrosoft)x.allowOffline=false;
+  var offAddr=null;if(x.allowOffline){var om=/^([A-Za-z0-9](?:[A-Za-z0-9.-]{0,253}[A-Za-z0-9])?)(?::(\d{1,5}))?$/.exec((x.offlineHost||'').trim());if(!om||om[1].indexOf('..')>=0||(om[2]&&(+om[2]<1||+om[2]>65535)))x.err=x.err||'indique l\'adresse du serveur des comptes hors-ligne (ex. play.example.fr:25565).';else offAddr=om[1].toLowerCase()+(om[2]&&+om[2]!==25565?':'+(+om[2]):'')}
+  if(x.err){renderDrawer();return}
+  x.offlineHost=x.allowOffline?offAddr:'';
   var nw=!d.id;run(b,nw?'eventCreate':'eventSave',{id:d.id},x,{ok:nw?'Event créé'+(x.card?' avec son encart':''):'Event enregistré',target:x.n,close:true,after:function(){
-    var e={id:d.id||uid('e'),n:x.n,date:x.date,server:x.server,pack:x.pack,state:x.state,slots:+x.slots,desc:x.desc,requireMicrosoft:x.requireMicrosoft===true,apps:nw?[]:byId(DB.events,d.id).apps};
+    var e={id:d.id||uid('e'),n:x.n,date:x.date,server:x.server,pack:x.pack,state:x.state,slots:+x.slots,desc:x.desc,requireMicrosoft:x.requireMicrosoft===true,allowOffline:x.allowOffline===true,offlineHost:x.allowOffline?x.offlineHost:'',apps:nw?[]:byId(DB.events,d.id).apps};
     if(nw){DB.events.unshift(e);if(x.card)DB.cards.push({id:uid('c'),type:'event',tags:'',title:x.n,sub:new Date(x.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'}),c1:'#7c2d12',c2:'#f59e0b',dest:'relaunch',cta:'Voir l\'event',status:'draft',from:'',to:'',aud:'all',img:''})}
     else DB.events[DB.events.indexOf(byId(DB.events,d.id))]=e}})};
 ACT.openApps=function(b){openDrawer({kind:'apps',id:b.dataset.id})};
