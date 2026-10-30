@@ -952,6 +952,28 @@
 }
 @media (prefers-reduced-motion:reduce){.rl *{animation:none!important;transition:none!important}
 }
+
+/* ═══ Navigation : groupes repliables + pastilles ═══ */
+.nav-group{display:flex;flex-direction:column}
+.nav-group-head{display:flex;align-items:center;gap:10px;width:100%;margin-top:6px;padding:8px 12px;border:none;background:none;border-radius:var(--radius);cursor:pointer;color:var(--muted);font:600 11px/1.4 var(--font);letter-spacing:.07em;text-transform:uppercase;transition:color .15s,background .15s}
+.nav-group-head:hover{color:var(--text);background:var(--card)}
+.nav-group-head .ico{font-size:14px;width:18px;text-align:center}
+.nav-spacer{flex:1}
+.nav-chev{font-size:11px;transition:transform .15s}
+.nav-group.collapsed .nav-chev{transform:rotate(-90deg)}
+.nav-group-body{display:flex;flex-direction:column;gap:2px;margin:2px 0 0 18px;padding-left:6px;border-left:1px solid var(--border)}
+.nav-group.collapsed .nav-group-body{display:none}
+.nav-badge{min-width:18px;margin-left:auto;padding:1px 7px;border-radius:999px;background:var(--border);color:var(--text);font-size:10px;font-weight:700;text-align:center;line-height:1.6}
+.nav-badge[hidden]{display:none}
+.nav-badge.warn{background:var(--amber-bg);color:var(--amber)}
+.nav-badge.bad{background:var(--red-bg);color:var(--red)}
+.nav-group-head .nav-badge{margin-left:0}
+.nav-group:not(.collapsed) .nav-group-head .nav-badge{display:none}
+.nav-group-head:focus-visible,.nav-item:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+@media (max-width:680px){
+  .nav-group,.nav-group.collapsed .nav-group-body,.nav-group-body{display:contents}
+  .nav-group-head{display:none}
+}
 </style>
 </head>
 <body>
@@ -984,43 +1006,57 @@
     </div>
     <div class="nav-items">
       <button class="nav-search" onclick="openCommandPalette()">🔎 Rechercher… <span class="cp-kbd">Ctrl K</span></button>
-      <div class="nav-section-label">Général</div>
       <button class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
         <span class="ico">📊</span> Tableau de bord
       </button>
-      <div class="nav-section-label" style="margin-top:8px;">Gestion</div>
-      <button class="nav-item" data-page="users" onclick="showPage('users')">
-        <span class="ico">👥</span> Utilisateurs
-      </button>
-      <button class="nav-item" data-page="submissions" onclick="showPage('submissions')">
-        <span class="ico">📋</span> Formulaires
-      </button>
-      <button class="nav-item" data-page="eclats" onclick="showPage('eclats')">
-        <span class="ico">💎</span> Éclats &amp; Boutique
-      </button>
-      <button class="nav-item" data-page="commandes" onclick="showPage('commandes')">
-        <span class="ico">📦</span> Suivi des commandes
-      </button>
-      <button class="nav-item" data-page="rl-reports" onclick="showPage('rl-reports')">
-        <span class="ico">🚩</span> Signalements
-      </button>
-      <button class="nav-item" data-page="rpnames" onclick="showPage('rpnames')">
-        <span class="ico">🎭</span> Noms RP
-      </button>
-      <button class="nav-item" data-page="gamedata" onclick="showPage('gamedata')">
-        <span class="ico">🏆</span> Serveur &amp; classements
-      </button>
-      <div class="nav-section-label" style="margin-top:8px;">Sites</div>
-      <button class="nav-item" data-page="sites" onclick="showPage('sites')">
-        <span class="ico">🌐</span> Sites &amp; visibilité
-      </button>
-      <div class="nav-section-label" style="margin-top:8px;">Serveurs Minecraft</div>
-      <button class="nav-item" data-page="mcservers" onclick="showPage('mcservers')">
-        <span class="ico">⛏️</span> Serveurs &amp; permissions
-      </button>
-      <button class="nav-item" data-page="mcmods" onclick="showPage('mcmods')">
-        <span class="ico">🧩</span> Mods &amp; Plugins
-      </button>
+      <div class="nav-group" data-grp="community">
+        <button class="nav-group-head" onclick="navToggleGroup('community')" aria-expanded="true"><span class="ico">👥</span> Communauté<span class="nav-spacer"></span><span class="nav-badge" hidden></span><span class="nav-chev">▾</span></button>
+        <div class="nav-group-body">
+        <button class="nav-item" data-page="users" onclick="showPage('users')">
+          <span class="ico">👥</span> Utilisateurs
+        </button>
+        <button class="nav-item" data-page="submissions" onclick="showPage('submissions')">
+          <span class="ico">📋</span> Formulaires
+        </button>
+        <button class="nav-item" data-page="rl-reports" onclick="showPage('rl-reports')">
+          <span class="ico">🚩</span> Signalements
+        </button>
+        <button class="nav-item" data-page="rpnames" onclick="showPage('rpnames')">
+          <span class="ico">🎭</span> Noms RP
+        </button>
+        <button class="nav-item" data-page="identities" onclick="showPage('identities')">
+          <span class="ico">🧬</span> Cohérence des identités
+        </button>
+        </div>
+      </div>
+      <div class="nav-group" data-grp="shop">
+        <button class="nav-group-head" onclick="navToggleGroup('shop')" aria-expanded="true"><span class="ico">🛒</span> Boutique<span class="nav-spacer"></span><span class="nav-badge" hidden></span><span class="nav-chev">▾</span></button>
+        <div class="nav-group-body">
+        <button class="nav-item" data-page="eclats" onclick="showPage('eclats')">
+          <span class="ico">💎</span> Éclats &amp; Boutique
+        </button>
+        <button class="nav-item" data-page="commandes" onclick="showPage('commandes')">
+          <span class="ico">📦</span> Suivi des commandes
+        </button>
+        </div>
+      </div>
+      <div class="nav-group" data-grp="game">
+        <button class="nav-group-head" onclick="navToggleGroup('game')" aria-expanded="true"><span class="ico">🎮</span> Jeu &amp; sites<span class="nav-spacer"></span><span class="nav-badge" hidden></span><span class="nav-chev">▾</span></button>
+        <div class="nav-group-body">
+        <button class="nav-item" data-page="gamedata" onclick="showPage('gamedata')">
+          <span class="ico">🏆</span> Serveur &amp; classements
+        </button>
+        <button class="nav-item" data-page="mcservers" onclick="showPage('mcservers')">
+          <span class="ico">⛏️</span> Serveurs &amp; permissions
+        </button>
+        <button class="nav-item" data-page="mcmods" onclick="showPage('mcmods')">
+          <span class="ico">🧩</span> Mods &amp; Plugins
+        </button>
+        <button class="nav-item" data-page="sites" onclick="showPage('sites')">
+          <span class="ico">🌐</span> Sites &amp; visibilité
+        </button>
+        </div>
+      </div>
       <div class="rl-group" id="rl-group">
         <button class="rl-group-head" onclick="rlToggleGroup()" aria-expanded="true"><span class="ico">🚀</span> ReLaunch <span class="rl-chev">▾</span></button>
         <div class="rl-sub">
@@ -1066,22 +1102,23 @@
         </button>
         </div>
       </div>
-      <div class="nav-section-label" style="margin-top:8px;">Sécurité</div>
-      <button class="nav-item" data-page="roles" onclick="showPage('roles')">
-        <span class="ico">🛡️</span> Rôles
-      </button>
-      <button class="nav-item" data-page="services" onclick="showPage('services')">
-        <span class="ico">🔑</span> Services &amp; clés API
-      </button>
-      <button class="nav-item" data-page="audit" onclick="showPage('audit')">
-        <span class="ico">📜</span> Journal d'audit
-      </button>
-      <button class="nav-item" data-page="webhooks" onclick="showPage('webhooks')">
-        <span class="ico">🪝</span> Webhooks
-      </button>
-      <button class="nav-item" data-page="identities" onclick="showPage('identities')">
-        <span class="ico">🧬</span> Cohérence des identités
-      </button>
+      <div class="nav-group" data-grp="system">
+        <button class="nav-group-head" onclick="navToggleGroup('system')" aria-expanded="true"><span class="ico">🛡️</span> Sécurité &amp; système<span class="nav-spacer"></span><span class="nav-badge" hidden></span><span class="nav-chev">▾</span></button>
+        <div class="nav-group-body">
+        <button class="nav-item" data-page="roles" onclick="showPage('roles')">
+          <span class="ico">🛡️</span> Rôles
+        </button>
+        <button class="nav-item" data-page="services" onclick="showPage('services')">
+          <span class="ico">🔑</span> Services &amp; clés API
+        </button>
+        <button class="nav-item" data-page="webhooks" onclick="showPage('webhooks')">
+          <span class="ico">🪝</span> Webhooks
+        </button>
+        <button class="nav-item" data-page="audit" onclick="showPage('audit')">
+          <span class="ico">📜</span> Journal d'audit
+        </button>
+        </div>
+      </div>
     </div>
     <div class="nav-footer">
       <div id="worker-url-display" style="word-break:break-all;font-size:11px;margin-bottom:8px;">https://relink-auth.refugeemeraudien-direction.workers.dev</div>
@@ -2259,7 +2296,15 @@ async function apiFetch(path, method = 'GET', body = null) {
 
   const opts = { method, headers };
   if (body) opts.body = isFormData ? body : JSON.stringify(body);
-  const r = await fetch(WORKER_URL + path, opts);
+  const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const tmo = setTimeout(() => { if (ctl) ctl.abort(); }, isFormData ? 120000 : 20000);
+  let r;
+  try { r = await fetch(WORKER_URL + path, ctl ? { ...opts, signal: ctl.signal } : opts); }
+  catch (e) {
+    return { ok: false, status: 0, error: e && e.name === 'AbortError'
+      ? 'Le serveur met trop de temps à répondre (délai dépassé).'
+      : 'Impossible de joindre le serveur. Vérifie ta connexion.' };
+  } finally { clearTimeout(tmo); }
 
   // Toujours tenter de lire la réponse, même lorsque le Worker renvoie 4xx/5xx.
   let data = null;
@@ -2293,6 +2338,35 @@ async function apiFetch(path, method = 'GET', body = null) {
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────
+// ── Modal « secret à copier » (remplace prompt() pour les clés et secrets) ──
+// Ne se ferme que via le bouton : impossible de perdre un secret affiché une seule fois.
+function showSecret(title, value, note) {
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.className = 'modal-overlay open';
+    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    const box = document.createElement('div'); box.className = 'modal';
+    const h = document.createElement('h3'); h.textContent = title;
+    const p = document.createElement('p'); p.textContent = note || 'Copie-le maintenant : il ne sera plus jamais affiché.';
+    const inp = document.createElement('input');
+    inp.readOnly = true; inp.value = value || ''; inp.setAttribute('aria-label', title);
+    inp.style.cssText = 'width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;margin:10px 0 4px';
+    inp.addEventListener('focus', () => inp.select());
+    const act = document.createElement('div'); act.className = 'modal-actions';
+    const cp = document.createElement('button'); cp.textContent = '📋 Copier';
+    const ok = document.createElement('button'); ok.className = 'btn-confirm-ok'; ok.textContent = 'J’ai copié, fermer';
+    cp.onclick = async () => {
+      try { await navigator.clipboard.writeText(inp.value); }
+      catch { inp.select(); try { document.execCommand('copy'); } catch {} }
+      cp.textContent = '✅ Copié';
+    };
+    ok.onclick = () => { ov.remove(); resolve(true); };
+    act.append(cp, ok); box.append(h, p, inp, act); ov.append(box);
+    document.body.append(ov);
+    inp.focus();
+  });
+}
+
 let toastTimer;
 function toast(msg, type = 'success') {
   const el = document.getElementById('toast');
@@ -2411,6 +2485,11 @@ async function loadDashboard() {
     if (hookBad.length) todo.push({ c: 'bad', i: '🪝', t: `${hookBad.length} webhook${hookBad.length > 1 ? 's' : ''} en échec`, s: hookBad.map(h => h.name).slice(0, 3).join(', '), go: 'webhooks', b: 'Voir' });
     if (keysSoon.length) todo.push({ c: 'warn', i: '🔑', t: `${keysSoon.length} clé${keysSoon.length > 1 ? 's' : ''} API expire${keysSoon.length > 1 ? 'nt' : ''} sous 14 jours`, s: 'Pense à les renouveler.', go: 'services', b: 'Voir' });
     if (identIssues) todo.push({ c: 'warn', i: '🧩', t: `${identIssues} incohérence${identIssues > 1 ? 's' : ''} d’identités`, s: 'Comptes Discord / Minecraft à vérifier.', go: 'identities', b: 'Détails' });
+    if (typeof navBadges === 'function') navBadges({
+      commandes: [pendTotal || 0, 'warn'], submissions: [subNew.length, 'warn'],
+      sites: [inMaint.length + scanErr.length, scanErr.length ? 'bad' : 'warn'],
+      webhooks: [hookBad.length, 'bad'], services: [keysSoon.length, 'warn'], identities: [identIssues, 'warn']
+    });
     const todoHtml = todo.length ? todo.map(x => `<div class="db-todo ${x.c}"><span class="t-ico">${x.i}</span><div class="t-txt">${esc(x.t)}<small>${esc(x.s || '')}</small></div><button class="btn-action btn-unlock" onclick="dbGo('${x.go}'${x.site ? `,'${escJsAttr(x.site)}'` : ''})">${x.b}</button></div>`).join('')
       : '<div class="db-ok">✅ Rien à signaler, tout est calme.</div>';
 
@@ -2774,7 +2853,7 @@ async function loadSubmissions(type) {
       <td>${avatar}<strong>${esc(s.pseudo || s.discord_id)}</strong><br><span style="color:var(--muted);font-size:11px">${esc(s.discord_id)}</span></td>
       <td><span class="badge-status badge-active">${typeLabel}</span></td>
       <td style="color:var(--muted);font-size:12px">${date}</td>
-      <td><button class="btn-action btn-unlock" onclick="unlockSub('${esc(s.discord_id)}','${escJsAttr(s.pseudo||s.discord_id)}','${esc(s.type)}')">Débloquer</button></td>
+      <td><button class="btn-action btn-unlock" onclick="unlockSub('${escJsAttr(s.discord_id)}','${escJsAttr(s.pseudo||s.discord_id)}','${escJsAttr(s.type)}')">Débloquer</button></td>
     </tr>`;
   }).join('');
 }
@@ -2840,7 +2919,7 @@ function selectSite(slug) { currentSite = slug; renderSiteTabs(); renderSite(); 
 function renderSiteTabs() {
   document.getElementById('sites-tabs').innerHTML = SITES.map(s => {
     const fresh = s.sections.filter(x => x.present && isRecent(x.discovered_at)).length;
-    return `<button class="subtab ${s.slug === currentSite ? 'active' : ''}" onclick="selectSite('${esc(s.slug)}')">`
+    return `<button class="subtab ${s.slug === currentSite ? 'active' : ''}" onclick="selectSite('${escJsAttr(s.slug)}')">`
       + `${svTabIcon(s)} ${esc(s.name)}`
       + (fresh ? ` <span class="badge-sub">${fresh} nouveau${fresh > 1 ? 'x' : ''}</span>` : '')
       + `</button>`;
@@ -2859,7 +2938,8 @@ let LK = null;
 const LK_EMOJIS = ['⚙️', '🌐', '🚂', '🏠', '⭐', '🎮', '📖', '🛒', '⚔️', '🔧', '💎', '🏰'];
 const LK_COLORS = ['#5c6ef7', '#8b5cf6', '#ec4899', '#ef5b5b', '#f5a623', '#3ecf8e', '#14b8a6', '#0ea5e9', '#64748b'];
 const svInitial = s => String(s.name || s.slug || '?').trim().charAt(0).toUpperCase();
-const svColor = s => s.color || ucColor(s.slug);
+const safeColor = c => { c = typeof c === 'string' ? c.trim() : ''; return /^(#[0-9a-fA-F]{3,8}|(hsl|rgb)\(\s*\d{1,3}(\.\d+)?%?[ ,]+\d{1,3}%?[ ,]+\d{1,3}%?\s*\))$/.test(c) ? c : null; };
+const svColor = s => safeColor(s.color) || ucColor(s.slug);
 function svLogoHtml(s) { return s.logo ? `<img src="${esc(s.logo)}" alt="">` : esc(s.emoji || (s.builtin ? '⚙️' : svInitial(s))); }
 function svTabIcon(s) {
   if (s.logo) return `<img src="${esc(s.logo)}" alt="" style="width:18px;height:18px;border-radius:5px;object-fit:cover;vertical-align:-4px">`;
@@ -2933,7 +3013,7 @@ function renderSite() {
   const s = SITES.find(x => x.slug === currentSite);
   const el = document.getElementById('site-detail');
   if (!s) { el.innerHTML = ''; return; }
-  const slug = esc(s.slug);
+  const slug = esc(s.slug), jsSlug = escJsAttr(s.slug);
 
   const status = s.builtin ? '<span class="badge-sub">intégré</span>'
     : s.last_scan_status === 'error' ? '<span class="badge-sub" style="background:var(--red-bg);color:var(--red);">détection en erreur</span>'
@@ -2952,7 +3032,7 @@ function renderSite() {
         <div class="flag-desc"><code>${esc(x.key)}</code>${x.description ? ' — ' + esc(x.description) : ''}</div>
       </div>
       <label class="toggle" title="${x.enabled ? 'Activée' : 'Désactivée'}">
-        <input type="checkbox" ${x.enabled ? 'checked' : ''} onchange="toggleSection('${slug}','${esc(x.key)}',this.checked)">
+        <input type="checkbox" ${x.enabled ? 'checked' : ''} onchange="toggleSection('${jsSlug}','${escJsAttr(x.key)}',this.checked)">
         <span class="slider"></span>
       </label>
     </div>`;
@@ -2962,7 +3042,7 @@ function renderSite() {
         <div class="flag-label">${esc(x.label)} <span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">absente du manifeste</span></div>
         <div class="flag-desc"><code>${esc(x.key)}</code> — réglage conservé au cas où elle revienne</div>
       </div>
-      <button class="btn-action btn-delete" onclick="forgetSection('${slug}','${esc(x.key)}')">Oublier</button>
+      <button class="btn-action btn-delete" onclick="forgetSection('${jsSlug}','${escJsAttr(x.key)}')">Oublier</button>
     </div>`;
 
   const healthOk = s.builtin ? true : s.last_scan_status !== 'error' && !!s.last_seen_at;
@@ -2973,7 +3053,7 @@ function renderSite() {
   const infoCard = `<div class="card sv-hero" style="--c:${svColor(s)}">
       <div class="sv-hero-in">
         <div class="sv-hero-top">
-          <div class="sv-logo-wrap"><div class="sv-logo">${svLogoHtml(s)}</div><button class="sv-logo-edit" title="Personnaliser l'apparence" onclick="openLookEditor('${slug}')">✏️</button></div>
+          <div class="sv-logo-wrap"><div class="sv-logo">${svLogoHtml(s)}</div><button class="sv-logo-edit" title="Personnaliser l'apparence" onclick="openLookEditor('${jsSlug}')">✏️</button></div>
           <div class="sv-hero-main">
             <h3>${esc(s.name)} <span class="sv-slug">${slug}</span> ${status}</h3>
             ${s.description ? `<p>${esc(s.description)}</p>` : ''}
@@ -2992,12 +3072,12 @@ function renderSite() {
         ${s.last_scan_error ? `<div class="sv-err">⚠️ ${esc(s.last_scan_error)}</div>` : ''}
       </div>
             <div class="sv-actions">
-        <button class="btn-action btn-unlock" onclick="openSite('${slug}')">🌐 Ouvrir le site</button>
+        <button class="btn-action btn-unlock" onclick="openSite('${jsSlug}')">🌐 Ouvrir le site</button>
       </div>
       ${s.builtin ? '' : `<div class="sv-actions" style="border-top:0;padding-top:0;">
-        ${s.manifest_url ? `<button class="btn-action btn-unlock" onclick="rescanSite('${slug}')">🔍 Détecter maintenant</button>` : ''}
-        <button class="btn-action btn-link" onclick="editManifestUrl('${slug}')">✏️ ${s.manifest_url ? 'Changer' : 'Définir'} l'URL du manifeste</button>
-        <button class="btn-action btn-delete" onclick="deleteSite('${slug}')">🗑️ Supprimer le site</button>
+        ${s.manifest_url ? `<button class="btn-action btn-unlock" onclick="rescanSite('${jsSlug}')">🔍 Détecter maintenant</button>` : ''}
+        <button class="btn-action btn-link" onclick="editManifestUrl('${jsSlug}')">✏️ ${s.manifest_url ? 'Changer' : 'Définir'} l'URL du manifeste</button>
+        <button class="btn-action btn-delete" onclick="deleteSite('${jsSlug}')">🗑️ Supprimer le site</button>
       </div>`}
     </div>`;
 
@@ -3007,8 +3087,8 @@ function renderSite() {
         <div><h3>Maintenance &amp; accès ${maintOn ? '<span class="badge-sub" style="background:var(--amber-bg);color:var(--amber);">MAINTENANCE ACTIVE</span>' : ''}</h3>
           <p>${maintOn ? 'Les visiteurs voient la page de maintenance, les admins passent.' : 'Le site est accessible normalement.'}</p></div></div>
       <div class="flags-grid">
-        ${flagToggle('Mode maintenance', 'Affiche une page de maintenance aux visiteurs (les admins peuvent toujours entrer)', maintOn, `toggleMaintenance('${slug}',this.checked)`)}
-        ${flagToggle('Connexion obligatoire', 'Force tous les visiteurs à se connecter pour voir ce site', s.require_auth, `toggleSetting('${slug}','require_auth',this.checked)`)}
+        ${flagToggle('Mode maintenance', 'Affiche une page de maintenance aux visiteurs (les admins peuvent toujours entrer)', maintOn, `toggleMaintenance('${jsSlug}',this.checked)`)}
+        ${flagToggle('Connexion obligatoire', 'Force tous les visiteurs à se connecter pour voir ce site', s.require_auth, `toggleSetting('${jsSlug}','require_auth',this.checked)`)}
       </div>
       <div class="form-grid" style="margin-top:16px;">
         <div class="form-field" style="grid-column: span 2;">
@@ -3020,7 +3100,7 @@ function renderSite() {
           <input type="datetime-local" id="maint-until" value="${esc(toLocalInput(s.maintenance_until))}">
         </div>
         <div class="form-field">
-          <button class="btn-primary" onclick="saveMaintenance('${slug}')">💾 Enregistrer</button>
+          <button class="btn-primary" onclick="saveMaintenance('${jsSlug}')">💾 Enregistrer</button>
         </div>
       </div>
     </div>`;
@@ -3030,8 +3110,8 @@ function renderSite() {
       <summary><span class="sv-chev">▼</span><span class="sv-sum-title">📄 Sections détectées</span><span class="sv-count">${activeCount} / ${present.length} actives</span><span class="sv-minibar"><i style="width:${secPct}%"></i></span></summary>
       <div class="sv-body">
       ${present.length ? `<div class="sv-bulk">
-        <button class="btn-action btn-unban" onclick="setAllSections('${slug}', true)">Tout activer</button>
-        <button class="btn-action btn-suspend" onclick="setAllSections('${slug}', false)">Tout désactiver</button>
+        <button class="btn-action btn-unban" onclick="setAllSections('${jsSlug}', true)">Tout activer</button>
+        <button class="btn-action btn-suspend" onclick="setAllSections('${jsSlug}', false)">Tout désactiver</button>
       </div>` : ''}
       <div class="flags-grid">${present.length ? present.map(sectionItem).join('') : '<span class="empty-state">Aucune section détectée pour le moment.</span>'}</div>
       ${absent.length ? `<div class="sv-sub">Disparues du manifeste (${absent.length})</div><div class="flags-grid">${absent.map(absentItem).join('')}</div>` : ''}
@@ -3243,7 +3323,7 @@ async function mcNewPair(slug) {
 async function mcCopyPair() {
   if (!MC_PAIR) return;
   try { await navigator.clipboard.writeText('/relink connect ' + MC_PAIR.code); toast('Commande copiée.', 'success'); }
-  catch { prompt('Copie la commande :', '/relink connect ' + MC_PAIR.code); }
+  catch { await showSecret('Commande de connexion', '/relink connect ' + MC_PAIR.code, 'Copie-la puis colle-la dans le jeu.'); }
 }
 const MC_LIVE_MS = 5 * 60 * 1000;      // « mod connecté » = signal reçu dans les 5 dernières minutes
 
@@ -3484,7 +3564,7 @@ async function mcRotateKey(slug) {
 async function mcCopyKey() {
   if (!MC_NEWKEY) return;
   try { await navigator.clipboard.writeText(MC_NEWKEY.key); toast('Clé copiée.', 'success'); }
-  catch { prompt('Copie la clé :', MC_NEWKEY.key); }
+  catch { await showSecret('Clé du serveur', MC_NEWKEY.key, 'Copie-la à la main dans la config du mod.'); }
 }
 
 async function deleteMc(slug) {
@@ -4709,7 +4789,7 @@ async function loadServices() {
           return `<div style="margin-bottom:6px;font-size:12px;">
             <span style="color:${statusColor};">●</span> ${esc(scopes.join(', '))}
             <span style="color:var(--muted);">(${status})</span>
-            ${status === 'active' ? `<button onclick="revokeKey(${s.id},'${esc(k.id)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;">révoquer</button>` : ''}
+            ${status === 'active' ? `<button onclick="revokeKey(${s.id},'${escJsAttr(k.id)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;">révoquer</button>` : ''}
           </div>`;
         }).join('')
       : '<span class="empty-state">Aucune clé.</span>';
@@ -4750,7 +4830,7 @@ async function openCreateKey(serviceId, serviceName) {
   const data = await apiFetch(`/admin/services/${serviceId}/keys`, 'POST', { scopes });
   if (data.ok) {
     // La clé brute n'est renvoyée qu'une fois : on force l'admin à la copier.
-    prompt('Clé générée — copiez-la maintenant, elle ne sera plus jamais affichée :', data.api_key);
+    await showSecret('Clé API générée', data.api_key);
     toast('Clé créée.', 'success');
     loadServices();
   } else {
@@ -4875,10 +4955,10 @@ async function loadWebhooks() {
       <td style="font-size:11px;">${lastDelivery}</td>
       <td>
         <div style="display:flex;gap:4px;flex-wrap:wrap;">
-          <button class="btn-action btn-unlock" onclick="testWebhook('${esc(w.id)}')">Tester</button>
-          <button class="btn-action btn-unlock" onclick="toggleWebhook('${esc(w.id)}','${w.status === 'active' ? 'disabled' : 'active'}')">${w.status === 'active' ? 'Désactiver' : 'Activer'}</button>
-          <button class="btn-action btn-unlock" onclick="viewWebhookDeliveries('${esc(w.id)}','${escJsAttr(w.name)}')">Historique</button>
-          <button class="btn-action btn-delete" onclick="deleteWebhook('${esc(w.id)}','${escJsAttr(w.name)}')">Supprimer</button>
+          <button class="btn-action btn-unlock" onclick="testWebhook('${escJsAttr(w.id)}')">Tester</button>
+          <button class="btn-action btn-unlock" onclick="toggleWebhook('${escJsAttr(w.id)}','${w.status === 'active' ? 'disabled' : 'active'}')">${w.status === 'active' ? 'Désactiver' : 'Activer'}</button>
+          <button class="btn-action btn-unlock" onclick="viewWebhookDeliveries('${escJsAttr(w.id)}','${escJsAttr(w.name)}')">Historique</button>
+          <button class="btn-action btn-delete" onclick="deleteWebhook('${escJsAttr(w.id)}','${escJsAttr(w.name)}')">Supprimer</button>
         </div>
       </td>
     </tr>`;
@@ -4894,7 +4974,7 @@ async function createWebhook() {
 
   const data = await apiFetch('/admin/webhooks', 'POST', { name, url, events });
   if (data.ok) {
-    prompt('Secret de signature généré — copie-le maintenant, il ne sera plus jamais affiché :', data.secret);
+    await showSecret('Secret de signature généré', data.secret);
     toast('Webhook créé.', 'success');
     document.getElementById('wh-new-name').value = '';
     document.getElementById('wh-new-url').value = '';
@@ -4957,7 +5037,7 @@ async function viewWebhookDeliveries(id, name) {
       <td><span class="badge-status badge-${d.status === 'success' ? 'active' : 'banned'}">${esc(d.status)}</span></td>
       <td>${d.http_status ?? '—'}</td>
       <td style="font-size:11px;color:var(--red);">${esc(d.error || '—')}</td>
-      <td>${d.status !== 'success' ? `<button class="btn-action btn-unlock" onclick="retryWebhookDelivery('${esc(id)}','${esc(d.id)}')">Retry</button>` : ''}</td>
+      <td>${d.status !== 'success' ? `<button class="btn-action btn-unlock" onclick="retryWebhookDelivery('${escJsAttr(id)}','${escJsAttr(d.id)}')">Retry</button>` : ''}</td>
     </tr>`).join('') : '<tr><td colspan="7" class="empty-state">Aucune livraison.</td></tr>';
 }
 
@@ -4982,7 +5062,7 @@ async function loadFormWebhooks() {
           : `<span style="color:var(--muted);">●</span> Variable d'environnement (${esc(r.env_key)})`}
       </td>
       <td>
-        <button class="btn-action btn-unlock" onclick="openSetFormWebhook('${esc(r.form_type)}')">Configurer</button>
+        <button class="btn-action btn-unlock" onclick="openSetFormWebhook('${escJsAttr(r.form_type)}')">Configurer</button>
       </td>
     </tr>`).join('') : '<tr><td colspan="3" class="empty-state">Aucun formulaire.</td></tr>';
 }
@@ -6601,7 +6681,7 @@ async function loadRpNames(reset = true) {
     const shown = isAlias ? esc(e.shown_to_username || e.shown_to_uuid || '—') : '<span style="color:var(--muted);">—</span>';
     return `<tr>
       <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${fmtDate(e.created_at)}</td>
-      <td><strong>${esc(e.mc_username || '—')}</strong><br><a style="cursor:pointer;color:var(--muted);font-size:11px;font-family:ui-monospace,monospace;" title="Filtrer sur ce joueur" onclick="rpFilterUuid('${esc(e.mc_uuid)}')">${esc(e.mc_uuid)}</a></td>
+      <td><strong>${esc(e.mc_username || '—')}</strong><br><a style="cursor:pointer;color:var(--muted);font-size:11px;font-family:ui-monospace,monospace;" title="Filtrer sur ce joueur" onclick="rpFilterUuid('${escJsAttr(e.mc_uuid)}')">${esc(e.mc_uuid)}</a></td>
       <td>${e.discord_id ? nxUserLink(e.discord_id, e.discord_pseudo) : '<span class="badge-mc-unlinked">Non lié</span>'}</td>
       <td><span class="badge-sub">${isAlias ? 'Pseudonyme' : 'Nom RP'}</span></td>
       <td>${name}</td><td>${src}</td><td>${shown}</td></tr>`;
@@ -6757,6 +6837,59 @@ async function loadIdentities() {
       ['identities', '🧬', 'Cohérence des identités', 'Contrôle users / identities', 'identités discord minecraft incohérence orphelin'],
     ].forEach(x => it.push({ group: 'Pages', id: 'page:' + x[0], ico: x[1], label: x[2], hint: x[3], kw: x[4], run: () => showPage(x[0]) }));
     return it;
+  };
+})();
+</script>
+
+<script>
+// ── Navigation : groupes repliables (état mémorisé) + pastilles d'alerte ──
+(function () {
+  var KEY = 'relink_nav_groups', state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function setC(g, c) {
+    g.classList.toggle('collapsed', c);
+    g.querySelector('.nav-group-head').setAttribute('aria-expanded', String(!c));
+    state[g.dataset.grp] = c; save();
+  }
+  document.querySelectorAll('.nav-group').forEach(function (g) {
+    if (state[g.dataset.grp]) { g.classList.add('collapsed'); g.querySelector('.nav-group-head').setAttribute('aria-expanded', 'false'); }
+  });
+  window.navToggleGroup = function (id) {
+    var g = document.querySelector('.nav-group[data-grp="' + id + '"]');
+    if (g) setC(g, !g.classList.contains('collapsed'));
+  };
+  // Ouvre automatiquement le groupe de la page affichée (clic, palette Ctrl K, lien du tableau de bord…)
+  var _sp = showPage;
+  showPage = function (n) {
+    _sp(n);
+    var b = document.querySelector('.nav-item[data-page="' + n + '"]');
+    var g = b && b.closest('.nav-group');
+    if (g && g.classList.contains('collapsed')) setC(g, false);
+  };
+  // map : { page: [nombre, 'warn'|'bad'|''] } — appelée à chaque chargement du tableau de bord
+  var RANK = { '': 0, warn: 1, bad: 2 };
+  window.navBadges = function (map) {
+    document.querySelectorAll('.nav-item[data-page] > .nav-badge').forEach(function (e) { e.remove(); });
+    Object.keys(map).forEach(function (page) {
+      var n = Number(map[page][0]) || 0; if (!n) return;
+      var b = document.querySelector('.nav-item[data-page="' + page + '"]'); if (!b) return;
+      var sp = document.createElement('span');
+      sp.className = 'nav-badge' + (map[page][1] ? ' ' + map[page][1] : '');
+      sp.textContent = n > 99 ? '99+' : String(n);
+      b.appendChild(sp);
+    });
+    document.querySelectorAll('.nav-group').forEach(function (g) {
+      var total = 0, tone = '';
+      g.querySelectorAll('.nav-item .nav-badge, .nav-item .rl-cnt').forEach(function (e) {
+        total += parseInt(e.textContent, 10) || 0;
+        var t = e.classList.contains('bad') ? 'bad' : e.classList.contains('warn') ? 'warn' : '';
+        if (RANK[t] > RANK[tone]) tone = t;
+      });
+      var hb = g.querySelector('.nav-group-head .nav-badge');
+      hb.hidden = !total; hb.textContent = total > 99 ? '99+' : String(total);
+      hb.className = 'nav-badge' + (tone ? ' ' + tone : '');
+    });
   };
 })();
 </script>
